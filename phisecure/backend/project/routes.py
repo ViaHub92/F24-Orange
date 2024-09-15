@@ -12,7 +12,6 @@ def landing_page():
     <ul>
         <li><strong>/create_user</strong> - POST: Create a new user.</li>
         <li><strong>/manage_account/&lt;username&gt;</strong> - GET: Manage user account by username.</li>
-        <li><strong>/run_messaging</strong> - GET: Execute messaging system.</li>
     </ul>
     <p>Use POST requests to interact with the API.</p>
     """
