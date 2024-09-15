@@ -12,6 +12,7 @@ def landing_page():
     <ul>
         <li><strong>/create_user</strong> - POST: Create a new user.</li>
         <li><strong>/manage_account/&lt;username&gt;</strong> - GET: Manage user account by username.</li>
+         <li><strong>/list_users</strong> - GET: List all users.</li>
     </ul>
     <p>Use POST requests to interact with the API.</p>
     """
@@ -69,3 +70,17 @@ def get_user(username):
         }), 200
     else:
         return jsonify({"message": "User not found"}), 404
+
+@routes.route('/list_users', methods=['GET'])
+def list_users():
+    users = User.query.all()
+    if users:
+        user_list = [{
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name
+        } for user in users]
+        return jsonify(user_list), 200
+    else:
+        return jsonify({"message": "No users found"}), 404
