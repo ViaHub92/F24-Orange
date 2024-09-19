@@ -3,9 +3,25 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import logo from './phisecurelogo.png';
+import './style.css';
 
+function Header() {
+  return (
+    <header>
+      <nav className="nav">
+        <img src={logo} alt={"logo"} className="nav-logo" />
+        <ul className="nav-items">
+          <li>About</li>
+          <li>Privacy</li>
+          <li>Help</li>
+        </ul>
+      </nav>
+    </header>
+  )
+}
 function HelloWorld() {
-  return <h1 className="greeting">Hello, world!</h1>;
+  return <h1 className="greeting">Hello world!</h1>;
 }
 
 function MainContent(){
@@ -15,6 +31,7 @@ function MainContent(){
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <Header />
     <HelloWorld />
     <MainContent />
   </React.StrictMode>
