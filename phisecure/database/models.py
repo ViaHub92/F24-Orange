@@ -23,7 +23,7 @@ class User(db.Model):
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
     role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
-    inbox_id = db.Column(db.Integer, db.ForeignKey("userInbox.id"), nullable=False)
+    inbox_id = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)
 
     def __repr__(self) -> str:
         return "<User %r>" % self.username
@@ -31,7 +31,7 @@ class User(db.Model):
 
 # Define user inbox
 class Inbox(db.Model):
-    __tablename__ = "userInbox"
+    __tablename__ = "inbox"
     id = db.Column(db.Integer, primary_key=True)
     emails = db.relationship("Email", backref="inbox")
 
@@ -45,4 +45,4 @@ class Email(db.Model):
     sent_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     subject = db.Column(db.String(120), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    inboxs = db.Column(db.Integer, db.ForeignKey("userInbox.id"), nullable=False)
+    inboxs = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)

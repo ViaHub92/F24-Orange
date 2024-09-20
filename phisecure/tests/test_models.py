@@ -24,7 +24,7 @@ class TestConfig:
 def app():
     """
     Provides a Flask application instance for testing.
-    
+
     """
     app = create_app(TestConfig)
 
@@ -87,3 +87,34 @@ class TestModels:
         retrieved_role = Role.query.get(role.id)
         assert retrieved_role is not None
         assert retrieved_role.name == "student"
+
+    def test_user_creation(self, db_session):
+        """ 
+        Test the creation of user with role and inbox
+        """
+        # Create a role
+        role = Role(name="student")
+        db_session.add(role)
+
+        # Create inbox
+        user_Inbox = Inbox()
+        db_session.add(user_Inbox)
+        db_session.commit()  # Commit to generate IDs for role and inbox
+
+        # Create a User
+        newUser = User(
+            username="testuser",
+            password_hash="hashed_password_value",
+            email="testuser@phisecure.com",
+            first_name="Test",
+            last_name="User",
+            role_id=role.id,  # Use generated role ID
+            inbox_id=user_Inbox.id,  # Use generated inbox ID
+        )
+
+        db_session.add(newUser)
+        db_session.commit()
+
+        get_user = User.query.filter_by(username="testuser").first()
+
+        assert get_user is not None
