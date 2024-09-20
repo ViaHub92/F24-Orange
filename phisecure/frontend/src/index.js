@@ -25,7 +25,7 @@ function HelloWorld() {
 }
 
 function MainContent(){
-  return <h1>I'm Learning React!</h1>
+  return <h1>Fetch data here</h1>
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
