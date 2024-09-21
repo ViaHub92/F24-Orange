@@ -89,7 +89,7 @@ class TestModels:
         assert retrieved_role.name == "student"
 
     def test_user_creation(self, db_session):
-        """ 
+        """
         Test the creation of user with role and inbox
         """
         # Create a role
@@ -97,24 +97,25 @@ class TestModels:
         db_session.add(role)
 
         # Create inbox
-        user_Inbox = Inbox()
-        db_session.add(user_Inbox)
+        user_inbox = Inbox()
+        db_session.add(user_inbox)
         db_session.commit()  # Commit to generate IDs for role and inbox
 
         # Create a User
-        newUser = User(
+        new_user = User(
             username="testuser",
             password_hash="hashed_password_value",
             email="testuser@phisecure.com",
             first_name="Test",
             last_name="User",
             role_id=role.id,  # Use generated role ID
-            inbox_id=user_Inbox.id,  # Use generated inbox ID
+            inbox_id=user_inbox.id,  # Use generated inbox ID
         )
 
-        db_session.add(newUser)
+        db_session.add(new_user)
         db_session.commit()
 
         get_user = User.query.filter_by(username="testuser").first()
 
         assert get_user is not None
+        assert get_user.inbox_id == 1

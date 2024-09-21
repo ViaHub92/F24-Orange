@@ -50,6 +50,7 @@ class Email(db.Model):
     sent_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     subject = db.Column(db.String(120), nullable=False)
     body = db.Column(db.Text, nullable=False)
+    is_read= db.Column(db.Boolean, default=False)
     inboxs = db.Column(db.Integer, db.ForeignKey('userInbox.id'), nullable=False)
     
     
