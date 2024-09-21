@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import logo from './phisecurelogo.png';
+import { useState, useEffect } from "react";
 import './style.css';
 
 function Header() {
@@ -19,25 +19,45 @@ function Header() {
       </nav>
     </header>
   )
-}
+};
+
 function HelloWorld() {
   return <h1 className="greeting">Hello world!</h1>;
-}
-
+};
+/*
 function MainContent(){
-  return <h1>Fetch data here</h1>
+
+  const [testfetch, setdata] = useState({
+    name: "",
+});
+
+// Using useEffect for single rendering
+useEffect(() => {
+    // Using fetch to fetch the api from 
+    // flask server it will be redirected to proxy
+    fetch("/testfetch").then((res) =>
+        res.json().then((testfetch) => {
+            // Setting a data from api
+            setdata({
+                name: testfetch.Name,
+            });
+        })
+    );
+}, []);
+
+return <h1 classname="fetch">Fetch here</h1>(
+  <p>testfetch.name</p>
+
+  );
 }
+}
+*/
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Header />
     <HelloWorld />
-    <MainContent />
+    <App />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
