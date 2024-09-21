@@ -2,14 +2,23 @@
 
 ## Setup
 
-1. Navigate to backend directory
-
-2. Activate virtual environment
+1. Navigate to backend directory and create venv
+    In bash terminal
+    ```bash
+    python3 -m venv venv
+    ```
+2. Now activate the venv
     In bash terminal
     ```bash
     source venv/bin/activate
     ```
-3. install the required dependencies
+   
+3. Activate virtual environment
+    In bash terminal
+    ```bash
+    source venv/bin/activate
+    ```
+4. install the required dependencies
     ```bash
     pip install -r requirements.txt
     ```
