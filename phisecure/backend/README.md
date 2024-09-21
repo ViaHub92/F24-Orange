@@ -12,13 +12,7 @@
     ```bash
     source venv/bin/activate
     ```
-   
-3. Activate virtual environment
-    In bash terminal
-    ```bash
-    source venv/bin/activate
-    ```
-4. install the required dependencies
+3. install the required dependencies
     ```bash
     pip install -r requirements.txt
     ```
