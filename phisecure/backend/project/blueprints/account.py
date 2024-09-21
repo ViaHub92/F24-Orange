@@ -1,38 +1,83 @@
+from flask import Blueprint, request, jsonify
+from project import db
+from project.models import User, Role, Inbox
 """
 account.py
 Team Orange
-Last Modified: 9/12/24
-Purpose: Contains data for Account object
-Most of the data currently is temporary data to work out the logic. The specifics will come later.
+Last Modified: 9/21/24
+Purpose: Creation and management of user accounts.
 """
+account = Blueprint('account', __name__)
 
-from email import Email
+@account.route('/create_user', methods=['POST'])
+def create_user():
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password_hash = data.get('password_hash')
+    first_name = data.get('first_name', '')
+    last_name = data.get('last_name', '')
 
-class Account:
-    """
-    An account with a name and inbox of emails
-    """
-    def __init__(self, name="John Doe", inbox = None):
-        self._name = name
-        if inbox is None:
-            self._inbox = []
-        else:
-            self._inbox = inbox
-    
-    @property
-    def name(self):
-        return self._name
-    
-    @property
-    def inbox(self):
-        return self._inbox
-    
-    def __str__(self):
-        temp = "Name of Account: " + self._name + "\n"
-        temp += "Amount of Emails: " + str(len(self._inbox))
-        return temp
-    
-    def check_email(self):
+    # Check if user already exists
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return jsonify({"message": "User already exists"}), 400
+
+    # Create a default role if it doesn't exist (You might want to adjust this based on your actual role handling)
+    default_role = Role.query.first()  # Assumes there is at least one role in the database
+    if not default_role:
+        default_role = Role(name='User')
+        db.session.add(default_role)
+        db.session.commit()
+
+    # Create inbox for the user
+    inbox = Inbox()
+    db.session.add(inbox)
+    db.session.commit()
+
+    # Create new user
+    new_user = User(
+        username=username,
+        email=email,
+        password_hash=password_hash,
+        first_name=first_name,
+        last_name=last_name,
+        role_id=default_role.id,  # Set default role id
+        inbox_id=inbox.id  # Set the created inbox id
+    )
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"message": "User created successfully!"}), 201
+
+@account.route('/get_user/<username>', methods=['GET'])
+def get_user(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return jsonify({
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name
+        }), 200
+    else:
+        return jsonify({"message": "User not found"}), 404
+
+@account.route('/list_users', methods=['GET'])
+def list_users():
+    users = User.query.all()
+    if users:
+        user_list = [{
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name
+        } for user in users]
+        return jsonify(user_list), 200
+    else:
+        return jsonify({"message": "No users found"}), 404
+
+    #def check_email(self):
         """
         Checks the inbox of the account for any emails.
         :param self: The account object
@@ -45,7 +90,7 @@ class Account:
                 print(self._inbox[i])
         return
     
-    def check_for_unread_emails(self):
+    #def check_for_unread_emails(self):
         """
         Checks the inbox of the account for any unread emails
         :param self: the account object
@@ -82,7 +127,7 @@ class Account:
                         print("Error! Invalid input detected! Please try again.\n")
         return
     
-    def add_to_inbox(self, email):
+    #def add_to_inbox(self, email):
         """
         Adds a new email to the inbox of a given Account
         :param self: The account object to add an email to
@@ -92,7 +137,7 @@ class Account:
         self._inbox.append(email)
         return
     
-    def send_email(self, email, account_list):
+    #def send_email(self, email, account_list):
         """
         Sends the email to the recipient of the email
         :param self: The account object sending the email
@@ -111,7 +156,7 @@ class Account:
             print("Error! Invalid recipient. Please check the recipient of the email and try again.")
         return
     
-    def make_email(self, account_list):
+    #def make_email(self, account_list):
         """
         Forms an Email to be sent to the recipient
         :param self: The account object
