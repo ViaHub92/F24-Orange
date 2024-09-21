@@ -2,9 +2,12 @@
 
 ## Setup
 
-1. Navigate to backend directory
-
-2. Activate virtual environment
+1. Navigate to backend directory and create venv
+    In bash terminal
+    ```bash
+    python3 -m venv venv
+    ```
+2. Now activate the venv
     In bash terminal
     ```bash
     source venv/bin/activate
