@@ -6,6 +6,33 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
  
 function App() {
+
+    const [data, setData] = useState([{}])
+
+    useEffect(() => {
+        fetch("/members").then(
+            res => res.json()        
+        ).then(
+            data => {
+                setData(data)
+                console.log(data)
+            }
+        )
+    }, [])
+    return (
+        <div>
+            {(typeof data.members === 'undefined') ?  (
+                <p>loading...</p>
+            ) : (
+                data.members.map((member, i) => (
+                    <p key={i}>{member}</p>
+                ))
+            )}
+
+        </div>
+    )
+}
+    /*
     // usestate for setting a javascript
     // object for storing and using data
     const [data, setdata] = useState({
@@ -36,7 +63,8 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <h1>React and flask</h1>
-                {/* Calling a data from setdata for showing */}
+                {/* Calling a data from setdata for showing */
+                /*
                 <p>{data.name}</p>
                 <p>{data.age}</p>
                 <p>{data.date}</p>
@@ -44,7 +72,6 @@ function App() {
  
             </header>
         </div>
-    );
-}
- 
+    )*/
+
 export default App;
