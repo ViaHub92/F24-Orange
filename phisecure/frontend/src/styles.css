@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-    background-image: url('background.jpg'); /* Add the background image */
+    /*background-image: url('background.jpg'); /* Add the background image */
     background-size: cover; /* Ensures the image covers the whole screen */
     background-position: center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents the image from repeating */
@@ -124,4 +124,30 @@ input[type="password"] {
     background-color: #45a049;
 }
 
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.nav-logo {
+    width: 120px;
+    height: 120px;
+}
+
+.nav-items {
+    color:crimson;
+    list-style: none;
+    display: flex;
+}
+
+.nav-items > li {
+    padding: 10px;
+}
+
+.nav-items a {
+    color:azure
+}
+.nav-items a:hover {
+    color:lawngreen
+}
