@@ -12,7 +12,7 @@ body {
 
 /* Header */
 header {
-    background-color: #12067ae5;
+    background-color: #231D6C;
     color: white;
     padding: 20px 0;
     text-align: center;
@@ -71,6 +71,14 @@ h2 {
 div.container {
     text-align: center;
 }
+
+ul {
+    list-style-type: none;
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+  }
+
 /* Footer */
 footer {
     background-color: #333;
@@ -146,8 +154,8 @@ input[type="password"] {
 }
 
 .nav-items a {
-    color:azure
+    color:#FFFFFF
 }
 .nav-items a:hover {
-    color:lawngreen
+    color:orange
 }

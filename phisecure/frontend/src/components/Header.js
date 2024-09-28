@@ -9,7 +9,7 @@ function Header() {
           <img src={logo} alt={"logo"} className="nav-logo" />
           <ul className="nav-items">
             <li>
-              <NavLink to="/">Home</NavLink>
+              <NavLink to="/Home">Home</NavLink>
             </li>
             <li>
               <NavLink to="/Contact">Contact</NavLink>

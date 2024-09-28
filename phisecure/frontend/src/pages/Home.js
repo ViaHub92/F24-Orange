@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Home() {
       return (
         <div>
@@ -5,27 +7,25 @@ export default function Home() {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>Phisecure - Home</title>
           <link rel="stylesheet" href="styles.css" />
-          {/* Navigation Bar */}
-          <header>
-            <nav className="navbar">
-              <div className="logo">
-                <h1>Phisecure</h1>
-              </div>
-              <ul className="nav-links">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
-              </ul>
-            </nav>
-          </header>
-          {/* Main Content */}
           <main>
             <section className="section">
               <h2>Welcome to Phisecure</h2>
               <p>Learn cybersecurity through interactive lessons and hands-on practice.</p>
+              <h3>Site Map (For Protoype Demo)</h3>
+              <span></span>
+              <ul>
+                <li><Link to='/About'>About</Link></li>
+                <li><Link to='/Admin'>Admin</Link></li>
+                <li><Link to='/Contact'>Contact</Link></li>
+                <li><Link to='/CreateAccount'>Create Account</Link></li>
+                <li><Link to='/Dashboard'>Student Dashboard</Link></li>
+                <li><Link to='/DashboardInstructor'>Instructor Dashboard</Link></li>
+                <li><Link to='/Login'>Login</Link></li>
+                <li><Link to='/Mail'>Email</Link></li>
+                <li><Link to='/Services'>Services</Link></li>
+                
+                      
+              </ul>
             </section>
           </main>
           {/* Footer */}

@@ -1,6 +1,6 @@
-/*import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
-function fetchAllUsers() {
+function FetchAllUsers() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -31,5 +31,4 @@ function fetchAllUsers() {
   );
 }
 
-export default fetchAllUsers;
-*/
+export default FetchAllUsers;
