@@ -2,12 +2,11 @@ from flask import Blueprint, request, jsonify
 from flask import Flask 
 from project import db
 from project.models import User, Role, Inbox
-from project.blueprints.account import account
 
 routes = Blueprint('routes', __name__)
 
 @routes.route('/')
-def landing_page():
+def index():
     return """
     <h1>Welcome to Phisecure API</h1>
     <p>Available Routes:</p>
@@ -18,8 +17,3 @@ def landing_page():
     </ul>
     <p>Use POST requests to interact with the API.</p>
     """
-def register_routes(app: Flask):
-    #This registers the account blueprint
-    app.register_blueprint(account, url_prefix='/account')
-    
-    #Any other necessary blueprints can be registered here
