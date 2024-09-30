@@ -15,6 +15,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     inbox_id = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)
 
     def __repr__(self) -> str:

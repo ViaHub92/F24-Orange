@@ -24,6 +24,7 @@ class Student(db.Model):
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
     inbox_id = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey("courses.id"))
     
 
