@@ -1,5 +1,5 @@
 import pytest
-from database.models import Role, User, Inbox, Email
+from database.models import Role, User, Inbox, Email, Course
 from database.db_connection import create_app, db
 
 
