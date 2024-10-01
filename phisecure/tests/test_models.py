@@ -1,5 +1,5 @@
 import pytest
-from database.models import Role, User, Inbox, Email
+from database.models import Role, User, Inbox, Email, Course, Student, Instructor, Admin,Template
 from database.db_connection import create_app, db
 
 
@@ -95,27 +95,35 @@ class TestModels:
         # Create a role
         role = Role(name="student")
         db_session.add(role)
+        db_session.commit()
 
         # Create inbox
         user_inbox = Inbox()
         db_session.add(user_inbox)
-        db_session.commit()  # Commit to generate IDs for role and inbox
+        db_session.commit()
+        
+        student_course = Course(course_name="Cyber Security 101")
+        db_session.add(student_course)
+        db_session.commit()
 
-        # Create a User
-        new_user = User(
+        # Create a Student User
+        new_user = Student(
             username="testuser",
             password_hash="hashed_password_value",
             email="testuser@phisecure.com",
             first_name="Test",
             last_name="User",
-            role_id=role.id,  # Use generated role ID
             inbox_id=user_inbox.id,  # Use generated inbox ID
+            role_id=role.id,  # Use generated role ID
+            course_id = student_course.id
+            
         )
 
         db_session.add(new_user)
         db_session.commit()
 
-        get_user = User.query.filter_by(username="testuser").first()
+        get_user = Student.query.filter_by(username="testuser").first()
 
         assert get_user is not None
         assert get_user.inbox_id == 1
+        assert get_user.course_id == student_course.id
