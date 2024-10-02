@@ -4,11 +4,10 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-    /*background-image: url('background.jpg'); /* Add the background image */
-    background-size: cover; /* Ensures the image covers the whole screen */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-}
+   
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
 
 /* Header */
 header {
@@ -158,4 +157,50 @@ input[type="password"] {
 }
 .nav-items a:hover {
     color:orange
+}
+/* Styles for the dashboard links */
+.dashboard-link {
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+    margin: 10px;
+}
+
+.dashboard-link:hover {
+    background-color: #f1f1f1;
+    border-color: #007BFF;
+}
+
+/* Styles for the reports list */
+.reports-section {
+    padding: 40px;
+}
+
+.reports-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.report-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.report-list li {
+    margin-bottom: 15px;
+}
+
+.report-list a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #007BFF;
+}
+
+.report-list a:hover {
+    text-decoration: underline;
 }
