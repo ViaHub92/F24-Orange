@@ -25,7 +25,11 @@
 
 1. Make sure you are still in backend directory
 
-2. Use app.py to start flask
+2. Use app.py to start flask or flask run
+    ```bash
+    flask run
+    ```
+    or
     ```bash
     python app.py
     ```
