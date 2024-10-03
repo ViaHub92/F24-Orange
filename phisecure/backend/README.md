@@ -5,14 +5,18 @@
 1. Navigate to backend directory and create venv
     In bash terminal
     ```bash
+    python -m venv venv
+    ```
+   or
+    ```bash
     python3 -m venv venv
     ```
-2. Now activate the venv
+3. Now activate the venv
     In bash terminal
     ```bash
     source venv/bin/activate
     ```
-3. install the required dependencies
+4. install the required dependencies
     ```bash
     pip install -r requirements.txt
     ```
@@ -21,9 +25,9 @@
 
 1. Make sure you are still in backend directory
 
-2. Use run.py to start flask
+2. Use app.py to start flask
     ```bash
-    python run.py
+    python app.py
     ```
 
 ## API Routes
