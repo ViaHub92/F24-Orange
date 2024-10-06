@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
-from project import db
-from project.models import User, Role, Inbox
+from backend.project import db
+from database.models.user import User
+from database.models.role import Role
+from database.models.inbox import Inbox
 """
 account.py
 Team Orange

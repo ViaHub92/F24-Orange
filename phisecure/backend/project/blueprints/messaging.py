@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from project import db
-from project.models import User, Email, Inbox
+from backend.project import db
+from backend.project.models import User, Email, Inbox
 from datetime import datetime, timezone
-from project.routes import routes
+from backend.project.routes import routes
 
 
 messaging = Blueprint('messaging', __name__, template_folder='templates')

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask import Flask 
-from project import db
-from project.models import User, Role, Inbox
+from backend.project import db
+from backend.project.models import User, Role, Inbox
 
 routes = Blueprint('routes', __name__)
 

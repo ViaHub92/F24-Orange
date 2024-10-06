@@ -22,8 +22,8 @@ class Phishingemail(db.Model):
     """
     __tablename__ = "phishing_emails"
     id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.Foreignkey("students.id"), nullable=False)
-    recipient_id = db.Column(db.Integer, db.Foreignkey("students.id"), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
     sent_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     subject = db.Column(db.String(120), nullable=False)
     body = db.Column(db.Text, nullable=False)
