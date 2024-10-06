@@ -44,8 +44,8 @@ def create_user():
         password_hash=password_hash,
         first_name=first_name,
         last_name=last_name,
-        role_id=default_role.id,  # Set default role id
-        inbox_id=inbox.id  # Set the created inbox id
+        role_id=default_role.id,
+        inbox_id=inbox.id 
     )
     db.session.add(new_user)
     db.session.commit()
@@ -78,3 +78,21 @@ def list_users():
         return jsonify(user_list), 200
     else:
         return jsonify({"message": "No users found"}), 404
+
+@account.route('/delete_user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    # Find the user by ID
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    # Optionally, delete the user's inbox as well
+    if user.inbox_id:
+        inbox = Inbox.query.get(user.inbox_id)
+        if inbox:
+            db.session.delete(inbox)
+    # Delete the user
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": "User deleted successfully!"}), 200
