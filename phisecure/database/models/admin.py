@@ -1,6 +1,6 @@
 """ Import the database connection object (db) from the db_connection module.
 """
-from database.db_connection import db
+from backend.project import db
 
 class Admin(db.Model):
     """

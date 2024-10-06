@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from backend.project import db
-from backend.project.models import User, Email, Inbox
+from database.models.user import User
+from database.models.email import Email
+from database.models.inbox import Inbox
 from datetime import datetime, timezone
 from backend.project.routes import routes
 

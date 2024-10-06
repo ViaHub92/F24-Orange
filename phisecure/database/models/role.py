@@ -1,6 +1,6 @@
 """ Import the database connection object (db) from the db_connection module.
 """
-from database.db_connection import db
+from backend.project import db
 
 # Define the role model
 class Role(db.Model):

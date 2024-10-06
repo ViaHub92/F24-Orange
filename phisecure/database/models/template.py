@@ -1,7 +1,7 @@
 """ Import the database connection object (db) from the db_connection module.
 """
 from datetime import datetime, timezone
-from database.db_connection import db
+from backend.project import db
 
 
 
@@ -23,6 +23,6 @@ class Template(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False, unique=True, index=True)
     description = db.Column(db.String(120), nullable=False)
-    subject = db.Column(db.String(), nullable=False)
+    subject = db.Column(db.String(120), nullable=False)
     body = db.Column(db.String(120), nullable=False)
     
