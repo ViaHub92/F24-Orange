@@ -23,15 +23,16 @@
 
 ## Run Flask
 
-1. Make sure you are still in backend directory
+1. Go back to the phisecure directory
 
-2. Use app.py to start flask or flask run
+2. Adjust the FLASK_APP environment variable with this command
+   ```bash
+    export FLASK_APP=backend.project:create_app
+   ```
+
+3. Use flask run command
     ```bash
     flask run
-    ```
-    or
-    ```bash
-    python app.py
     ```
 
 ## API Routes
