@@ -23,6 +23,6 @@ class Template(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False, unique=True, index=True)
     description = db.Column(db.String(120), nullable=False)
-    subject = db.Column(db.String(), nullable=False)
+    subject = db.Column(db.String(120), nullable=False)
     body = db.Column(db.String(120), nullable=False)
     
