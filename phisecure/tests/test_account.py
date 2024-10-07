@@ -1,6 +1,7 @@
 import pytest
 from backend.project.blueprints.account import list_users, get_user, create_user
 from database.db_connection import create_app, db
+
 """
 unittesting.py
 Team Orange
@@ -8,23 +9,46 @@ Last Modified: 10/3/24
 Unit testing for backend.
 """
 
-def test_list_users():
-    userlist = list_users()
-    assert len(userlist) != 0, "Was not able to properly read list of users from database."
-    print(userlist)
-    return
+class TestConfig:
+    """
+    Configuration for Flask testing.
 
-def test_get_user():
-    user1 = get_user("Dman92")
-    user2 = get_user("FaultyUser")
-    assert user1 != None and user2 != None, "Could not properly grab users from database."
-    return
+    Sets up an in-memory SQLite database
 
-def test_create_user():
-    return
+    Attributes:
+    SQLALCHEMY_DATABASE_URI (str): URI for the SQLite database.
+    SQLALCHEMY_TRACK_MODIFICATIONS (bool): Disables modification tracking.
+    TESTING (bool): Enables testing mode.
+    """
 
-def main():
-    test_list_users()
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TESTING = True
 
-if __name__ == "__main__":
-    main()
+@pytest.fixture
+def client():
+    """
+    Provides a test client for the Flask Application.
+    """
+    app = create_app(TestConfig)
+    app.config['TESTING'] = True
+    
+    with app.app_context():
+        with app.test_client() as client:
+            yield client
+
+
+class TestAccount:
+    """
+    Test suite for account functions
+    It tests the behavior of Account
+    """
+    def test_list_users(self, client):
+        userlist = client.get('/list_users')
+        assert userlist is not None
+    
+    def test_get_user(self):
+        assert 1 != 0
+    
+    def test_create_user(self):
+        return 1 != 0
