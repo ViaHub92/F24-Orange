@@ -1,12 +1,11 @@
 import pytest
-from backend.project.blueprints.account import list_users, get_user, create_user
 from database.db_connection import create_app, db
 
 """
 unittesting.py
 Team Orange
 Last Modified: 10/3/24
-Unit testing for backend.
+Unit testing for account and its Flask endpoints
 """
 
 class TestConfig:
@@ -45,10 +44,13 @@ class TestAccount:
     """
     def test_list_users(self, client):
         userlist = client.get('/list_users')
-        assert userlist is not None
+        assert userlist is not None, "Error in grabbing data from database."
     
-    def test_get_user(self):
-        assert 1 != 0
+    def test_get_user(self, client):
+        user1 = client.get('/get_user/alex_johnson')
+        user2 = client.get('/get_user/leedle_lee')
+        assert user1 is not None and user2 is not None, "Error in grabbing data from database."
     
-    def test_create_user(self):
-        return 1 != 0
+    def test_create_user(self, client):
+        temp = client.get('/create_user')
+        assert temp is not None, "Error in Flask endpoint."
