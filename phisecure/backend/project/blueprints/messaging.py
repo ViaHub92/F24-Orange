@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from backend.project import db
 from database.models.user import User
 from database.models.email import Email
@@ -22,10 +22,23 @@ def inbox():
     if not user:
         flash('User not found.')
         return redirect(url_for('routes.index'))
-
     # Get all emails sent to this user
     inbox_emails = Email.query.filter_by(recipient=user.email).all()
-    return render_template('inbox.html', emails=inbox_emails)
+
+    # Initialize email_list as an empty list
+    email_list = []
+
+    # Convert emails to a serializable format
+    for email in inbox_emails:
+        email_list.append({
+            "id": email.id,
+            "sender": email.sender,
+            "recipient": email.recipient,
+            "subject": email.subject,
+            "body": email.body,
+            "sent_at": email.sent_at.isoformat()  # Convert datetime to ISO format
+        })
+    return jsonify({"inbox": email_list}), 200
 
 # Route for composing a message
 @messaging.route('/compose', methods=['GET', 'POST'])
@@ -57,7 +70,7 @@ def compose():
         flash('Message sent successfully!')
         return redirect(url_for('messaging.inbox', user_id=recipient_user.id))
 
-    return render_template('compose.html')
+    return jsonify({"message": "Compose message form displayed."}), 200
 # Route to view a specific email
 @messaging.route('/view/<int:email_id>')
 def view_email(email_id):
