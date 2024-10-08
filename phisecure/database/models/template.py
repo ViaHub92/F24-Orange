@@ -1,6 +1,6 @@
-""" Import the database connection object (db) from the db_connection module.
+"""Import the database connection object (db) from the db_connection module.
 """
-'''
+
 from datetime import datetime, timezone
 from backend.project import db
 import enum
@@ -20,10 +20,10 @@ class DifficultyLevel(enum.Enum):
 
 
 class Template(db.Model):
-    """
-    *Still working on it*
     
-    Represents an email template in the database table.
+    """*Still working on it*
+    
+    Represents an email template in the database table. 
     
     Columns:
     id: id for the template.
@@ -42,8 +42,7 @@ class Template(db.Model):
     description = db.Column(db.String(400), nullable=False)
     category = db.Column(db.String(250), nullable=False)
     diffculty_level = db.Column(Enum(DifficultyLevel), nullable=False)
-    sent_by =db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
-    recipient = db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
+    #sent_by =db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
+    #recipient = db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
     subject = db.Column(db.String(120), nullable=False)
     body = db.Column(db.String(500), nullable=False)
-    

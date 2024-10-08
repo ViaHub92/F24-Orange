@@ -2,7 +2,6 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 from backend.config import Config
 
 # Initialize SQLAlchemy and Flask-Migrate
@@ -10,7 +9,7 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+   
     app.config.from_object(Config)
     app.config['SECRET_KEY'] = 'your_super_secret_key'
     db.init_app(app)

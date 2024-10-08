@@ -1,6 +1,6 @@
 import pytest
-from database.models import Role, User, Inbox, Email, Course, Student, Instructor, Admin,Template
-from database.db_connection import create_app, db
+from database.models import Role, User, Inbox, Email, Course, Student, Instructor, Admin
+from backend.project import create_app, db
 
 
 class TestConfig:
