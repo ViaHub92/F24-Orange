@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phisecure - About</title>
+    <title>Phisecure - Admin Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -14,11 +14,7 @@
         <nav class="navbar">
             <div class="logo">
                 <h1>Phisecure</h1>
-
-
             </div>
-
-            
             <ul class="nav-links">
                 <li><a href="home.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
@@ -26,25 +22,36 @@
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="login.html">Login</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
-
             </ul>
         </nav>
     </header>
 
-    <!-- Main Content -->
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Welcome, Admin [INSERT NAME]</h1>
+        <p>Manage your dashboard and configure system settings</p>
+    </section>
+
+    <!-- Admin Options Section -->
     <main>
-    <style>
-    li{margin-bottom: 20px; font-weight: bold;}
-    </style>
-    <div class="container">
-        <p style= "text-align: center; font-weight: bold;">Hello Admin [INSERT NAME HERE]</p>
-        <ul style="text-align: center; list-style: none;">
-        <li><a href="usermanagement.html">Manage User Accounts and Configuration</a></li>
-        <li><a href="phishingassessment.html">Phishing Attack Assessments</a></li>
-        <li><a href="dataanalytics.html">View Data Analytics for Phishing Attacks</a></li>
-        <li><a href="systemanalytics.html">Monitor System Usage and Performance</a></li>
-        </ul>
-    </div>
+        <div class="admin-options">
+            <div class="admin-option">
+                <i class="fas fa-users-cog"></i>
+                <a href="usermanagement.html">Manage Users</a>
+            </div>
+            <div class="admin-option">
+                <i class="fas fa-user-shield"></i>
+                <a href="phishingassessment.html">Phishing Assessments</a>
+            </div>
+            <div class="admin-option">
+                <i class="fas fa-chart-line"></i>
+                <a href="dataanalytics.html">Data Analytics</a>
+            </div>
+            <div class="admin-option">
+                <i class="fas fa-server"></i>
+                <a href="systemanalytics.html">System Analytics</a>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
