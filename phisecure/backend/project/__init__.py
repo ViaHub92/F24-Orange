@@ -2,10 +2,12 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from backend.config import Config
 
 # Initialize SQLAlchemy and Flask-Migrate
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -13,6 +15,7 @@ def create_app():
     app.config.from_object(Config)
     app.config['SECRET_KEY'] = 'your_super_secret_key'
     db.init_app(app)
+    migrate.init_app(app, db)
     
     from backend.project.routes import routes
     from backend.project.blueprints.account import account
