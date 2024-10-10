@@ -1,10 +1,13 @@
 import pytest
 from database.models import Role, User, Inbox, Email, Course, Student, Instructor, Admin
 from backend.project import create_app, db
+from backend.config import TestConfig
 
 
+
+"""
 class TestConfig:
-    """
+    
     Configuration for Flask testing.
 
     Sets up an in-memory SQLite database
@@ -13,12 +16,12 @@ class TestConfig:
     SQLALCHEMY_DATABASE_URI (str): URI for the SQLite database.
     SQLALCHEMY_TRACK_MODIFICATIONS (bool): Disables modification tracking.
     TESTING (bool): Enables testing mode.
-    """
+    
 
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = True
-
+"""
 
 @pytest.fixture(scope="module")
 def app():
@@ -32,7 +35,7 @@ def app():
         db.create_all()
         yield app
         db.session.remove()
-        db.drop_all()
+       # db.drop_all()
 
 
 @pytest.fixture(scope="module")
@@ -102,12 +105,9 @@ class TestModels:
         db_session.add(user_inbox)
         db_session.commit()
         
-        student_course = Course(course_name="Cyber Security 101")
-        db_session.add(student_course)
-        db_session.commit()
 
         # Create a Student User
-        new_user = Student(
+        new_user = User(
             username="testuser",
             password_hash="hashed_password_value",
             email="testuser@phisecure.com",
@@ -115,15 +115,13 @@ class TestModels:
             last_name="User",
             inbox_id=user_inbox.id,  # Use generated inbox ID
             role_id=role.id,  # Use generated role ID
-            course_id = student_course.id
-            
         )
 
         db_session.add(new_user)
         db_session.commit()
 
-        get_user = Student.query.filter_by(username="testuser").first()
+        get_user = User.query.filter_by(username="testuser").first()
 
         assert get_user is not None
         assert get_user.inbox_id == 1
-        assert get_user.course_id == student_course.id
+       

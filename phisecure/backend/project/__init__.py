@@ -9,10 +9,10 @@ from backend.config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
+def create_app(config_class=Config):
     app = Flask(__name__)
    
-    app.config.from_object(Config)
+    app.config.from_object(config_class)
     app.config['SECRET_KEY'] = 'your_super_secret_key'
     db.init_app(app)
     migrate.init_app(app, db)
@@ -24,7 +24,8 @@ def create_app():
     app.register_blueprint(account, url_prefix='/account')
     app.register_blueprint(messaging, url_prefix='/messaging')
 
+    """
     with app.app_context():
         db.create_all()  # Ensure this creates tables for the models
-
+    """
     return app
