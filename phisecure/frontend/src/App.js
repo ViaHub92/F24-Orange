@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Routes, Route} from "react-router-dom";
-import FetchAllUsers from "./components/FetchUsers";
-import Header from "./components/Header";
+import FetchAllUsers from "./pages/components/FetchUsers.js";
+import Header from "./pages/components/Header.js";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Admin from "./pages/Admin.js";

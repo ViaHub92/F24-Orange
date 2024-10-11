@@ -2,31 +2,29 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import TestEMail from './email_templates/testemail';
+import Sidebar from './components/Sidebar';
+import EmailList from './components/EmailList';
+import EmailDetail from './components/EmailDetail';
+
 
 const Mail = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [selectedEmail, setSelectedEmail] = useState(null);
 
-  const handleSendEmail = async () => {
-    try {
-      const response = await axios.post('/api/send-email', { email, template: TestEMail });
-      setMessage('Email sent successfully!');
-    } catch (error) {
-      setMessage('Failed to send email. Please try again.');
-    }
+  const emails = [
+    { id: 1, subject: 'Not Spam', body: 'Placeholder' },
+    { id: 2, subject: 'Phisecure', body: 'Placeholder' },
+    { id: 3, subject: 'Not Spam', body: 'Placeholder' },
+  ];
+
+  const handleEmailSelect = (email) => {
+    setSelectedEmail(email);
   };
 
   return (
-    <div>
-      <h2>Send Email</h2>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
-      />
-      <button onClick={handleSendEmail}>Send Email</button>
-      {message && <p>{message}</p>}
+    <div className="app">
+      <Sidebar />
+      <EmailList emails={emails} onEmailSelect={handleEmailSelect} />
+      {selectedEmail && <EmailDetail email={selectedEmail} />}
     </div>
   );
 };
