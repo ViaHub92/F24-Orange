@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import pytest
 from database.models import Role, User, Inbox, Email, Course, Student, Instructor, Admin
 from backend.project import create_app, db
@@ -124,4 +125,32 @@ class TestModels:
 
         assert get_user is not None
         assert get_user.inbox_id == 1
-       
+        
+        
+    def test_email_creation(self, db_session):
+        """
+        Test that an email is created with all fields which include
+        sender, recipient, subject, body, timestamp, and inbox
+
+        Args:
+            db_session (Session): A SQLAlchemy session object used to interact with the database.
+        """
+        
+        student_user_inbox = Inbox()
+        db_session.add(student_user_inbox)
+        db_session.commit()
+        
+        
+        test_email = Email(sender = "Mrbeans@gmail.com", recipient="student_user@gmail.com", sent_at=datetime(2024, 10, 11, 15, 30, tzinfo=timezone.utc), subject="CS411 Meeting Reminder", body="Don't forget about the meeting tomorrow", inboxs =student_user_inbox.id)
+        db_session.add(test_email)
+        db_session.commit()
+        
+        get_test_email = Email.query.get(1)
+        
+        assert get_test_email is not None
+        assert get_test_email.sent_at is not None
+        assert get_test_email.id == 1
+        assert get_test_email.sender == "Mrbeans@gmail.com"
+        assert get_test_email.recipient == "student_user@gmail.com"
+        assert get_test_email.subject == "CS411 Meeting Reminder"
+        assert get_test_email.body == "Don't forget about the meeting tomorrow"
