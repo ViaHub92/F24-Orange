@@ -83,17 +83,13 @@ def list_users():
 @account.route('/delete_user/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     # Find the user by ID
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
     if not user:
         return jsonify({"message": "User not found"}), 404
 
-    # Optionally, delete the user's inbox as well
-    if user.inbox_id:
-        inbox = Inbox.query.get(user.inbox_id)
-        if inbox:
-            db.session.delete(inbox)
-    # Delete the user
+    # Delete the user (this will also delete the inbox if cascade is set)
     db.session.delete(user)
     db.session.commit()
 
     return jsonify({"message": "User deleted successfully!"}), 200
+
