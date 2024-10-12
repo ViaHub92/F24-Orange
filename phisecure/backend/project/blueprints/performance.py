@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from backend.project import db
 from database.models.email import Email
-from database.models.student import Student  # Adjust import based on your structure
+from database.models.student import Student
 from datetime import datetime
 from sqlalchemy import func
 
