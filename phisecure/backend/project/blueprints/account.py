@@ -61,6 +61,7 @@ def get_student(username):
     student = Student.query.filter_by(username=username).first()
     if student:
         return jsonify({
+            "id": student.id,
             "username": student.username,
             "email": student.email,
             "first_name": student.first_name,
