@@ -5,7 +5,6 @@ from backend.project import create_app, db
 from backend.config import TestConfig
 
 
-
 """
 class TestConfig:
     
@@ -24,6 +23,7 @@ class TestConfig:
     TESTING = True
 """
 
+
 @pytest.fixture(scope="module")
 def app():
     """
@@ -36,7 +36,7 @@ def app():
         db.create_all()
         yield app
         db.session.remove()
-       # db.drop_all()
+    # db.drop_all()
 
 
 @pytest.fixture(scope="module")
@@ -105,7 +105,6 @@ class TestModels:
         user_inbox = Inbox()
         db_session.add(user_inbox)
         db_session.commit()
-        
 
         # Create a Student User
         new_user = User(
@@ -125,8 +124,7 @@ class TestModels:
 
         assert get_user is not None
         assert get_user.inbox_id == 1
-        
-        
+
     def test_email_creation(self, db_session):
         """
         Test that an email is created with all fields which include
@@ -135,18 +133,24 @@ class TestModels:
         Args:
             db_session (Session): A SQLAlchemy session object used to interact with the database.
         """
-        
+
         student_user_inbox = Inbox()
         db_session.add(student_user_inbox)
         db_session.commit()
-        
-        
-        test_email = Email(sender = "Mrbeans@gmail.com", recipient="student_user@gmail.com", sent_at=datetime(2024, 10, 11, 15, 30, tzinfo=timezone.utc), subject="CS411 Meeting Reminder", body="Don't forget about the meeting tomorrow", inboxs =student_user_inbox.id)
+
+        test_email = Email(
+            sender="Mrbeans@gmail.com",
+            recipient="student_user@gmail.com",
+            sent_at=datetime(2024, 10, 11, 15, 30, tzinfo=timezone.utc),
+            subject="CS411 Meeting Reminder",
+            body="Don't forget about the meeting tomorrow",
+            inboxs=student_user_inbox.id,
+        )
         db_session.add(test_email)
         db_session.commit()
-        
+
         get_test_email = Email.query.get(1)
-        
+
         assert get_test_email is not None
         assert get_test_email.sent_at is not None
         assert get_test_email.id == 1
@@ -154,3 +158,69 @@ class TestModels:
         assert get_test_email.recipient == "student_user@gmail.com"
         assert get_test_email.subject == "CS411 Meeting Reminder"
         assert get_test_email.body == "Don't forget about the meeting tomorrow"
+
+    def get_email_by_id(self, db_session):
+        """
+         Retrieve an email from the database by its ID.
+
+        Args:
+        db_session (Session): A SQLAlchemy session object used to interact with the database.
+        email_id (int): The ID of the email to retrieve.
+
+        Returns:
+        Email: The retrieved Email object, or None if not found.
+        """
+        # Logic to retrieve email by ID
+        pass
+
+    def delete_email(self, db_session):
+        """
+        Delete an email from the database by its ID.
+
+        Args:
+        db_session (Session): A SQLAlchemy session object used to interact with the database.
+        email_id (int): The ID of the email to delete.
+
+        Returns:
+        bool: True if the email was successfully deleted, False if not found.
+        """
+        # Logic to delete email
+        pass
+    
+    def test_create_and_read_phishing_template(self, db_session):
+        """
+        Test the creation of a new phishing template in the database.
+
+         Args:
+        db_session (Session): A SQLAlchemy session object used to interact with the database.
+        """
+        pass
+    
+    def test_update_phishing_template(self, db_session):
+        """
+        Test updating an existing phishing template in the database.
+
+        Args:
+        db_session (Session): A SQLAlchemy session object used to interact with the database.
+        """
+        pass
+    
+    def test_delete_phishing_template(self, db_session):
+        """
+        Test deleting a phishing template by its unique ID.
+
+        Args:
+        db_session (Session): A SQLAlchemy session object used to interact with the database.
+         """
+        pass
+    
+    def test_get_all_phishing_templates(self, db_session):
+        """
+        Test retrieving all phishing templates from the database.
+
+        Args:
+        db_session (Session): A SQLAlchemy session object used to interact with the database.
+        """
+        pass
+
+
