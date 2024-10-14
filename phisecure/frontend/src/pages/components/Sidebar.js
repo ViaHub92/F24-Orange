@@ -8,7 +8,6 @@ const Sidebar = () => {
         <li>Inbox</li>
         <li>Sent</li>
         <li>Drafts</li>
-        <li>Spam</li>
       </ul>
     </div>
   );

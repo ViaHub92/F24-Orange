@@ -7,7 +7,7 @@ import EmailList from './components/EmailList';
 import EmailDetail from './components/EmailDetail';
 
 
-const Mail = () => {
+function Mail() {
   const [selectedEmail, setSelectedEmail] = useState(null);
 
   const emails = [
@@ -22,9 +22,11 @@ const Mail = () => {
 
   return (
     <div className="app">
-      <Sidebar />
+
+      <Sidebar />  
       <EmailList emails={emails} onEmailSelect={handleEmailSelect} />
       {selectedEmail && <EmailDetail email={selectedEmail} />}
+  
     </div>
   );
 };
