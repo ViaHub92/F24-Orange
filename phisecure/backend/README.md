@@ -37,7 +37,7 @@
 
 ## API Routes
 
-Below is a list of the API routes available in the Phisecure backend:
+Below is a list of the functional API routes available in the Phisecure backend:
 
 ### 1. Landing Page
    - **URL:** `/`
@@ -45,23 +45,50 @@ Below is a list of the API routes available in the Phisecure backend:
    - **Description:** Returns a welcome message and a list of available routes.
 
 ### 2. Create User
-   - **URL:** `/account/create_user`
+   - **URL:** `/account/create_student`
    - **Method:** POST
-   - **Description:** Create a new user with the required details.
+   - **Description:** Create a new student with the required details.
    - **Expected Input:** JSON object with `username`, `email`, `password_hash`, `first_name`, `last_name`.
    - **Response:** Success or error message.
 
 ### 3. Get User by Username
-   - **URL:** `/account/get_user/<username>`
+   - **URL:** `/account/get_student/<username>`
    - **Method:** GET
-   - **Description:** Retrieve a user by their username.
-   - **Response:** User information (`username`, `email`, `first_name`, `last_name`) or an error message if the user is not found.
+   - **Description:** Retrieve a student by their username.
+   - **Response:** Student information (`username`, `email`, `first_name`, `last_name`) or an error message if the user is not found.
 
 ### 4. List All Users
-   - **URL:** `/account/list_users`
+   - **URL:** `/account/list_students`
    - **Method:** GET
-   - **Description:** Returns a list of all registered users.
-   - **Response:** JSON array of user objects with `username`, `email`, `first_name`, and `last_name`.
+   - **Description:** Returns a list of all registered students.
+   - **Response:** JSON array of student objects with `username`, `email`, `first_name`, and `last_name`.
+
+### 5. Delete Student
+   - **URL:** `/account/delete_student/<int:student_id>`
+   - **Method:** DELETE
+   - **Description:** Delete a specific student by their ID.
+   - **Expected Input:** Path parameter `student_id` (required).
+   - **Response:** Success message or an error message if the student is not found.
+
+### 6. Inbox
+   - **URL:** `/messaging/inbox`
+   - **Method:** GET
+   - **Description:** Retrieve all emails sent to a specific student.
+   - **Expected Input:** Query parameter `student_id` (required).
+   - **Response:** JSON object containing an array of emails with `id`, `sender`, `recipient`, `subject`, `body`, and `sent_at`.
+
+### 7. Compose Message
+   - **URL:** `/messaging/compose`
+   - **Method:** POST
+   - **Description:** Send a new email message.
+   - **Expected Input:** Form data with `sender`, `recipient`, `subject`, and `body`.
+   - **Response:** Success message or an error message if the recipient does not exist.
+
+### 8. View Email
+   - **URL:** `/messaging/view/<int:email_id>`
+   - **Method:** GET
+   - **Description:** View a specific email.
+   - **Response:** Renders the email details or redirects with an error message if the email is not found.
 
 ## How to Create User Using Postman
 1. **Open Postman**  

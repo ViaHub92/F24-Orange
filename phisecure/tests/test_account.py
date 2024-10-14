@@ -1,56 +1,62 @@
 import pytest
-from database.db_connection import create_app, db
+from backend.project import create_app, db
+from backend.config import TestConfig
 
-"""
-unittesting.py
-Team Orange
-Last Modified: 10/3/24
-Unit testing for account and its Flask endpoints
-"""
-
-class TestConfig:
-    """
-    Configuration for Flask testing.
-
-    Sets up an in-memory SQLite database
-
-    Attributes:
-    SQLALCHEMY_DATABASE_URI (str): URI for the SQLite database.
-    SQLALCHEMY_TRACK_MODIFICATIONS (bool): Disables modification tracking.
-    TESTING (bool): Enables testing mode.
-    """
-
-    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    TESTING = True
-
-@pytest.fixture
-def client():
-    """
-    Provides a test client for the Flask Application.
-    """
+@pytest.fixture(scope='session')
+def app():
     app = create_app(TestConfig)
-    app.config['TESTING'] = True
-    
     with app.app_context():
-        with app.test_client() as client:
-            yield client
+        db.create_all()
+        yield app
+        db.session.remove()
 
+@pytest.fixture(scope='function')
+def client(app):
+    with app.test_client() as client:
+        yield client
 
-class TestAccount:
-    """
-    Test suite for account functions
-    It tests the behavior of Account
-    """
-    def test_list_users(self, client):
-        userlist = client.get('/list_users')
-        assert userlist is not None, "Error in grabbing data from database."
+def test_student_account(client):
+    from database.models.student import Student  # Update the import to use Student
     
-    def test_get_user(self, client):
-        user1 = client.get('/get_user/alex_johnson')
-        user2 = client.get('/get_user/leedle_lee')
-        assert user1 is not None and user2 is not None, "Error in grabbing data from database."
+    student_data = {
+        "username": "teststudent",
+        "email": "teststudent@example.com",
+        "password_hash": "hashed_password",
+        "first_name": "Test",
+        "last_name": "Student"
+    }
     
-    def test_create_user(self, client):
-        temp = client.get('/create_user')
-        assert temp is not None, "Error in Flask endpoint."
+    # Test creating the student
+    create = client.post('/account/create_student', json=student_data)  # Adjust endpoint if necessary
+    assert create.status_code == 201, "Student creation failed"
+    assert b"Student created successfully!" in create.data  # Update message if needed
+    
+    # Test getting the student
+    get = client.get('/account/get_student/teststudent')  # Adjust endpoint if necessary
+    assert get.status_code == 200
+    student_info = get.get_json()
+    assert student_info["username"] == "teststudent"
+    assert student_info["email"] == "teststudent@example.com"
+    
+    # Test list_students (make sure this route is created)
+    list_test = client.get('/account/list_students')
+    assert list_test.status_code == 200
+    students_list = list_test.get_json()
+    assert len(students_list) > 0
+    assert students_list[0]["username"] == "teststudent"
+    
+    # Test deleting the student
+    delete_student_info = Student.query.filter_by(username="teststudent").first()
+    assert delete_student_info is not None, "Student not found before deletion"
+    
+    delete = client.delete(f'/account/delete_student/{delete_student_info.id}')  # Use the student's ID
+    assert delete.status_code == 200, "Student deletion failed"
+    assert b"Student deleted successfully!" in delete.data  # Update message if needed
+
+    # Test retrieving the deleted student
+    get_after_delete = client.get('/account/get_student/teststudent')  # Adjust endpoint if necessary
+    assert get_after_delete.status_code == 404, "Deleted student should not be found"
+
+    # Test trying to delete the same student again
+    delete_again = client.delete(f'/account/delete_student/{delete_student_info.id}')
+    assert delete_again.status_code == 404, "Should return 404 for already deleted student"

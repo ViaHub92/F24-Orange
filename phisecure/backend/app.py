@@ -1,4 +1,4 @@
-# backend/run.py
+# backend/app.py
 
 from project import create_app
 
