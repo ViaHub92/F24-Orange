@@ -164,17 +164,18 @@ input[type="password"] {
 
 /*EMail Page*/
 
-.sidebar {
-    list-style: none;
-    padding: 50px;
-    font-size: x-large;
-    color: #231D6C;
-    
-    align-items: center;
-    cursor: pointer;
-    width: 120px;
-    height: 120px;
+.sidebar > h2 {
+    color:#45a049;
   }
+
+.sidebar > ul {
+    columns: 1;
+    width: 200px;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    background-color: #f4f4f4;
+
+}
 
 .email-list > ul {
     cursor: pointer;
@@ -188,24 +189,19 @@ input[type="password"] {
     border: 2px solid #ccc; 
     border-radius: 8px;
     width: 500px;
+    flex: 1;
   }  
 
 .email-detail {
     cursor: pointer;
 }
-
-.sidebar {
-    width: 100%;
-    background-color: #f4f4f4;
-    padding: 10px;
-  }
   
-  .email-list {
+.email-list {
     flex: 1;
     padding: 10px;
   }
   
-  .email-detail {
+.email-detail {
     width: 80%;
     height: 100%;
     padding: 1px;

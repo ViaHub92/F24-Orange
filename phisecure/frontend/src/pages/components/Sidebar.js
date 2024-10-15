@@ -4,7 +4,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <h2>Folders</h2>
-      <ul>
+      <ul role="list">
         <li>Inbox</li>
         <li>Sent</li>
         <li>Drafts</li>
