@@ -3,7 +3,7 @@ imports all the models from the database in models folder
 """
 
 from database.models.role import Role
-from database.models.user import User
+from database.models.user_interaction import UserInteraction
 from database.models.email import Email
 from database.models.inbox import Inbox
 from database.models.course import Course

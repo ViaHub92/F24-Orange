@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 import pytest
-from database.models import Role, User, Inbox, Email, Course, Student, Instructor, Admin
+from database.models import Role, Inbox, Email, Course, Student, Instructor, Admin
 from backend.project import create_app, db
 from backend.config import TestConfig
 
@@ -107,7 +107,7 @@ class TestModels:
         db_session.commit()
 
         # Create a Student User
-        new_user = User(
+        new_user = Student(
             username="testuser",
             password_hash="hashed_password_value",
             email="testuser@phisecure.com",
@@ -120,7 +120,7 @@ class TestModels:
         db_session.add(new_user)
         db_session.commit()
 
-        get_user = User.query.filter_by(username="testuser").first()
+        get_user = Student.query.filter_by(username="testuser").first()
 
         assert get_user is not None
         assert get_user.inbox_id == 1
