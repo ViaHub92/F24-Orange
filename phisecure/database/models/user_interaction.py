@@ -3,7 +3,7 @@
 from backend.project import db
 
 
-# Define the user model
+
 class UserInteraction(db.Model):
     """
     model for user interaction with phishing templates
