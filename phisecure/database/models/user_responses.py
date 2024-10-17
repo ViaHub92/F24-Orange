@@ -2,7 +2,7 @@
 """
 from backend.project import db
 
-class UserProfile(db.Model):
+class UserResponses(db.Model):
     """
     Represents the profile personalization for student users for templates
     id: primary key for user profile
@@ -17,7 +17,7 @@ class UserProfile(db.Model):
     student_id: foreign key referencing the userprofile of the student user.
     
     """
-    __tablename__ = "userProfile"
+    __tablename__ = "user_Responses"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
     user_age = db.Column(db.Integer, nullable=False)
