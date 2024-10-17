@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phisecure - About</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <!-- Navigation Bar -->
+   <header>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>Phisecure</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="dashboard.html"> Dashboard</a></li>
+            <li><a href="studentreports.html">Reports</a></li> 
+            <li><a href="inbox.html">Inbox</a></li>
+
+        </ul>
+    </nav>
+</header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="section">
+            <form action="/questionnaire_page.php">
+                <p>First Name:</p>
+                <input type="text" id="fname" name="fname"><br>
+
+                <p>Last Name:</p>
+                <input type="text" id="lname" name="lname"><br>
+
+                <p>Username:</p>
+                <input type="text" id="uname" name="uname"><br>
+
+                <p>Email:</p>
+                <input type="text" id="email" name="email"><br>
+
+                <p>Are you currently employed?</p>
+                    <input type="radio" id="empstat1" name="yes" value="empstatyes">
+                    <label for="empstat1">Yes</label>
+                    <input type="radio" id="empstat2" name="empstatno" value="empstatno">
+                    <label for="empstat2">No</label><br>
+
+                <p>If so, name your place of employment and experience:</p>
+                <input type="text" id="employmentdetails" name="empdet"><br>
+
+                <p>Have you recently moved from your hometown to your selected college?</p>
+                    <input type="radio" id="movecoll1" name="yes" value="movecollyes">
+                    <label for="movecoll1">Yes</label>
+                    <input type="radio" id="movecoll2" name="no" value="movecollno">
+                    <label for="movecoll2">Yes</label><br>
+
+                <p>Are you doing well financially?</p>
+                    <input type="radio" name="financialyes">
+                    Yes
+                    <input type="radio" name="financialno">
+                    No<br><br>
+                <input type="submit" value="Submit">
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Phisecure. All rights reserved.</p>
+    </footer>
+</body>
+</html>
