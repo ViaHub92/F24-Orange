@@ -29,7 +29,7 @@ class Student(db.Model):
     
     
     interactions = db.relationship("UserInteraction", backref="student", lazy=True)
-    
+    responses = db.relationship("UserResponses", backref="student", uselist=False)
 
     def __repr__(self) -> str:
         return "<User %r>" % self.username

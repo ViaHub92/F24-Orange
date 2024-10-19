@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from backend.project import db
-from database.models.template import Template
+from database.models.template import Template, DifficultyLevel
 
 
 phishing_templates = Blueprint("phishing_templates", __name__)
@@ -33,16 +33,23 @@ def create_template():
         description = data.get('description')
         category = data.get('category')
         tags = data.get('tags')
-        difficulty_level = data.get('difficulty_level')
+        difficulty_level_str = data.get('difficulty_level')
         sender = data.get('sender')
         recipient = data.get('recipient')
         subject = data.get('subject')
         body = data.get('body')
         link = data.get('link', '')
         
+       
+        
         existing_templates = Template.query.filter_by(name=name).first()
         if existing_templates:
             return jsonify(message="Template name already exists!"), 409
+        
+        try:
+            difficulty_level = DifficultyLevel[difficulty_level_str]  # Convert string to enum
+        except KeyError:
+            return jsonify(message="Invalid difficulty level!"), 400
         
         template = Template(
                 name = name,
