@@ -29,5 +29,5 @@ class UserResponses(db.Model):
     use_2fa = db.Column(db.Boolean, nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False, unique=True)
     
-    student = db.relationship("Student", back_populates="responses", useList=False)
+    student = db.relationship("Student", back_populates="responses", uselist=False)
     
