@@ -21,10 +21,12 @@ def create_app(config_class=Config):
     from backend.project.blueprints.account import account
     from backend.project.blueprints.messaging import messaging
     from backend.project.blueprints.performance import performance
+    from backend.project.blueprints.phishing_templates import phishing_templates
     app.register_blueprint(routes)
     app.register_blueprint(account, url_prefix='/account')
     app.register_blueprint(messaging, url_prefix='/messaging')
     app.register_blueprint(performance, url_prefix='/performance')
+    app.register_blueprint(phishing_templates, url_prefix='/phishing')
 
     """
     with app.app_context():

@@ -22,7 +22,7 @@ def get_template(template_id):
     """
     pass
 
-@phishing_templates.route('/templates', method=['POST'])
+@phishing_templates.route('/templates', methods=['POST'])
 def create_template():
     """
      Implement logic for creating a new template
