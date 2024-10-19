@@ -27,7 +27,45 @@ def create_template():
     """
      Implement logic for creating a new template
     """
-    pass
+    if request.method == 'POST':
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+        category = data.get('category')
+        tags = data.get('tags')
+        difficulty_level = data.get('difficulty_level')
+        sender = data.get('sender')
+        recipient = data.get('recipient')
+        subject = data.get('subject')
+        body = data.get('body')
+        link = data.get('link', '')
+        
+        existing_templates = Template.query.filter_by(name=name).first()
+        if existing_templates:
+            return jsonify(message="Template name already exists!"), 409
+        
+        template = Template(
+                name = name,
+                description=description,
+                category = category,
+                tags=tags,
+                difficulty_level=difficulty_level,
+                sender=sender,
+                recipient=recipient,
+                subject=subject,
+                body=body,
+                link=link
+            )
+        db.session.add(template)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'template': template.serialize()
+        }), 201
+        
+        
+        
 
 @phishing_templates.route('/templates/<template_id>', methods=['PUT'])
 def update_template(template_id):
