@@ -3,6 +3,7 @@ from backend.project import db
 from database.models.student import Student  # Import Student model instead of User
 from database.models.email import Email
 from database.models.inbox import Inbox
+from database.models.user_interaction import UserInteraction
 from datetime import datetime, timezone
 from backend.project.routes import routes
 
@@ -67,21 +68,88 @@ def compose():
 
         db.session.add(email)
         db.session.commit()
+
+        # Create a UserInteraction record for the recipient
+        interaction = UserInteraction(
+            student_id=recipient_student.id,
+            template_id=1,
+            opened=0,
+            link_clicked=0,
+            replied=0
+        )
+
+        db.session.add(interaction)
+        db.session.commit()
+
         flash('Message sent successfully!')
-        return redirect(url_for('messaging.inbox', user_id=recipient_student.id))
+        return redirect(url_for('messaging.inbox', student_id=recipient_student.id))
 
     return jsonify({"message": "Compose message form displayed."}), 200
 
-# Route to view a specific email
-@messaging.route('/view/<int:email_id>')
+
+@messaging.route('/view/<int:email_id>', methods=['GET'])
 def view_email(email_id):
+    # Find the email by its ID
     email = Email.query.get(email_id)
+    
     if not email:
         flash('Email not found.')
         return redirect(url_for('messaging.inbox'))
 
-    # Mark email as read
-    email.is_read = True
+    # Find the interaction for the current student (assuming student_id is passed in the session or request)
+    student_id = request.args.get('student_id')
+    interaction = UserInteraction.query.filter_by(student_id=student_id).first()
+
+    if interaction:
+        # Logic to handle existing interaction
+        # You can update 'opened' if you want, but not link_clicked or replied
+        interaction.opened += 1
+        db.session.commit()
+
+    # Render the email view template or return JSON data
+    return render_template('view_email.html', email=email, interaction=interaction)
+
+
+# Route to handle replying to an email
+@messaging.route('/reply/<int:email_id>', methods=['POST'])
+def reply_email(email_id):
+    email = Email.query.get(email_id)
+    if not email:
+        flash('Email not found.')
+        return redirect(url_for('messaging.inbox'))
+    
+    reply_body = request.form.get('reply_body')  # Get reply message from the form
+
+    student_id = request.args.get('student_id')
+    
+    if not student_id:
+        flash("Student ID is missing")
+        return redirect(url_for('messaging.inbox'))
+    
+    # Update the interaction record (set replied to True) using only student_id
+    interaction = UserInteraction.query.filter_by(student_id=student_id).first()
+    if interaction:
+        interaction.replied = True
+        db.session.commit()
+    else:
+        flash('No interaction found for this email.')
+    
+    flash('Reply sent successfully!')
+    return redirect(url_for('messaging.inbox'))
+
+# Route to handle deleting an email
+@messaging.route('/delete/<int:email_id>', methods=['POST'])
+def delete_email(email_id):
+    # Find the email by its ID
+    email = Email.query.get(email_id)
+    
+    if not email:
+        flash('Email not found.')
+        return redirect(url_for('messaging.inbox'))  # Redirect back to inbox if email not found
+
+    # Delete the email from the database
+    db.session.delete(email)
     db.session.commit()
     
-    return render_template('view_email.html', email=email)
+    flash('Email deleted successfully!')
+    return redirect(url_for('messaging.inbox'))  # Redirect back to inbox
