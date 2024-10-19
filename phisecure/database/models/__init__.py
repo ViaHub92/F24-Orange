@@ -11,4 +11,4 @@ from database.models.admin import Admin
 from database.models.instructor import Instructor
 from database.models.student import Student
 from database.models.template import Template
-from database.models.userProfile import UserProfile
+from database.models.user_responses import UserResponses
