@@ -28,7 +28,7 @@ class Student(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey("courses.id"))
     
     interactions = db.relationship("UserInteraction", backref="student", lazy=True)
-    profile = db.relationship("UserProfile", back_populates="student", uselist=False)
+    
 
     def __repr__(self) -> str:
         return "<User %r>" % self.username
