@@ -10,7 +10,12 @@ def get_templates():
     """
     logic for retrieving all templates
     """
-    pass
+    if request.method == 'GET':
+        templates = Template.query.all()
+        return jsonify({
+            'success': True,
+            'templates': [template.serialize() for template in templates]
+        }), 200
 
 @phishing_templates.route('/templates/<template_id>', methods=['GET'])
 def get_template(template_id):
@@ -20,12 +25,19 @@ def get_template(template_id):
     Args:
         template_id (int): unique identifier for the phishing template.
     """
-    pass
+    if request.method == 'GET':
+        template = Template.query.get(template_id)
+        if not template:
+            return jsonify(message="Template not found!"), 404
+        return jsonify({
+            'success': True,
+            'template': template.serialize()
+        }), 200
 
 @phishing_templates.route('/templates', methods=['POST'])
 def create_template():
     """
-     Implement logic for creating a new template
+    logic for creating a new phishing template.
     """
     if request.method == 'POST':
         data = request.get_json()
@@ -85,9 +97,15 @@ def update_template(template_id):
 
 @phishing_templates.route('/templates/<template_id>', methods=['DELETE'])
 def delete_template(template_id):
-    """_summary_
-
+    """
+    logic for deleting a phishing template.
     Args:
         template_id (_type_): _description_
     """
-    pass
+    if request.method == 'DELETE':
+        template = Template.query.get(template_id)
+        if not template:
+            return jsonify(message="Template not found!"), 404
+        db.session.delete(template)
+        db.session.commit()
+        return jsonify(message="Template deleted successfully!"), 200
