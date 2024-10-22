@@ -31,6 +31,10 @@
     <main>
         <section class="section">
             <form action="/questionnaire_page.php">
+                <p>Hello! This is a questionnaire for new users to better know you and customize our faux phishing attempts to best train you.
+                   Below are a list of questions and fill-ins. Respond to them and when you're done, submit.<br><br>
+                   Please, be as honest and direct as possible. It will give you the best results with our service.</p>
+
                 <p>First Name:</p>
                 <input type="text" id="fname" name="fname"><br>
 
@@ -58,12 +62,13 @@
                     <input type="radio" id="movecoll2" name="no" value="movecollno">
                     <label for="movecoll2">Yes</label><br>
 
-                <p>Are you doing well financially?</p>
+                <p>Do you not have any problems financially at the moment?</p>
                     <input type="radio" id="financialyes" name="financialyes">
                     <label for="financialyes">Yes</label>
                     <input type="radio" name="financialno">
                     <label for="financialno">No</label><br>
 
+                <!-- Too Vague: Comment it Out f or now
                 <p>How well versed are you in computer technology and web safety?</p>
                     <input type="radio" id="knowledgewellversed" name="knowledgewellversed">
                     <label for="knowledgewellversed">Well Versed</label>
@@ -75,6 +80,19 @@
                     <label for="knowledgenotwellversed">Not Well Versed</label>
                     <input type="radio" id="knowledgenonex" name="knowledgenonex">
                     <label for="knowledgenonex">Nonexistent Knowledge Base</label><br>
+                -->
+                
+                <p>Do you often change your password?</p>
+                    <input type="radio" id="passyes" name="passyes">
+                    <label for="passyes">Yes</label>
+                    <input type="radio" id="passno" name="passno">
+                    <label for="passno">No</label><br>
+                
+                <p>Do you reuse password for multiple accounts?</p>
+                    <input type="radio" id="reuseyes" name="reuseyes">
+                    <label for="reuseyes">Yes</label>
+                    <input type="radio" id="reuseno" name="reuseno">
+                    <label for="reuseno">No</label><br>
 
                 <p>Have you been phished before?</p>
                     <input type="radio" id="phishyes" name="phishyes">
@@ -82,7 +100,19 @@
                     <input type="radio" id="phishno" name="phishno">
                     <label for="phishno">No</label><br>
                 
-                <p>If so, describe the attack:</p>
+                <p>Have you been sent a phishing email before?</p>
+                    <input type="radio" id="phishemailyes" name="phishemailyes">
+                    <label for="phishemailyes">Yes</label>
+                    <input type="radio" id="phishemailno" name="phishemailno">
+                    <label for="phishemailno">No</label><br>
+                
+                <p>If so, did you fall for it?</p>
+                    <input type="radio" id="phishemailstatyes" name="phishemailstatyes">
+                    <label for="phishemailstatyes">Yes</label>
+                    <input type="radio" id="phishemailstatno" name="phishemailstatno">
+                    <label for="phishemailno">No</label><br>
+
+                <p>If so, describe the most recent attack:</p>
                 <input type="text" id="employmentdetails" name="empdet"><br>
 
                 <p>Has your college and/or place of employment recently suffered a wide-scale spear phishing attack?</p>
@@ -90,6 +120,11 @@
                     <label for="empphishyes">Yes</label>
                     <input type="radio" id="empphishno" name="phishno">
                     <label for="empphishno">No</label><br>
+                
+                <p>If so, describe the attack:</p>
+                <input type="text" id="empattdetails" name="ead"><br><br>
+
+                <input type="submit" value="Submit"> 
             </form>
         </section>
     </main>
