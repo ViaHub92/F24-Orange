@@ -5,6 +5,7 @@ from backend.project import create_app, db
 from backend.config import TestConfig
 
 
+
 """
 class TestConfig:
     
@@ -109,21 +110,28 @@ class TestModels:
         # Create a Student User
         new_user = Student(
             username="testuser",
-            password_hash="hashed_password_value",
             email="testuser@phisecure.com",
             first_name="Test",
             last_name="User",
             inbox_id=user_inbox.id,  # Use generated inbox ID
             role_id=role.id,  # Use generated role ID
         )
-
+        
+        # hash the password for user using bcrypt
+        new_user.password = "password12345"
+      
+        
         db_session.add(new_user)
         db_session.commit()
 
         get_user = Student.query.filter_by(username="testuser").first()
-
+        is_hashed = get_user.check_password("password12345")
+       
         assert get_user is not None
         assert get_user.inbox_id == 1
+        assert is_hashed
+
+       
 
     def test_email_creation(self, db_session):
         """

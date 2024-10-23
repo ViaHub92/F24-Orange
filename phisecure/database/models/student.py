@@ -1,6 +1,9 @@
 """ Import the database connection object (db) from the db_connection module.
 """
 from backend.project import db
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt()
 
 class Student(db.Model):
     """
@@ -30,6 +33,36 @@ class Student(db.Model):
     
     interactions = db.relationship("UserInteraction", backref="student", lazy=True)
     responses = db.relationship("UserResponses", backref="student", uselist=False)
+    
+    @property
+    def password(self):
+        """ fetches the password of the student
+        
 
+        Raises:
+            AttributeError: Password is not a readable attribute
+        """
+        raise AttributeError("Password is not a readable attribute")
+    
+    @password.setter
+    def password(self, password):
+        """ sets the password of the student and hashes it
+
+        Args:
+            password (_type_): password of the student
+        """
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+        
+    def check_password(self, password):
+        """ checks if the password is correct
+
+        Args:
+            password (_type_): password of the student
+
+        Returns:
+            _type_: True if the password is correct, False otherwise
+        """
+        return bcrypt.check_password_hash(self.password_hash, password)
+    
     def __repr__(self) -> str:
         return "<User %r>" % self.username
