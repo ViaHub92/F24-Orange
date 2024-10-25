@@ -18,18 +18,19 @@ export const dataInstructor = [
     curveType: "function",
     legend: { position: "bottom" },
     pageSize: 10,
+    allowHtml: true,
   };
 
   export function ReportsInstructor() {
     return (
-      <div>
+      <div id="instructor_report">
           <meta charSet="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>Phisecure - Contact</title>
           <link rel="stylesheet" href="styles.css" />
           {/* Main Content */}
           <main>
-          <section className="section">
+          <section className="report-section">
               <h2>Instructor Report</h2>
               <Chart
               chartType="Table"
