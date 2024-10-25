@@ -1,14 +1,22 @@
-/* General styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('Images/bn21.jpg'); /* Add the path to your background image */
-    background-size: cover; /* Ensures the image covers the entire page */
-    background-position: center; /* Centers the image on the screen */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    background-attachment: fixed; /* Keeps the background image fixed when scrolling */
-    color: #333; /* Default text color */
+    background-image: url('Images/bn21.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+    background-color: #f4f7fa; 
+}
+
+:root {
+    --primary-color: #231D6C;
+    --secondary-color: #4CAF50;
+    --accent-color: #007BFF;
+    --text-color: #333;
+    --footer-bg: #333;
 }
 
 
@@ -134,33 +142,9 @@ input[type="password"] {
     background-color: #45a049;
 }
 
-.nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.nav-logo {
-    width: 120px;
-    height: 120px;
-}
 
-.nav-items {
-    color:crimson;
-    list-style: none;
-    display: flex;
-}
 
-.nav-items > li {
-    padding: 10px;
-}
-
-.nav-items a {
-    color:#FFFFFF
-}
-.nav-items a:hover {
-    color:orange
-}
 /* Styles for the dashboard links */
 .dashboard-link {
     text-decoration: none;
@@ -182,14 +166,7 @@ input[type="password"] {
 
 
 /* Admin Section */
-.hero {
-    background-image: url('admin-bg.jpg'); /* Background image for admin page */
-    background-size: cover;
-    background-position: center;
-    padding: 50px 0;
-    color: white;
-    text-align: center;
-}
+
 
 .hero h1 {
     font-size: 3rem;
@@ -241,165 +218,9 @@ input[type="password"] {
 
 
 
-  /* Dashboard Options */
-  .dashboard-options {
-    display: flex;
-    justify-content: center;
-    margin: 40px 0;
-    gap: 30px;
-    flex-wrap: wrap;
-}
+  
 
-.dashboard-option {
-    background-color: #231D6C;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 200px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.dashboard-option:hover {
-    transform: translateY(-10px);
-    background-color: #3e338d;
-}
-
-.dashboard-option i {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    display: block;
-}
-
-.dashboard-option a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
- /* Report Section */
- .hero {
-    background-image: url('reports-bg.jpg'); /* Background image for reports page */
-    background-size: cover;
-    background-position: center;
-    padding: 50px 0;
-    color: rgb(0, 0, 0);
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-/* Reports List Section */
-.reports-section {
-    padding: 40px;
-}
-
-.report-list {
-    list-style: none;
-    padding: 0;
-}
-
-.report-list li {
-    background-color: #f4f4f4;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.report-list li:hover {
-    background-color: #007BFF;
-    color: white;
-    transform: translateY(-5px);
-}
-
-.report-list a {
-    text-decoration: none;
-    color: inherit;
-    font-size: 1.2rem;
-    display: flex;
-    justify-content: space-between;
-}
-
-.report-list a i {
-    color: #007BFF;
-}
-
-.report-list a:hover i {
-    color: white;
-}
-/* Inbox Section */
-
-.email-inbox {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.email-inbox h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-}
-
-.email-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-}
-
-.email-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.email-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.email-subject {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.email-sender, .email-time {
-    font-size: 14px;
-    color: #777;
-}
-
-.email-action {
-    text-align: right;
-}
-
-.view-email-btn {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.view-email-btn:hover {
-    background-color: #45a049;
-}
-
+ 
 /* Homepage Section */
 
 
@@ -443,3 +264,207 @@ input[type="password"] {
     color: #666;
     font-size: 16px;
 }
+
+.hero {
+    background-size: cover;
+    background-position: center;
+    padding: 50px 0;
+    text-align: center;
+    color: white;
+}
+.hero.admin {
+    background-image: url('admin-bg.jpg');
+}
+.hero.reports {
+    background-image: url('reports-bg.jpg');
+    color: black;
+}
+
+
+/* Inbox Section */
+.email-inbox {
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+.email-inbox h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.email-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.email-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.email-info {
+    flex: 1;
+}
+
+.email-subject {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.email-sender, .email-time {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.view-email-btn {
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.view-email-btn:hover {
+    background-color: #555;
+}
+
+
+
+
+/* Dashboard Layout */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.dashboard-item {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.dashboard-item:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-item i {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.dashboard-item h3 {
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.dashboard-item p {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.dashboard-link {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.dashboard-link:hover {
+    color: #0056b3;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #333;
+    color: #fff;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+/* Reports List Section */
+.reports-section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.reports-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.report-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.report-list li {
+    width: 80%;
+    max-width: 600px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.report-list li:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.report-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.report-list a:hover {
+    color: #007BFF;
+}
+
+.report-list i {
+    color: #007BFF;
+}
+
+
+
+
