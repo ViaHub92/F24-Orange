@@ -28,5 +28,5 @@ class Email(db.Model):
     sent_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     subject = db.Column(db.String(120), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    inboxs = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)
+    inbox_id = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)
     

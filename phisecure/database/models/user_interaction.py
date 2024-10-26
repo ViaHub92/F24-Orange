@@ -15,6 +15,7 @@ class UserInteraction(db.Model):
     opened = db.Column(db.Boolean, default=False)
     link_clicked = db.Column(db.Boolean, default=False)
     replied = db.Column(db.Boolean, default=False)
+    reported = db.Column(db.Boolean, default=False)
     
 
     def __repr__(self) -> str:
