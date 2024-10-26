@@ -1,8 +1,9 @@
 from datetime import datetime, timezone
 import pytest
-from database.models import Role, Inbox, Email, Course, Student, Instructor, Admin
+from database.models import Role, Inbox, Email, Course, Student, Instructor, Admin, Template
 from backend.project import create_app, db
 from backend.config import TestConfig
+
 
 
 
@@ -152,7 +153,7 @@ class TestModels:
             sent_at=datetime(2024, 10, 11, 15, 30, tzinfo=timezone.utc),
             subject="CS411 Meeting Reminder",
             body="Don't forget about the meeting tomorrow",
-            inboxs=student_user_inbox.id,
+            inbox_id=student_user_inbox.id,
         )
         db_session.add(test_email)
         db_session.commit()
@@ -167,33 +168,6 @@ class TestModels:
         assert get_test_email.subject == "CS411 Meeting Reminder"
         assert get_test_email.body == "Don't forget about the meeting tomorrow"
 
-    def get_email_by_id(self, db_session):
-        """
-         Retrieve an email from the database by its ID.
-
-        Args:
-        db_session (Session): A SQLAlchemy session object used to interact with the database.
-        email_id (int): The ID of the email to retrieve.
-
-        Returns:
-        Email: The retrieved Email object, or None if not found.
-        """
-        # Logic to retrieve email by ID
-        pass
-
-    def delete_email(self, db_session):
-        """
-        Delete an email from the database by its ID.
-
-        Args:
-        db_session (Session): A SQLAlchemy session object used to interact with the database.
-        email_id (int): The ID of the email to delete.
-
-        Returns:
-        bool: True if the email was successfully deleted, False if not found.
-        """
-        # Logic to delete email
-        pass
     
     def test_create_and_read_phishing_template(self, db_session):
         """
@@ -202,25 +176,57 @@ class TestModels:
          Args:
         db_session (Session): A SQLAlchemy session object used to interact with the database.
         """
-        pass
-    
-    def test_update_phishing_template(self, db_session):
-        """
-        Test updating an existing phishing template in the database.
+        
+         # Create a role
+        role = Role(name="student")
+        db_session.add(role)
+        db_session.commit()
+        
+        
+        student_user_inbox = Inbox()
+        db_session.add(student_user_inbox)
+        db_session.commit()
+        
+        new_user = Student(
+            username="testuser",
+            email="testuser@phisecure.com",
+            first_name="Test",
+            last_name="User",
+            inbox_id=student_user_inbox.id, 
+            role_id=role.id,  
+        )
+        
+        # hash the password for user using bcrypt
+        new_user.password = "password12345"
+        db_session.add(new_user)
+        db_session.commit()
 
-        Args:
-        db_session (Session): A SQLAlchemy session object used to interact with the database.
-        """
-        pass
+        
+        phishing_template = Template(
+            name="Test Phishing Template",
+            description="Test Description",
+            category="Test Category",
+            subject="Test Subject",
+            body="this is a tester",
+            tags = "Test Tags",
+            difficulty_level=DifficultyLevel.beginner,
+            sender="phisher350@gmail.com",
+            recipient= new_user.email,
+            link="www.testlink.com")
+        db_session.add(phishing_template)
+        db_session.commit()
+        
+        test_phishing_template_email = Email(
+            sender=phishing_template.sender,
+            recipient=phishing_template.recipient,
+            sent_at=datetime(2024, 10, 11, 15, 30, tzinfo=timezone.utc),
+            subject=phishing_template.subject,
+            body=phishing_template.body,
+            inbox_id=student_user_inbox.id,
+        )
+        db_session.add(test_phishing_template_email)
+        db_session.commit()
     
-    def test_delete_phishing_template(self, db_session):
-        """
-        Test deleting a phishing template by its unique ID.
-
-        Args:
-        db_session (Session): A SQLAlchemy session object used to interact with the database.
-         """
-        pass
     
     def test_get_all_phishing_templates(self, db_session):
         """
