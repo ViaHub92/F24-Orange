@@ -4,6 +4,7 @@ from database.models.student import Student  # Import Student model instead of U
 from database.models.email import Email
 from database.models.inbox import Inbox
 from database.models.user_interaction import UserInteraction
+from database.models.template import Template
 from datetime import datetime, timezone
 from backend.project.routes import routes
 
@@ -45,10 +46,8 @@ def inbox():
 @messaging.route('/compose', methods=['GET', 'POST'])
 def compose():
     if request.method == 'POST':
-        sender_email = request.form.get('sender')  # sender email is now passed from form
         recipient_email = request.form.get('recipient')
-        subject = request.form.get('subject')
-        body = request.form.get('body')
+        template_id = request.form.get('template_id')
 
         # Check if the recipient is valid
         recipient_student = Student.query.filter_by(email=recipient_email).first()
@@ -56,14 +55,20 @@ def compose():
             flash('Recipient does not exist.')
             return redirect(url_for('messaging.compose'))
 
+        # Fetch the template using the template_id
+        template = Template.query.get(template_id)
+        if not template:
+            flash('Template does not exist.')
+            return redirect(url_for('messaging.compose'))
+
         # Create the new email and save it
         email = Email(
-            sender=sender_email,
+            sender=template.sender,  # Use the sender from the template
             recipient=recipient_email,
-            subject=subject,
-            body=body,
+            subject=template.subject,  # Use the subject from the template
+            body=template.body,        # Use the body from the template
             sent_at=datetime.now(timezone.utc),
-            inboxs=recipient_student.inbox_id  # Link the email to recipient's inbox
+            inbox_id=recipient_student.inbox_id  # Link the email to recipient's inbox
         )
 
         db.session.add(email)
@@ -72,10 +77,10 @@ def compose():
         # Create a UserInteraction record for the recipient
         interaction = UserInteraction(
             student_id=recipient_student.id,
-            template_id=1,
-            opened=0,
-            link_clicked=0,
-            replied=0
+            template_id=template.id,  # Use the ID of the fetched template
+            opened=False,
+            link_clicked=False,
+            replied=False
         )
 
         db.session.add(interaction)
@@ -84,6 +89,8 @@ def compose():
         flash('Message sent successfully!')
         return redirect(url_for('messaging.inbox', student_id=recipient_student.id))
 
+    # If GET request, fetch templates to display
+    templates = Template.query.all()  # Fetch all templates for the dropdown
     return jsonify({"message": "Compose message form displayed."}), 200
 
 
@@ -102,12 +109,17 @@ def view_email(email_id):
 
     if interaction:
         # Logic to handle existing interaction
-        # You can update 'opened' if you want, but not link_clicked or replied
-        interaction.opened += 1
+        interaction.opened = 1
         db.session.commit()
 
     # Render the email view template or return JSON data
-    return render_template('view_email.html', email=email, interaction=interaction)
+    return jsonify({
+    "email_id": email.id,
+    "sender": email.sender,
+    "recipient": email.recipient,
+    "subject": email.subject,
+    "body": email.body,
+    }), 200
 
 
 # Route to handle replying to an email
