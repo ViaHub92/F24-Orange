@@ -18,5 +18,4 @@ class UserInteraction(db.Model):
     reported = db.Column(db.Boolean, default=False)
     
 
-    def __repr__(self) -> str:
-        return "<User %r>" % self.username
+    
