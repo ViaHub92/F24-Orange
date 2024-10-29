@@ -15,7 +15,7 @@ class PhishingEmail(db.Model):
     subject: subject line of the email
     body: content of the email
     inbox_id: foreign key referencing the inbox associated with the email.
-    
+    template_id: foreign key referencing the template used to create the email.
     
     """
     __tablename__ = "phishing_emails"
