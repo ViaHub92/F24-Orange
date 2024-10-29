@@ -1,4 +1,36 @@
+import React, { useState } from 'react';
+
 function CreateAccount() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch('/account/create_student', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password, firstname, lastname, email }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            setMessage(result.message);
+        } else {
+            const errorResult = await response.json();
+            setMessage(errorResult.error);
+        }
+    } catch (error) {
+        setMessage('Error creating user');
+    }
+};
+
     return (
     <div>
         <meta charSet="UTF-8" />
@@ -9,29 +41,55 @@ function CreateAccount() {
           <main>
             <section className="section">
               <h2>Create Account</h2>
-              <form action="login.php" method="post">
+              <form onSubmit={handleSubmit}>
                 <div className="input-group">
-                  <label htmlFor="username">Username</label>
-                  <input type="text" id="username" name="username" required />
+                <label htmlFor="username">Username</label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="input-group">
-                  <label htmlFor="password">Password</label>
-                  <input type="password" id="password" name="password" required />
+                <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="input-group">
-                  <label htmlFor="firstname">First Name</label>
-                  <input type="firstname" id="firstname" name="firstname" required />
+                <label htmlFor="firstname">First Name</label>
+                  <input
+                    type="text"
+                    value={firstname}
+                    onChange={(e) => setFirstname(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="input-group">
-                  <label htmlFor="lastname">Last Name</label>
-                  <input type="lastname" id="lastname" name="lastname" required />
+                <label htmlFor="lastname">Last Name</label>
+                  <input
+                    type="text"
+                    value={lastname}
+                    onChange={(e) => setLastname(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="input-group">
-                  <label htmlFor="email">Email</label>
-                  <input type="email" id="email" name="email" required />
+                <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
                 </div>                
                 <button type="submit" className="login-button">Submit</button>
               </form>
+              {message && <p>{message}</p>}
             </section>
           </main>
           {/* Footer */}

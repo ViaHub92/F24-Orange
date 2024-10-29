@@ -21,6 +21,7 @@ import { ReportsStudents } from "./pages/ReportsStudents.js";
 import Services from "./pages/Services";
 import SystemAnalytics from "./pages/SystemAnalytics";
 import UserManagement from "./pages/UserManagement";
+import Questionnaire from "./pages/Questionnaire.js";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
                 <Route path="Services" element={<Services />} />
                 <Route path="SystemAnalytics" element={<SystemAnalytics />} />
                 <Route path="UserManagement" element={<UserManagement />} />
+                <Route path="Questionnaire" element={<Questionnaire />} />
                 
             </Routes>
         </>
