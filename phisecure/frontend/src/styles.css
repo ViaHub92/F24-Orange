@@ -9,6 +9,14 @@ body {
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-attachment: fixed; /* Keeps the background image fixed when scrolling */
     color: #333; /* Default text color */
+    background-color: #f4f7fa; 
+}
+:root {
+    --primary-color: #231D6C;
+    --secondary-color: #4CAF50;
+    --accent-color: #007BFF;
+    --text-color: #333;
+    --footer-bg: #333;
 }
 
 /* Header */
@@ -152,6 +160,57 @@ input[type="password"] {
     display: flex;
 }
 
+/* Admin Section */
+
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+/* Admin Options */
+.admin-options {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.admin-option {
+    background-color: #231D6C;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.admin-option:hover {
+    transform: translateY(-10px);
+    background-color: #3e338d;
+}
+
+.admin-option i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.admin-option a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
 .nav-items > li {
     padding: 10px;
 }
@@ -196,7 +255,62 @@ input[type="password"] {
 .email-detail {
     cursor: pointer;
 }
-  
+* Inbox Section */
+.email-inbox {
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+.email-inbox h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.email-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.email-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.email-info {
+    flex: 1;
+}
+
+.email-subject {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.email-sender, .email-time {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.view-email-btn {
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.view-email-btn:hover {
+    background-color: #555;
+}  
 .email-list {
     flex: 1;
     padding: 10px;
@@ -216,5 +330,57 @@ input[type="password"] {
 .report-section {
     color:#45a049;
 }
+/* Reports List Section */
+.reports-section {
+    padding: 40px 20px;
+    text-align: center;
+}
 
+.reports-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.report-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.report-list li {
+    width: 80%;
+    max-width: 600px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.report-list li:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.report-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.report-list a:hover {
+    color: #007BFF;
+}
+
+.report-list i {
+    color: #007BFF;
+}
   
