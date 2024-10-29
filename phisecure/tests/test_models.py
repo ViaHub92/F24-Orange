@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 import pytest
-from database.models import Role, Inbox, Email, Course, Student, Instructor, Admin, Template
+from database.models import Role, Inbox, Email, Course, Student, Instructor, Admin, Template, DifficultyLevel
 from backend.project import create_app, db
 from backend.config import TestConfig
 

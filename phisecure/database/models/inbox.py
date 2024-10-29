@@ -15,4 +15,4 @@ class Inbox(db.Model):
     __tablename__ = "inbox"
     id = db.Column(db.Integer, primary_key=True)
     emails = db.relationship("Email", backref="inbox")
-    
+    phishing_emails = db.relationship("PhishingEmail", backref="inbox")

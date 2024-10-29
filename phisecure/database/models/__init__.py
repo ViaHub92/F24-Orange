@@ -12,3 +12,4 @@ from database.models.instructor import Instructor
 from database.models.student import Student
 from database.models.template import Template
 from database.models.user_responses import UserResponses
+from database.models.phishing_email import PhishingEmail

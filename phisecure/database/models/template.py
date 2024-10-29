@@ -41,13 +41,11 @@ class Template(db.Model):
     category = db.Column(db.String(250))
     tags = db.Column(db.String(120), nullable=False, index=True)
     difficulty_level = db.Column(Enum(DifficultyLevel), nullable=False)
-    sender = db.Column(db.String(120), nullable=False)
-    recipient = db.Column(db.String(120), nullable=False)
-    subject = db.Column(db.String(120), nullable=False)
-    body = db.Column(db.String(500), nullable=False)
+    subject_temlpate = db.Column(db.String(120), nullable=False)
+    body_template = db.Column(db.String(500), nullable=False)
     link = db.Column(db.String(100))
-    interactions = db.relationship("UserInteraction", backref="template", lazy=True)
-
+    
+    phishing_emails = db.relationship("PhishingEmail", back_populates="template", lazy=True)
     def serialize(self):
         """
          Convert model of a phishing template into a serializable dictionary
@@ -59,9 +57,8 @@ class Template(db.Model):
             'category': self.category,
             'tags': self.tags,
             'difficulty_level': self.difficulty_level.value,
-            'sender': self.sender,
-            'recipient': self.recipient,
-            'subject': self.subject,
-            'body': self.body,
-            'link': self.link
+            'subject_template': self.subject_template,
+            'body_template': self.body_template,
+            'link': self.link,  
+
         }
