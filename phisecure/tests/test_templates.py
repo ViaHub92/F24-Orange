@@ -34,7 +34,10 @@ def test_phishing_template(client):
     }
     
     response = client.post('/phishing/templates', json=template_data)
-    
+    print(response.json)
     assert response.status_code == 201, "Template created successfully"
+    assert response.json['template']['name'] == template_data['name'], "Template name matches"
+    assert response.json['template']['description'] == template_data['description'], "Template description matches"
+    
    
     
