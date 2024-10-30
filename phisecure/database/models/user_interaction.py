@@ -16,6 +16,8 @@ class UserInteraction(db.Model):
     link_clicked = db.Column(db.Boolean, default=False)
     replied = db.Column(db.Boolean, default=False)
     reported = db.Column(db.Boolean, default=False)
-    
-
+    #Attribute of the UserInteraction model. it is deinfed using the relationship function that creates a realationship with phishing email model
+    phishing_email = db.relationship("PhishingEmail", back_populates="interactions") 
+    #Attribute of the UserInteraction model. it is deinfed using the relationship function that creates a realationship with student model
+    student = db.relationship("Student", back_populates="interactions")
     

@@ -46,6 +46,7 @@ class Template(db.Model):
     link = db.Column(db.String(100))
     
     phishing_emails = db.relationship("PhishingEmail", back_populates="template", lazy=True)
+    
     def serialize(self):
         """
          Convert model of a phishing template into a serializable dictionary

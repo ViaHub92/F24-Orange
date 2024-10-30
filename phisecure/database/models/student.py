@@ -31,8 +31,8 @@ class Student(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey("courses.id"))
     
     
-    interactions = db.relationship("UserInteraction", backref="student", lazy=True)
-    responses = db.relationship("UserResponses", backref="student", uselist=False)
+    interactions = db.relationship("UserInteraction", back_populates="student")
+    
     
     @property
     def password(self):
@@ -64,5 +64,4 @@ class Student(db.Model):
         """
         return bcrypt.check_password_hash(self.password_hash, password)
     
-    def __repr__(self) -> str:
-        return "<User %r>" % self.username
+   
