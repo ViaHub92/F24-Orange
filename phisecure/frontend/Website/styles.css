@@ -468,3 +468,19 @@ footer {
 
 
 
+
+
+/* Header */
+header {
+    background-color: #231D6C;
+    color: white;
+    padding: 20px 0; /* Reduce padding to make the header smaller */
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.5rem; /* Reduce font size to make the header text smaller */
+    margin: 0;
+}
+
+
