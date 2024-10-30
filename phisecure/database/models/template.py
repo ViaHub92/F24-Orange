@@ -41,7 +41,7 @@ class Template(db.Model):
     category = db.Column(db.String(250))
     tags = db.Column(db.String(120), nullable=False, index=True)
     difficulty_level = db.Column(Enum(DifficultyLevel), nullable=False)
-    subject_temlpate = db.Column(db.String(120), nullable=False)
+    subject_template = db.Column(db.String(120), nullable=False)
     body_template = db.Column(db.String(500), nullable=False)
     link = db.Column(db.String(100))
     

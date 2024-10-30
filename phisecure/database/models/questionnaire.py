@@ -31,6 +31,7 @@ class Question(db.Model):
     #attribute of the Question model. it is deinfed using the relationship function that creates a realationship with Questionnaire model
     questionnaire = relationship("Questionnaire", back_populates="questions")
     
+    responses = relationship("Response", back_populates="question")
 
 class Response(db.Model):
     """_summary_

@@ -29,3 +29,4 @@ class PhishingEmail(db.Model):
     template_id = db.Column(db.Integer, db.ForeignKey("phishing_templates.id"), nullable=False)
     #Attribute of the PhishingEmail model. it is deinfed using the relationship function that creates a realationship with user interaction model
     interactions = db.relationship("UserInteraction", back_populates="phishing_email")
+    template = db.relationship("Template", back_populates="phishing_emails")

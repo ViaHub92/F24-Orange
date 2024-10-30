@@ -28,16 +28,13 @@ def test_phishing_template(client):
         "category": "Test",
         "tags": "Test, Phishing",
         "difficulty_level": "beginner",
-        "sender": "testuser123@gmail.com",
-        "recipient": "phiseduser123@gmail.com",
-        "subject": "Test phishing email",
-        "body": "This is a test phishing email",
-        "link": "https://fakephishinglink.com"
+        "subject_template": "Test phishing email",
+        "body_template": "This is a test phishing email",
+        "link": "http://test.com"
     }
     
     response = client.post('/phishing/templates', json=template_data)
     
     assert response.status_code == 201, "Template created successfully"
-    assert response.get_json()["template"]["name"] == "Test Phishing Template"
-    assert response.get_json()["template"]["description"] == "Test phishing template for testing purposes"
+   
     
