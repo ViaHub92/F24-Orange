@@ -383,4 +383,6 @@ input[type="password"] {
 .report-list i {
     color: #007BFF;
 }
+
+.error{color: #FF0000;}
   

@@ -30,14 +30,15 @@
     <!-- Main Content -->
     <main>
         <section class="section">
-            <form action="/questionnaire_page.php">
+            <!-- DO NOT CHANGE METHOD FOR FORM OR THE NAMES OF INPUTS. IT WILL BREAK THE PROCESSING.-->
+            <p><span class="error">* required field</span></p>
+            <form method="POST" action="questionnaire_page.php">
                 <p>Hello! This is a questionnaire for new users to better know you and customize our faux phishing attempts to best train you.
                    Below are a list of questions and fill-ins. Respond to them and when you're done, submit.<br><br>
                    Please, be as honest and direct as possible. It will give you the best results with our service.</p>
 
                 <p>First Name:</p>
                 <input type="text" id="fname" name="fname"><br>
-
                 <p>Last Name:</p>
                 <input type="text" id="lname" name="lname"><br>
 
@@ -48,10 +49,8 @@
                 <input type="text" id="email" name="email"><br>
 
                 <p>Are you currently employed?</p>
-                    <input type="radio" id="empstat1" name="yes" value="empstatyes">
-                    <label for="empstat1">Yes</label>
-                    <input type="radio" id="empstat2" name="empstatno" value="empstatno">
-                    <label for="empstat2">No</label><br>
+                    <input type="radio" id="empstat1" name="empstat">Yes
+                    <input type="radio" id="empstat2" name="empstat">No<br>
 
                 <p>If so, name your place of employment and experience:</p>
                 <input type="text" id="employmentdetails" name="empdet"><br>
@@ -66,10 +65,8 @@
                 -->
 
                 <p>Do you not have any problems financially at the moment?</p>
-                    <input type="radio" id="financialyes" name="financialyes">
-                    <label for="financialyes">Yes</label>
-                    <input type="radio" name="financialno">
-                    <label for="financialno">No</label><br>
+                    <input type="radio" name="financial">Yes
+                    <input type="radio" name="financial">No<br>
 
                 <!-- Too Vague: Comment it Out f or now
                 <p>How well versed are you in computer technology and web safety?</p>
@@ -86,27 +83,21 @@
                 -->
                 
                 <p>Do you often change your password?</p>
-                    <input type="radio" id="passyes" name="passyes">
-                    <label for="passyes">Yes</label>
-                    <input type="radio" id="passno" name="passno">
-                    <label for="passno">No</label><br>
+                    <input type="radio" id="passyes" name="pass">Yes
+                    <input type="radio" id="passno" name="pass">No<br>
                 
                 <p>Do you reuse password for multiple accounts?</p>
-                    <input type="radio" id="reuseyes" name="reuseyes">
-                    <label for="reuseyes">Yes</label>
-                    <input type="radio" id="reuseno" name="reuseno">
-                    <label for="reuseno">No</label><br>
+                    <input type="radio" id="reuseyes" name="reuse">Yes
+                    <input type="radio" id="reuseno" name="reuse">No<br>
 
                 <p>Has your college and/or place of employment recently suffered a wide-scale spear phishing attack?</p>
-                    <input type="radio" id="empphishyes" name="phishyes">
-                    <label for="empphishyes">Yes</label>
-                    <input type="radio" id="empphishno" name="phishno">
-                    <label for="empphishno">No</label><br>
+                    <input type="radio" id="empphishyes" name="empphish">Yes
+                    <input type="radio" id="empphishno" name="empphish">No<br>
                 
                 <p>If so, describe the attack:</p>
                 <input type="text" id="empattdetails" name="ead"><br><br>
 
-                <input type="submit" value="Submit"> 
+                <input type="submit" name="submit" value="Submit"> 
             </form>
         </section>
     </main>
