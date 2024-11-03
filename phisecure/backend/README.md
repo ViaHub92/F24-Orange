@@ -78,17 +78,43 @@ Below is a list of the functional API routes available in the Phisecure backend:
    - **Response:** JSON object containing an array of emails with `id`, `sender`, `recipient`, `subject`, `body`, and `sent_at`.
 
 ### 7. Compose Message
-   - **URL:** `/messaging/compose`
-   - **Method:** POST
-   - **Description:** Send a new email message.
-   - **Expected Input:** Form data with `sender`, `recipient`, `subject`, and `body`.
-   - **Response:** Success message or an error message if the recipient does not exist.
+- **URL:** `/messaging/compose_email`
+- **Method:** POST
+- **Description:** Send a new email message.
+- **Expected Input:** Form data with `sender`, `recipient`, `subject`, and `body`.
+- **Response:** Success message or an error message if the recipient does not exist.
 
-### 8. View Email
-   - **URL:** `/messaging/view/<int:email_id>`
-   - **Method:** GET
-   - **Description:** View a specific email.
-   - **Response:** Renders the email details or redirects with an error message if the email is not found.
+### 8. Compose Phishing Email
+- **URL:** `/messaging/compose_phishing_email`
+- **Method:** POST
+- **Description:** Send a phishing email using a specified template.
+- **Expected Input:** Form data with `sender`, `recipient`, and `template_id`.
+- **Response:** Success message or an error message if the recipient or template does not exist.
+
+### 9. View Email
+- **URL:** `/messaging/view/<int:email_id>`
+- **Method:** GET
+- **Description:** View a specific email.
+- **Response:** JSON object containing email details or redirects with an error message if the email is not found.
+
+### 10. Reply to Email
+- **URL:** `/messaging/reply/<int:email_id>`
+- **Method:** POST
+- **Description:** Reply to a specific email.
+- **Expected Input:** Form data with `reply_body`.
+- **Response:** Success message or an error message if the email is not found.
+
+### 11. Delete Email
+- **URL:** `/messaging/delete/<int:email_id>`
+- **Method:** POST
+- **Description:** Delete a specific email.
+- **Response:** Success message or an error message if the email is not found.
+
+### 12. Performance Metrics
+- **URL:** `/performance/<int:student_id>`
+- **Method:** GET (or specify the method if different)
+- **Description:** Retrieve performance metrics regarding email interactions and student responses during phishing simulations.
+- **Response:** JSON object containing aggregated data about student performance in relation to phishing emails.
 
 ## How to Create User Using Postman
 1. **Open Postman**  
