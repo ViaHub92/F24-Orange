@@ -32,7 +32,8 @@ class Student(db.Model):
     
     
     interactions = db.relationship("UserInteraction", back_populates="student")
-    
+    #attribute of the Student model. it is deinfed using the relationship function that creates a realationship with Response model
+    responses = db.relationship("Response", back_populates="student")
     
     @property
     def password(self):

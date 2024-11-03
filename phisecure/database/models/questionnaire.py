@@ -16,6 +16,16 @@ class Questionnaire(db.Model):
     #attribute of the Questionnaire model. it is deinfed using the relationship function that creates a realationship with Question model
     questions = relationship("Question", back_populates="questionnaire")
     
+    def serialize(self):
+        """
+        Convert model of a questionnaire into a serializable dictionary
+        """
+        return {
+            'id': self.id,
+            'name': self.name,
+            'questions': [question.serialize() for question in self.questions]
+        }
+    
     
 class Question(db.Model):
     """_summary_
@@ -33,6 +43,18 @@ class Question(db.Model):
     
     responses = relationship("Response", back_populates="question")
 
+    def serialize(self):
+        """
+        Convert model of a question into a serializable dictionary
+        
+        """
+        return {
+            'id': self.id,
+            'questionnaire_id': self.questionnaire_id,
+            'question_text': self.question_text,
+            'question_type': self.question_type,
+            'responses': [response.serialize() for response in self.responses]
+        }
 class Response(db.Model):
     """_summary_
 
@@ -47,4 +69,19 @@ class Response(db.Model):
     boolean_response = db.Column(db.Boolean, nullable=False) # For yes or no or true or false questions
     #attribute of the Response model. it is deinfed using the relationship function that creates a realationship with Question model
     question = relationship("Question", back_populates="responses")
+    student = relationship("Student", back_populates="responses")
     
+    def serialize(self):
+        """
+        Convert model of a response into a serializable dictionary
+        """
+        return {
+            'id': self.id,
+            'student_id': self.student_id,
+            'question_id': self.question_id,
+            'response_text': self.response_text,
+            'boolean_response': self.boolean_response,
+            
+            
+            
+        }
