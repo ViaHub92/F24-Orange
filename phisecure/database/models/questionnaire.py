@@ -1,5 +1,6 @@
 from backend.project import db
 from sqlalchemy.orm import relationship
+from datetime import datetime, timezone
 
 
 
@@ -13,6 +14,7 @@ class Questionnaire(db.Model):
     __tablename__ = "questionnaire"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     #attribute of the Questionnaire model. it is deinfed using the relationship function that creates a realationship with Question model
     questions = relationship("Question", back_populates="questionnaire")
     
@@ -23,6 +25,7 @@ class Questionnaire(db.Model):
         return {
             'id': self.id,
             'name': self.name,
+            'description': self.description,
             'questions': [question.serialize() for question in self.questions]
         }
     
@@ -38,11 +41,7 @@ class Question(db.Model):
     questionnaire_id = db.Column(db.Integer, db.ForeignKey("questionnaire.id"), nullable=False)
     question_text = db.Column(db.Text, nullable=False)
     question_type = db.Column(db.String(128), nullable=False) # e.g. multiple choice, short answer, etc.
-    #attribute of the Question model. it is deinfed using the relationship function that creates a realationship with Questionnaire model
-    questionnaire = relationship("Questionnaire", back_populates="questions")
     
-    responses = relationship("Response", back_populates="question")
-
     def serialize(self):
         """
         Convert model of a question into a serializable dictionary
@@ -53,7 +52,6 @@ class Question(db.Model):
             'questionnaire_id': self.questionnaire_id,
             'question_text': self.question_text,
             'question_type': self.question_type,
-            'responses': [response.serialize() for response in self.responses]
         }
 class Response(db.Model):
     """_summary_
@@ -64,12 +62,10 @@ class Response(db.Model):
     __tablename__ = "response"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
-    question_id = db.Column(db.Integer, db.ForeignKey("question.id"), nullable=False)
-    response_text = db.Column(db.Text, nullable=False) # For text based responses
-    boolean_response = db.Column(db.Boolean, nullable=False) # For yes or no or true or false questions
-    #attribute of the Response model. it is deinfed using the relationship function that creates a realationship with Question model
-    question = relationship("Question", back_populates="responses")
-    student = relationship("Student", back_populates="responses")
+    questionnaire_id = db.Column(db.Integer, db.ForeignKey("questionnaire.id"), nullable=False)
+    submitted_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    
+    answers = relationship("Answer", back_populates="response")
     
     def serialize(self):
         """
@@ -78,10 +74,28 @@ class Response(db.Model):
         return {
             'id': self.id,
             'student_id': self.student_id,
+            'questionnaire_id': self.questionnaire_id,
+            'submitted_at': self.submitted_at,
+            'answers': [answer.serialize() for answer in self.answers]
+        }
+
+class Answer(db.Model):
+    __tablename__ = "answers"
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    response_id = db.Column(db.Integer, db.ForeignKey("response.id"), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey("question.id"), nullable=False)
+    answer_text = db.Column(db.Text, nullable=False)
+    
+    question = relationship("Question", back_populates="answers")
+    
+    def serialize(self):
+        """
+         Convert model of an answer into serializable dictionary
+        """
+        return {
+            'id': self.id,
+            'response_id': self.response_id,
             'question_id': self.question_id,
-            'response_text': self.response_text,
-            'boolean_response': self.boolean_response,
-            
-            
-            
+            'answer_text': self.answer_text,
+            'question': self.question.serialize() if self.question else None
         }

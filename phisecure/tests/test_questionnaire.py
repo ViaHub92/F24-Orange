@@ -16,7 +16,7 @@ def client(app):
         yield client
         
 def test_questionnaire_creation(client):
-    """ Test creating a questionnaire
+    """ Test creating an empty questionnaire
 
     Args:
         client (_type_): Flask test client
@@ -28,5 +28,11 @@ def test_questionnaire_creation(client):
     response = client.post('/questionnaire', json=questionnaire_data)
     assert response.status_code == 201, "Questionnaire created successfully"
     assert response.json['questionnaire']['name'] == questionnaire_data['name'], "Questionnaire name matches"
-   
+
+def add_questions_to_questionnaire(client):
+    """_summary_
+
+    Args:
+        client (_type_): _description_
+    """
     
