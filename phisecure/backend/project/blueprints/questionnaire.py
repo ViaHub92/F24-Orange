@@ -12,4 +12,25 @@ def create_questionnaire():
     """ 
     Route for creating a new questionnaire with no questions
     """
-    return jsonify({"message": "Not implemented"}), 501
+    if request.method == "POST":
+       data = request.get_json()
+       name = data.get('name')
+       description = data.get('description')
+       new_questionnaire = Questionnaire(name=name, description=description)
+       
+       existing_questionnaire = Questionnaire.query.filter_by(name=name).first()
+       if existing_questionnaire:
+           return jsonify({"error": "Questionnaire with this name already exists"}), 400
+       else:
+           for question in data.get('questions'):
+               question_text = question.get('question_text')
+               question_type = question.get('question_type')
+               new_question = Question(questionnaire=new_questionnaire, question_text=question_text, question_type=question_type)
+               db.session.add(new_question)
+               db.session.commit()
+           return jsonify(new_questionnaire.serialize()), 200
+
+
+       
+       
+    

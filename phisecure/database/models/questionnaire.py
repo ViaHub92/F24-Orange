@@ -42,6 +42,9 @@ class Question(db.Model):
     question_text = db.Column(db.Text, nullable=False)
     question_type = db.Column(db.String(128), nullable=False) # e.g. multiple choice, short answer, etc.
     
+    questionnaire = relationship("Questionnaire", back_populates="questions")
+    answers = relationship("Answer", back_populates="question")
+    
     def serialize(self):
         """
         Convert model of a question into a serializable dictionary
@@ -66,6 +69,7 @@ class Response(db.Model):
     submitted_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     
     answers = relationship("Answer", back_populates="response")
+    student = relationship("Student", back_populates="responses")
     
     def serialize(self):
         """
@@ -87,6 +91,7 @@ class Answer(db.Model):
     answer_text = db.Column(db.Text, nullable=False)
     
     question = relationship("Question", back_populates="answers")
+    response = relationship("Response", back_populates="answers")
     
     def serialize(self):
         """

@@ -16,23 +16,28 @@ def client(app):
         yield client
         
 def test_questionnaire_creation(client):
-    """ Test creating an empty questionnaire
+    """ Test creating a new questionnaire
 
     Args:
         client (_type_): Flask test client
     """
-    questionnaire_data = {
-        'name': 'Test Questionnaire',
-        'questions': []
+    new_questionnaire = { 
+        "name": "Test Questionnaire",
+        "description": "A test questionnaire",
+        'questions': [
+            {
+                'question_text': 'Are you Employed?',
+                'question_type': 'True/False'
+            },
+            {
+                'question_text': 'How many times a day do you check your email?',
+                'question_type': 'multiple choice'
+            }
+        ]      
     }
-    response = client.post('/questionnaire', json=questionnaire_data)
-    assert response.status_code == 201, "Questionnaire created successfully"
-    assert response.json['questionnaire']['name'] == questionnaire_data['name'], "Questionnaire name matches"
-
-def add_questions_to_questionnaire(client):
-    """_summary_
-
-    Args:
-        client (_type_): _description_
-    """
-    
+    response = client.post('/questionnaire', json=new_questionnaire)
+    assert response.status_code == 200
+    assert response.json['name'] == 'Test Questionnaire'
+    assert response.json['description'] == 'A test questionnaire'
+    assert len(response.json['questions']) == 2
+   
