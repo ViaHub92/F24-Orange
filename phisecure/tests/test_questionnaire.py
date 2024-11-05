@@ -70,4 +70,28 @@ def test_retriveing_questionnaire(client):
     assert response.status_code == 200
     get = client.get(f'/questionnaire/{response.json["id"]}')
     assert get.status_code == 200
+
+def test_submit_response(client):
+    """
+    Test submitting questionnaire
+
+    Args:
+        client (_type_): _description_
+    """
+    new_submission = {
+        "questionnaire_id": 1,
+        "student_id": 1,
+        "answers": [
+            {
+                "question_id": 1,
+                "answer_text": "Yes"
+            },
+            {
+                "question_id": 2,
+                "answer_text": "3 times a day"
+            }
+        ]
+    }
+    response = client.post('/questionnaire/Submit', json=new_submission)
+    assert response.status_code == 200
     

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from backend.project import db
-from database.models.questionnaire import Questionnaire, Question, Response
+from database.models.questionnaire import Questionnaire, Question, Response, Answer
+from database.models.student import Student
 from datetime import datetime, timezone
 from backend.project.routes import routes
 
@@ -40,11 +41,35 @@ def get_questionnaire(questionnaire_id):
     Route for retrieving a specific questionnaire
     """
     if request.method == "GET":
-        questionnaire = Questionnaire.query.get(questionnaire_id)
-        if not questionnaire:
+        found_questionnaire = Questionnaire.query.get(questionnaire_id)
+        if not found_questionnaire:
             return jsonify({"error": "Questionnaire not found"}), 404
-        return jsonify(questionnaire.serialize()), 200
+        return jsonify(found_questionnaire.serialize()), 200
 
+@questionnaire.route("/Submit", methods=["POST"])
+def submit_response():
+    """
+    Route for submitting a response to a questionnaire
+    """
+    if request.method == "POST":
+        data = request.get_json()
+        questionnaire_id = data.get('questionnaire_id')
+        student_id = data.get('student_id')
+        answers = data.get('answers')
+        new_response = Response(questionnaire_id=questionnaire_id, student_id=student_id)
+        for answer in answers:
+            question_id = answer.get('question_id')
+            answer_text = answer.get('answer_text')
+            new_answer = Answer(
+                response=new_response, 
+                question_id=question_id, 
+                answer_text=answer_text
+            )
+            db.session.add(new_answer)
+        db.session.add(new_response)
+        db.session.commit()
+        return jsonify(new_response.serialize()), 200
+    
 
        
        

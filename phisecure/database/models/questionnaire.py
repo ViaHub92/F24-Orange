@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 class Questionnaire(db.Model):
     """
-
+    Model for a questionnaire
     Args:
         db (_type_): _description_
     """
@@ -31,7 +31,8 @@ class Questionnaire(db.Model):
     
     
 class Question(db.Model):
-    """_summary_
+    """
+    Model for a question
 
     Args:
         db (_type_): _description_
