@@ -4,7 +4,7 @@ function FetchAllUsers() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("/account/list_users")
+    fetch("/account/list_students")
       .then(res => res.json())
       .then(data => {
         setData(data);
