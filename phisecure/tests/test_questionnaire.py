@@ -41,3 +41,33 @@ def test_questionnaire_creation(client):
     assert response.json['description'] == 'A test questionnaire'
     assert len(response.json['questions']) == 2
    
+def test_retriveing_questionnaire(client): 
+    """_summary_
+
+    Args:
+        client (_type_): _description_
+    """
+    questionnaire_in_db = {
+        "name": "Recon Questionnaire",
+        "description": "A test questionnaire",
+        'questions': [
+            {
+                'question_text': 'Do you open all emails or skip some? Why?',
+                'question_type': 'Short answer'
+            },
+            {
+                'question_text': 'Do you review links before clicking them?',
+                'question_type': 'Yes or No'
+            },
+            {
+                'question_text': 'Describe a time you encountered a phishing email. What did you do?',
+                'question_type': 'Short answer'
+            }
+        ]      
+    }
+    response = client.post('/questionnaire', json=questionnaire_in_db)
+    print(response.json)
+    assert response.status_code == 200
+    get = client.get(f'/questionnaire/{response.json["id"]}')
+    assert get.status_code == 200
+    
