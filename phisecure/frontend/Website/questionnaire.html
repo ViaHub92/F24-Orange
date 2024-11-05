@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phisecure - About</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></head>
 </head>
 <body>
    <!-- Navigation Bar -->
@@ -31,29 +35,29 @@
     <main>
         <section class="section">
             <!-- DO NOT CHANGE METHOD FOR FORM OR THE NAMES OF INPUTS. IT WILL BREAK THE PROCESSING.-->
-            <p><span class="error">* required field</span></p>
-            <form method="POST" action="questionnaire_page.php">
-                <p>Hello! This is a questionnaire for new users to better know you and customize our faux phishing attempts to best train you.
-                   Below are a list of questions and fill-ins. Respond to them and when you're done, submit.<br><br>
-                   Please, be as honest and direct as possible. It will give you the best results with our service.</p>
+            <div>
+                <form method="POST" action="questionnaire_page.php">
+                    <p>Hello! This is a questionnaire for new users to better know you and customize our faux phishing attempts to best train you.
+                    Below are a list of questions and fill-ins. Respond to them and when you're done, submit.<br><br>
+                    Please, be as honest and direct as possible. It will give you the best results with our service.</p>
 
-                <p>First Name:</p>
-                <input type="text" id="fname" name="fname"><br>
-                <p>Last Name:</p>
-                <input type="text" id="lname" name="lname"><br>
+                    <p>First Name:</p>
+                    <input type="text" id="fname" name="fname"><br>
+                    <p>Last Name:</p>
+                    <input type="text" id="lname" name="lname"><br>
 
-                <p>Username:</p>
-                <input type="text" id="uname" name="uname"><br>
+                    <p>Username:</p>
+                    <input type="text" id="uname" name="uname"><br>
 
-                <p>Email:</p>
-                <input type="text" id="email" name="email"><br>
+                    <p>Email:</p>
+                    <input type="text" id="email" name="email"><br>
 
-                <p>Are you currently employed?</p>
-                    <input type="radio" id="empstat1" name="empstat">Yes
-                    <input type="radio" id="empstat2" name="empstat">No<br>
+                    <p>Are you currently employed?</p>
+                        <input type="radio" id="empstat1" name="empstat">Yes &nbsp;
+                        <input type="radio" id="empstat2" name="empstat">No<br>
 
-                <p>If so, name your place of employment and experience:</p>
-                <input type="text" id="employmentdetails" name="empdet"><br>
+                    <p>If so, name your place of employment and experience:</p>
+                    <input type="text" id="employmentdetails" name="empdet"><br>
 
                 <!--Too specific, comment out
                 <p>Have you recently moved from your hometown to your selected college?</p>
@@ -64,9 +68,9 @@
                 
                 -->
 
-                <p>Do you not have any problems financially at the moment?</p>
-                    <input type="radio" name="financial">Yes
-                    <input type="radio" name="financial">No<br>
+                    <p>Do you not have any problems financially at the moment?</p>
+                        <input type="radio" name="financial">Yes &nbsp;
+                        <input type="radio" name="financial">No<br>
 
                 <!-- Too Vague: Comment it Out f or now
                 <p>How well versed are you in computer technology and web safety?</p>
@@ -82,23 +86,24 @@
                     <label for="knowledgenonex">Nonexistent Knowledge Base</label><br>
                 -->
                 
-                <p>Do you often change your password?</p>
-                    <input type="radio" id="passyes" name="pass">Yes
-                    <input type="radio" id="passno" name="pass">No<br>
+                    <p>Do you often change your password?</p>
+                        <input type="radio" id="passyes" name="pass">Yes &nbsp;
+                        <input type="radio" id="passno" name="pass">No<br>
                 
-                <p>Do you reuse password for multiple accounts?</p>
-                    <input type="radio" id="reuseyes" name="reuse">Yes
-                    <input type="radio" id="reuseno" name="reuse">No<br>
+                    <p>Do you reuse password for multiple accounts?</p>
+                        <input type="radio" id="reuseyes" name="reuse">Yes &nbsp;
+                        <input type="radio" id="reuseno" name="reuse">No<br>
 
-                <p>Has your college and/or place of employment recently suffered a wide-scale spear phishing attack?</p>
-                    <input type="radio" id="empphishyes" name="empphish">Yes
-                    <input type="radio" id="empphishno" name="empphish">No<br>
+                    <p>Has your college and/or place of employment recently suffered a wide-scale spear phishing attack?</p>
+                        <input type="radio" id="empphishyes" name="empphish">Yes &nbsp;
+                        <input type="radio" id="empphishno" name="empphish">No<br>
                 
-                <p>If so, describe the attack:</p>
-                <input type="text" id="empattdetails" name="ead"><br><br>
+                    <p>If so, describe the attack:</p>
+                    <input type="text" id="empattdetails" name="ead"><br><br>
 
-                <input type="submit" name="submit" value="Submit"> 
-            </form>
+                    <input type="submit" name="submit" value="Submit"> 
+                </form>
+            </div>
         </section>
     </main>
 
