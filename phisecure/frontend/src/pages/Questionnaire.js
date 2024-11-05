@@ -1,3 +1,5 @@
+import CreateQuestionnaire from "./components/CreateQuestionnaire";
+
 export default function Questionnaire() {
     return(
         <div>
@@ -8,6 +10,7 @@ export default function Questionnaire() {
 
         {/* Main Content */}
         <main>
+            <CreateQuestionnaire />
             <section className="section">
             <form action="/questionnaire_page.php">
                 <p>

@@ -16,7 +16,7 @@ function FetchAllUsers() {
   return (
     <div>
       {data.length === 0 ? (
-        <p>Loading...</p>
+        <p>Waiting...</p>
       ) : (
         data.map((user, i) => (
           <div key={i}>

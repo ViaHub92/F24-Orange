@@ -1,3 +1,5 @@
+import FetchAllUsers from "./components/FetchUsers";
+
 export default function About() {
       return (
         <div>
@@ -7,6 +9,7 @@ export default function About() {
           <link rel="stylesheet" href="styles.css" />
           {/* Main Content */}
           <main>
+            <FetchAllUsers />
             <section className="section">
               <h2>About Us</h2>
               <p>Phisecure is a learning tool designed to teach university students about cybersecurity in a fun and interactive way.</p>
