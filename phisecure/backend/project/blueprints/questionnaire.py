@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from backend.project import db
-from database.models.questionnaire import Questionnaire, Question, Response, Answer
+from database.models.questionnaire import Questionnaire, Question, Response, Answer, Option
 from database.models.student import Student
 from datetime import datetime, timezone
 from backend.project.routes import routes
@@ -30,6 +30,12 @@ def create_questionnaire():
                 question_text=question_text, 
                 question_type=question_type
             )
+            if question_type in ["true/false", "multiple choice", "yes/no"]:
+                for option in question.get('options'):
+                    option_text = option.get('option_text')
+                    new_option = Option(question=new_question, option_text=option_text)
+                    db.session.add(new_option)
+                    
         db.session.add(new_question)
         db.session.add(new_questionnaire)
         db.session.commit()
