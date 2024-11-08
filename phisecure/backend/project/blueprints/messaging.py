@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from backend.project import db
 from database.models.student import Student
 from database.models.email import Email
-from database.models.phishing_email import PhishingEmail  # Import PhishingEmail model
+from database.models.phishing_email import PhishingEmail
 from database.models.inbox import Inbox
 from database.models.user_interaction import UserInteraction
 from database.models.template import Template
