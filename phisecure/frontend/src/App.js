@@ -22,7 +22,7 @@ import Services from "./pages/Services";
 import SystemAnalytics from "./pages/SystemAnalytics";
 import UserManagement from "./pages/UserManagement";
 import Questionnaire from "./pages/Questionnaire.js";
-
+import ViewQuestionnaire from "./pages/components/ViewQuestionnaire.js";
 
 function App() {
   return (
@@ -47,7 +47,7 @@ function App() {
                 <Route path="SystemAnalytics" element={<SystemAnalytics />} />
                 <Route path="UserManagement" element={<UserManagement />} />
                 <Route path="Questionnaire" element={<Questionnaire />} />
-                
+                <Route path="ViewQuestionnaire" element={<ViewQuestionnaire />} />
             </Routes>
         </>
   );
