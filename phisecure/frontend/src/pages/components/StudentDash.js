@@ -5,6 +5,7 @@ import { FaEnvelope } from "react-icons/fa";
 import { GoPersonFill } from "react-icons/go";
 import { FaCog } from "react-icons/fa";
 import 'w3-css/w3.css';
+import FetchPerformance from './FetchPerformance';
 
 const SidebarComponent = () => {
   const [studentName, setStudentName] = useState("Student");

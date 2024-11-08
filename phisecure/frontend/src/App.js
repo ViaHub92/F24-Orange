@@ -23,6 +23,7 @@ import SystemAnalytics from "./pages/SystemAnalytics";
 import UserManagement from "./pages/UserManagement";
 import Questionnaire from "./pages/Questionnaire.js";
 import ViewQuestionnaire from "./pages/components/ViewQuestionnaire.js";
+import FetchPerformance from "./pages/components/FetchPerformance.js";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
                 <Route path="UserManagement" element={<UserManagement />} />
                 <Route path="Questionnaire" element={<Questionnaire />} />
                 <Route path="ViewQuestionnaire" element={<ViewQuestionnaire />} />
+                <Route path="FetchPerformance" element={<FetchPerformance />} />
             </Routes>
         </>
   );
