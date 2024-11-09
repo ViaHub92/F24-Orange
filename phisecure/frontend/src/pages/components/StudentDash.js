@@ -36,10 +36,10 @@ const SidebarComponent = () => {
           <Link to="/overview" className="w3-bar-item w3-button w3-padding">
             <i className="fa fa-users-cog"></i> Overview
           </Link>
-          <Link to="/inbox" className="w3-bar-item w3-button w3-padding">
+          <Link to="/Mail" className="w3-bar-item w3-button w3-padding">
             <i className="fa fa-user-shield"></i> Inbox
           </Link>
-          <Link to="/reports" className="w3-bar-item w3-button w3-padding">
+          <Link to="/ReportsStudents" className="w3-bar-item w3-button w3-padding">
             <i className="fa fa-chart-line"></i> Reports
           </Link>
           <Link to="/notifications" className="w3-bar-item w3-button w3-padding">
@@ -98,7 +98,7 @@ const SidebarComponent = () => {
             </li>
           </ul>
 
-          <Link to="/inbox">
+          <Link to="/Mail">
             <button className="w3-button w3-dark-grey">
               View All Emails <i className="fa fa-arrow-right" />
             </button>
