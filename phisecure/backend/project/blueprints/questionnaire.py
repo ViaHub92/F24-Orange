@@ -4,6 +4,9 @@ from database.models.questionnaire import Questionnaire, Question, Response, Ans
 from database.models.student import Student
 from datetime import datetime, timezone
 from backend.project.routes import routes
+from marshmallow import Schema, fields, ValidationError
+from database.schemas.response_schema import ResponseSchema
+
 
 questionnaire = Blueprint('questionnaire', __name__)
 
@@ -60,9 +63,19 @@ def submit_response():
     """
     if request.method == "POST":
         data = request.get_json()
-        questionnaire_id = data.get('questionnaire_id')
-        student_id = data.get('student_id')
-        answers = data.get('answers')
+        
+        #Validate the data
+        schema = ResponseSchema()
+        try:
+            validated_data = schema.load(data) # This will raise a ValidationError if the data is invalid
+        except ValidationError as err:
+            return jsonify(err.messages), 400 # Return the validation error messages
+        
+        #If the data is valid, create the response
+        questionnaire_id = validated_data['questionnaire_id']
+        student_id = validated_data['student_id']
+        answers = validated_data['answers']
+        
         new_response = Response(questionnaire_id=questionnaire_id, student_id=student_id) # create a new response
         for answer in answers: # loop to iterate through the answers
             question_id = answer.get('question_id') # get the question id
@@ -104,6 +117,15 @@ def update_question(question_id):
         return jsonify(question.serialize()), 200
     
 
-       
+@questionnaire.route("/response/<response_id>", methods=["GET"])
+def get_response(response_id):
+    """
+    Route for retrieving a specific response
+    """
+    if request.method == "GET":
+        found_response = Response.query.get(response_id)
+        if not found_response:
+            return jsonify({"error": "Response not found"}), 404
+        return jsonify(found_response.serialize()), 200      
        
     
