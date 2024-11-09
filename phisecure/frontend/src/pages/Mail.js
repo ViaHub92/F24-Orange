@@ -1,7 +1,5 @@
 //Mail.js
 import React, { useState } from 'react';
-import axios from 'axios';
-import TestEMail from './email_templates/testemail';
 import Sidebar from './components/Sidebar';
 import EmailList from './components/EmailList';
 import EmailDetail from './components/EmailDetail';

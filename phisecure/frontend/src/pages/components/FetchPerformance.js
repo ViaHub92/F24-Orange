@@ -18,20 +18,17 @@ function FetchPerformance() {
       {data.length === 0 ? (
         <p>Waiting...</p>
       ) : (
-        data.map((student, i) => (
-          <div key={i}>
-            <p>StudentTest: {student.id}</p>
-            <p>Username: {student.username}</p>
-            <p>Total Opened: {total_opened}</p>
-            <p>Total Replied: {total_replied}</p>
-            <p>Total clicked: {total_links_clicked}</p>
-
-          </div>
-        ))
-      )
-      }
+        <div>        
+            <p>StudentTest: {data.student_id}</p>
+            <p>Username: {data.student_name}</p>
+            <p>Total Interaction: {data.total_interactions}</p>
+            <p>Total Open: {data.total_opened}</p>
+            <p>Total Replied: {data.total_replied}</p>
+            <p>Total Links: {data.total_links_clicked}</p>
+        </div> 
+        )}    
     </div>
-)
+  )
 };
 
 export default FetchPerformance;
