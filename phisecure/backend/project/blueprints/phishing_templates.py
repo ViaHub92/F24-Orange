@@ -46,9 +46,11 @@ def create_template():
         category = data.get('category')
         tags = data.get('tags')
         difficulty_level_str = data.get('difficulty_level')
+        sender_template = data.get('sender_template')
         subject_template = data.get('subject_template')
         body_template = data.get('body_template')
         link = data.get('link')
+        template_redflag = data.get('template_redflag')
         
        
         
@@ -67,9 +69,11 @@ def create_template():
                 category = category,
                 tags=tags,
                 difficulty_level=difficulty_level,
+                sender_template=sender_template,
                 subject_template=subject_template,
                 body_template=body_template,
-                link=link
+                link=link,
+                template_redflag=template_redflag
             )
         db.session.add(template)
         db.session.commit()

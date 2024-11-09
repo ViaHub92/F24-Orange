@@ -95,7 +95,7 @@ def update_question(question_id):
             #Clear existing options if any
             Option.query.filter_by(question_id=question_id).delete()
             
-            for option in data.get('options'):
+            for option in data.get('options'): # loop to iterate through the options
                 option_text = option.get('option_text')
                 new_option = Option(question=question, option_text=option_text)
                 db.session.add(new_option)

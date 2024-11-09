@@ -28,9 +28,11 @@ def test_phishing_template(client):
         "category": "Test",
         "tags": "Test, Phishing",
         "difficulty_level": "beginner",
+        "sender_template": "genericemail@test.com",
         "subject_template": "Test phishing email",
         "body_template": "This is a test phishing email",
-        "link": "http://test.com"
+        "link": "http://test.com",
+        "template_redflag": "Test red flag"
     }
     
     response = client.post('/phishing/templates', json=template_data)
