@@ -23,14 +23,10 @@ import SystemAnalytics from "./pages/SystemAnalytics";
 import UserManagement from "./pages/UserManagement";
 import Questionnaire from "./pages/Questionnaire.js";
 import ViewQuestionnaire from "./pages/components/ViewQuestionnaire.js";
-<<<<<<< Updated upstream
 import FetchPerformanceSummary from "./pages/components/FetchPerformanceSummary.js";
 import FetchPerformanceDetailed from "./pages/components/FetchPerformanceDetailed.js";
-=======
-import FetchPerformance from "./pages/components/FetchPerformance.js";
 import FetchInbox from "./pages/components/FetchInbox.js";
 
->>>>>>> Stashed changes
 function App() {
   return (
         <>
@@ -55,13 +51,9 @@ function App() {
                 <Route path="UserManagement" element={<UserManagement />} />
                 <Route path="Questionnaire" element={<Questionnaire />} />
                 <Route path="ViewQuestionnaire" element={<ViewQuestionnaire />} />
-<<<<<<< Updated upstream
                 <Route path="FetchPerformanceSummary" element={<FetchPerformanceSummary />} />
                 <Route path="FetchPerformanceDetailed" element={<FetchPerformanceDetailed />} />
-=======
-                <Route path="FetchPerformance" element={<FetchPerformance />} />
                 <Route path="FetchInbox" element={<FetchInbox />} />
->>>>>>> Stashed changes
             </Routes>
         </>
   );
