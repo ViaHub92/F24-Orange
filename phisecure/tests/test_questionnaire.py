@@ -1,4 +1,5 @@
 import pytest
+from database.models import Answer
 from backend.project import create_app, db
 from backend.config import TestConfig
 
@@ -27,11 +28,22 @@ def test_questionnaire_creation(client):
         'questions': [
             {
                 'question_text': 'Are you Employed?',
-                'question_type': 'True/False'
+                'question_type': 'True/False',
+                'options': [
+                    {"option_text": "True"},
+                    {"option_text": "False"}
+                ]
             },
             {
                 'question_text': 'How many times a day do you check your email?',
-                'question_type': 'multiple choice'
+                'question_type': 'multiple choice',
+                'options': [
+                    {"option_text": "1"},
+                    {"option_text": "2"},
+                    {"option_text": "3"},
+                    {"option_text": "4"},
+                    {"option_text": "5+"}
+                ]
             }
         ]      
     }
@@ -53,15 +65,23 @@ def test_retriveing_questionnaire(client):
         'questions': [
             {
                 'question_text': 'Do you open all emails or skip some? Why?',
-                'question_type': 'Short answer'
+                'question_type': 'Short answer',
+                'options': []
+                
+                
             },
             {
                 'question_text': 'Do you review links before clicking them?',
-                'question_type': 'Yes or No'
+                'question_type': 'Yes or No',
+                'options': [
+                    {"option_text": "Yes"},
+                    {"option_text": "No"}
+                ]
             },
             {
                 'question_text': 'Describe a time you encountered a phishing email. What did you do?',
-                'question_type': 'Short answer'
+                'question_type': 'Short answer',
+                'options': []
             }
         ]      
     }
@@ -102,3 +122,25 @@ def test_update_questions_in_questionnaire(client):
         client (_type_): _description_
     """
         
+class TestQuestionnaire:
+    """
+    test suite for the questionnaire model
+    
+    """
+
+def test_analyze_answers():
+    """
+    Test the analyze answers method
+    """
+    new_submission = Answer(
+        question_id=1,
+        answer_text="Yes"
+    )
+    
+    submission_data = new_submission.analyze_answers()
+ 
+    
+    print(submission_data)
+    assert submission_data['question_id'] == 1
+    assert submission_data['answer_text'] == "No"
+    

@@ -135,3 +135,13 @@ class Answer(db.Model):
             'answer_text': self.answer_text,
             'question': self.question.serialize() if self.question else None
         }
+        
+    def analyze_answers(self):
+        """
+        Analyze the answer to a question
+        """
+        data = self.serialize()
+        print("Dictionary of keys and their types")
+        for key, value in self.__dict__.items():
+            print(f"{key}: {type(value)}")
+            return data
