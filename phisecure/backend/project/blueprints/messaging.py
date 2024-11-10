@@ -12,12 +12,11 @@ from backend.project.routes import routes
 messaging = Blueprint('messaging', __name__, template_folder='templates')
 
 # Route for the inbox
-@messaging.route('/inbox')
-def inbox():
+@messaging.route('/inbox/<int:student_id>')
+def inbox(student_id):
     """
     Route to retrieve the inbox for a specific student.
     """
-    student_id = request.args.get('student_id')
     if not student_id:
         flash('Student ID is required.')
         return redirect(url_for('routes.index'))
