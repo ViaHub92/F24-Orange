@@ -87,7 +87,7 @@ const SidebarComponent = () => {
               <tr>
                 <th>Interactions</th>
                 <th>Email Body</th>
-                <th>Risk</th>
+                <th>Red Flags</th>
               </tr>
             </thead>
             <tbody>

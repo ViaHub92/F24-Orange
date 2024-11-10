@@ -22,7 +22,6 @@ function FetchPerformanceDetailed() {
           {data.map((item, index) => (
             <div key={index} style={{ marginBottom: "20px", borderBottom: "1px solid #ddd", padding: "10px" }}>
               <tr>
-              <p><strong>Email Subject:</strong> {item.email_subject}</p>
               <p><strong>Opened:</strong> {item.opened ? "Yes" : "No"}</p>
               <p><strong>Link Clicked:</strong> {item.link_clicked ? "Yes" : "No"}</p>
               <p><strong>Replied:</strong> {item.replied ? "Yes" : "No"}</p>
