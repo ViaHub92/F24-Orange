@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function FetchPerformance() {
+function FetchPerformanceSummary() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -19,9 +19,7 @@ function FetchPerformance() {
         <p>Waiting...</p>
       ) : (
         <div>        
-            <p>StudentTest: {data.student_id}</p>
-            <p>Username: {data.student_name}</p>
-            <p>Total Interaction: {data.total_interactions}</p>
+            <p>Total Interactions: {data.total_interactions}</p>
             <p>Total Open: {data.total_opened}</p>
             <p>Total Replied: {data.total_replied}</p>
             <p>Total Links: {data.total_links_clicked}</p>
@@ -31,4 +29,4 @@ function FetchPerformance() {
   )
 };
 
-export default FetchPerformance;
+export default FetchPerformanceSummary;

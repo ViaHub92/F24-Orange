@@ -5,10 +5,11 @@ import { FaEnvelope } from "react-icons/fa";
 import { GoPersonFill } from "react-icons/go";
 import { FaCog } from "react-icons/fa";
 import 'w3-css/w3.css';
-import FetchPerformance from './FetchPerformance';
+import FetchPerformanceSummary from './FetchPerformanceSummary';
+import FetchPerformanceDetailed from './FetchPerformanceDetailed';
 
 const SidebarComponent = () => {
-  const [studentName, setStudentName] = useState("Student");
+  const [studentName, setStudentName] = useState("John");
 
   return (
     <div>
@@ -57,22 +58,41 @@ const SidebarComponent = () => {
           <h5><b><i className="fa fa-dashboard"></i> Student Dashboard</b></h5>
         </header>
 
+        {/* Overall Performance*/}
+        <div className="w3-container">
+          <h5>Overall Performance</h5>
+          <table className="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+            <thead>
+              <tr>
+                <th>Performance Summary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><FetchPerformanceSummary /></td>
+              </tr>
+              <tr>
+                <td>Results</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr />
+
         {/* Reports Section */}
         <div className="w3-container">
           <h5>Reports</h5>
           <table className="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
             <thead>
               <tr>
-                <th>Report Title</th>
+                <th>Individual Reports</th>
                 <th>Date</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Feedback</td>
-                <td>Oct 21, 2024</td>
-                <td>Reviewed</td>
+              <td><FetchPerformanceDetailed /></td>
               </tr>
               <tr>
                 <td>Results</td>
@@ -84,41 +104,6 @@ const SidebarComponent = () => {
         </div>
         <hr />
 
-        {/* Email Section */}
-        <div className="w3-container">
-          <h5>Email Inbox</h5>
-          <ul className="w3-ul w3-card-4 w3-white">
-            <li className="w3-padding-16">
-              <span className="w3-large">Subject</span><br />
-              <span className="w3-opacity">From: johnsmith@example.com</span>
-            </li>
-            <li className="w3-padding-16">
-              <span className="w3-large">Subject:</span><br />
-              <span className="w3-opacity">From: janesmith@example.com</span>
-            </li>
-          </ul>
-
-          <Link to="/Mail">
-            <button className="w3-button w3-dark-grey">
-              View All Emails <i className="fa fa-arrow-right" />
-            </button>
-          </Link>
-        </div>
-        <hr />
-
-        {/* Notifications Section */}
-        <div className="w3-container">
-          <h5>Notifications</h5>
-          <ul className="w3-ul w3-card-4 w3-white">
-            <li className="w3-padding-16">
-              <i className="fa fa-bell w3-text-red"></i> New grades available for review.
-            </li>
-            <li className="w3-padding-16">
-              <i className="fa fa-bell w3-text-green"></i> Your report has been approved.
-            </li>
-          </ul>
-        </div>
-        <hr />
       </main>
 
       {/* Footer */}
