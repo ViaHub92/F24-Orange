@@ -72,7 +72,7 @@ const SidebarComponent = () => {
                 <td><FetchPerformanceSummary /></td>
               </tr>
               <tr>
-                <td>Results</td>
+                <td>Risk Meter</td>
               </tr>
             </tbody>
           </table>
@@ -81,23 +81,18 @@ const SidebarComponent = () => {
 
         {/* Reports Section */}
         <div className="w3-container">
-          <h5>Reports</h5>
+          <h5>Phishing Email Feedback</h5>
           <table className="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
             <thead>
               <tr>
-                <th>Individual Reports</th>
-                <th>Date</th>
-                <th>Status</th>
+                <th>Interactions</th>
+                <th>Email Body</th>
+                <th>Risk</th>
               </tr>
             </thead>
             <tbody>
               <tr>
               <td><FetchPerformanceDetailed /></td>
-              </tr>
-              <tr>
-                <td>Results</td>
-                <td>Oct 19, 2024</td>
-                <td>Pending</td>
               </tr>
             </tbody>
           </table>
