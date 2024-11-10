@@ -8,7 +8,7 @@ function Header() {
         <nav className="navbar">
           <div className="logo">
             <img src={logo} alt="Phisecure Logo" className="nav-logo" />
-            <h1>             Phisecure</h1>
+            <h1>Phisecure</h1>
           </div>
           <ul className="nav-links">
             <li><NavLink to="/Home">Home</NavLink></li>

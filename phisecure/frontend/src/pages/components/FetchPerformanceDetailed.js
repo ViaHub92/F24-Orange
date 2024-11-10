@@ -14,23 +14,38 @@ function FetchPerformanceDetailed() {
   }, []);
 
   return (
-    <div>
+    <>
       {data.length === 0 ? (
-        <p>Waiting...</p>
+        <tr>
+          <td colSpan="3">Waiting...</td>
+        </tr>
       ) : (
-        <div>
-          {data.map((item, index) => (
-            <div key={index} style={{ marginBottom: "20px", borderBottom: "1px solid #ddd", padding: "10px" }}>
-              <tr>
+        data.map((item, index) => (
+          <tr key={index}>
+            {/* Interactions Column */}
+            <td>
               <p><strong>Opened:</strong> {item.opened ? "Yes" : "No"}</p>
               <p><strong>Link Clicked:</strong> {item.link_clicked ? "Yes" : "No"}</p>
               <p><strong>Replied:</strong> {item.replied ? "Yes" : "No"}</p>
-              </tr>
+            </td>
+            
+            {/* Email Body Column */}
+            <td>
+              
+            <div className="email-body-container">
+            {item.email_body}
             </div>
-          ))}
-        </div>
+
+            </td>
+
+
+
+            {/* Red Flags Column */}
+            <td>{item.template_id ? item.template_id : "No Red Flags"}</td>
+          </tr>
+        ))
       )}
-    </div>
+    </>
   );
 }
 

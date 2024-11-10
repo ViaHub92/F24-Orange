@@ -91,9 +91,9 @@ const SidebarComponent = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-              <td><FetchPerformanceDetailed /></td>
-              </tr>
+              
+              <FetchPerformanceDetailed />
+              
             </tbody>
           </table>
         </div>

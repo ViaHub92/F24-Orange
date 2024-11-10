@@ -408,3 +408,26 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
 }
+
+
+.email-body-container {
+    word-wrap: break-word; 
+    white-space: normal; 
+    max-width: 300px; 
+    overflow-wrap: break-word; 
+  }
+  
+  .email-body-full {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    z-index: 10;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 300px;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+  
