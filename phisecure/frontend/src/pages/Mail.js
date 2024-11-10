@@ -1,8 +1,7 @@
 //Mail.js
 import React, { useState } from 'react';
-import Sidebar from './components/Sidebar';
 import EmailList from './components/EmailList';
-import EmailDetail from './components/EmailDetail';
+import FetchInbox from './components/FetchInbox';
 
 
 function Mail() {
@@ -21,9 +20,8 @@ function Mail() {
   return (
     <div className="app">
 
-      <Sidebar />  
       <EmailList emails={emails} onEmailSelect={handleEmailSelect} />
-      {selectedEmail && <EmailDetail email={selectedEmail} />}
+      {selectedEmail && <FetchInbox email={selectedEmail} />}
   
     </div>
   );

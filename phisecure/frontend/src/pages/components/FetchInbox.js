@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const Inbox = ({ studentId }) => {
+const FetchInbox = ({ studentId }) => {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,4 +52,4 @@ const Inbox = ({ studentId }) => {
   );
 };
 
-export default Inbox;
+export default FetchInbox;
