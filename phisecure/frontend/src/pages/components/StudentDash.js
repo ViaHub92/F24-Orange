@@ -37,7 +37,7 @@ const SidebarComponent = () => {
           <Link to="/overview" className="w3-bar-item w3-button w3-padding">
             <i className="fa fa-users-cog"></i> Overview
           </Link>
-          <Link to="/Mail" className="w3-bar-item w3-button w3-padding">
+          <Link to="/Inbox" className="w3-bar-item w3-button w3-padding">
             <i className="fa fa-user-shield"></i> Prototype Inbox
           </Link>
           <Link to="/ReportsStudents" className="w3-bar-item w3-button w3-padding">
