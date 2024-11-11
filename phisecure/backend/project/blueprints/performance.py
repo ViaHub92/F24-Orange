@@ -28,6 +28,7 @@ def performance_report(student_id):
                 "opened": interaction.opened,
                 "link_clicked": interaction.link_clicked,
                 "replied": interaction.replied,
+                "red_flag": phishing_email.red_flag,
                 "template_id": phishing_email.template_id #Used only for testing purposes
             })
 

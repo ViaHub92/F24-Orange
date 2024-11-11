@@ -4,7 +4,7 @@ function FetchPerformanceDetailed() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("/performance/detailed/4")  // Add full URL if needed, like `http://localhost:5000/performance/detailed/4`
+    fetch("/performance/detailed/7")  // Add full URL if needed, like `http://localhost:5000/performance/detailed/4`
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -41,7 +41,11 @@ function FetchPerformanceDetailed() {
 
 
             {/* Red Flags Column */}
-            <td>{item.template_id ? item.template_id : "No Red Flags"}</td>
+            <td>
+            <div className="email-body-container">
+              {item.red_flag ? item.red_flag : "No Red Flags"}
+            </div>
+            </td>
           </tr>
         ))
       )}

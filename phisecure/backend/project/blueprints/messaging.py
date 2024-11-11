@@ -135,6 +135,7 @@ def compose_phishing_email():
         body=template.body_template,
         sent_at=datetime.now(timezone.utc),
         inbox_id=recipient_student.inbox_id,
+        red_flag=template.template_redflag,
         template_id=template.id
     )
     db.session.add(phishing_email)
