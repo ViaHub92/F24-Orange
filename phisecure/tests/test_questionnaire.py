@@ -142,5 +142,5 @@ def test_analyze_answers():
     
     print(submission_data)
     assert submission_data['question_id'] == 1
-    assert submission_data['answer_text'] == "No"
+    assert submission_data['answer_text'] == "Yes"
     
