@@ -63,3 +63,77 @@
 .submit-button:hover {
     background-color: var(--primary-color-dark);
 }
+
+/*inbox style*/
+.inbox {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+}
+
+.inbox-container {
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.inbox ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.inbox ul li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+/*email style*/
+.email-view {
+    padding: 10px;
+    margin-left: 20px;
+}
+
+.email-view h3 {
+    margin: 0 0 10px;
+}
+
+.email-view textarea {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+}
+
+.email-view button {
+    margin-top: 10px;
+}
+.email-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Adds space between each email item */
+}
+
+.email-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.email-subject {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.email-sender {
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.email-date {
+    color: #777;
+    font-size: 0.9em;
+}
