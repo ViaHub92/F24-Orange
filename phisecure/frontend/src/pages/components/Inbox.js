@@ -37,11 +37,20 @@ function Inbox({ studentId }) {
     return (
         <div className="inbox">
             <h2>Inbox</h2>
-            <ul>
+            <ul className="email-list">
                 {emails.map(email => (
-                    <li key={email.id} onClick={() => handleEmailClick(email.id)}>
-                        <strong>{email.subject}</strong> - {email.sender}
-                        <span>{new Date(email.sent_at).toLocaleString()}</span>
+                    <li 
+                        key={email.id} 
+                        className="email-item" 
+                        onClick={() => handleEmailClick(email.id)}
+                    >
+                        <div className="email-header">
+                            <strong>{email.subject}</strong>
+                            <span className="email-sender">{email.sender}</span>
+                        </div>
+                        <span className="email-timestamp">
+                            {new Date(email.sent_at).toLocaleString()}
+                        </span>
                     </li>
                 ))}
             </ul>
