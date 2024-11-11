@@ -21,11 +21,11 @@ import { ReportsStudents } from "./pages/ReportsStudents.js";
 import Services from "./pages/Services";
 import SystemAnalytics from "./pages/SystemAnalytics";
 import UserManagement from "./pages/UserManagement";
-import Questionnaire from "./pages/Questionnaire.js";
 import ViewQuestionnaire from "./pages/components/ViewQuestionnaire.js";
 import FetchPerformanceSummary from "./pages/components/FetchPerformanceSummary.js";
 import FetchPerformanceDetailed from "./pages/components/FetchPerformanceDetailed.js";
 import FetchInbox from "./pages/components/FetchInbox.js";
+import EmailDetailsByIndex from "./pages/components/FetchFirstInbox.js";
 
 function App() {
   return (
@@ -49,11 +49,11 @@ function App() {
                 <Route path="Services" element={<Services />} />
                 <Route path="SystemAnalytics" element={<SystemAnalytics />} />
                 <Route path="UserManagement" element={<UserManagement />} />
-                <Route path="Questionnaire" element={<Questionnaire />} />
                 <Route path="ViewQuestionnaire" element={<ViewQuestionnaire />} />
                 <Route path="FetchPerformanceSummary" element={<FetchPerformanceSummary />} />
                 <Route path="FetchPerformanceDetailed" element={<FetchPerformanceDetailed />} />
                 <Route path="FetchInbox" element={<FetchInbox />} />
+                <Route path="FetchFirstInbox" element={<EmailDetailsByIndex />} />
             </Routes>
         </>
   );

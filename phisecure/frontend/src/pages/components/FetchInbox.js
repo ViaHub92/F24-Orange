@@ -44,8 +44,7 @@ const FetchInbox = ({ studentId }) => {
           <li key={email.id}>
             <strong>{email.subject}</strong> from {email.sender}
             <p>{email.body}</p>
-            <small>{new Date(email.sent_at).toLocaleString()}</small>
-          </li>
+            </li>
         ))}
       </ul>
     </div>

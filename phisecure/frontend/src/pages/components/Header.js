@@ -14,7 +14,7 @@ function Header() {
             <li><NavLink to="/Home">Home</NavLink></li>
             <li><NavLink to="/About">About</NavLink></li>
             <li><NavLink to="/CreateAccount">Create Account</NavLink></li>
-            <li><NavLink to="/Questionnaire">Questionnaire</NavLink></li>
+            <li><NavLink to="/ViewQuestionnaire">Questionnaire</NavLink></li>
             <li><NavLink to="/Login">Login</NavLink></li>
             <li><NavLink to="/Dashboard">Dashboard</NavLink></li>
             <li><NavLink to="/ReportsStudents">Reports</NavLink></li>
