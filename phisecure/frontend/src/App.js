@@ -25,7 +25,10 @@ import ViewQuestionnaire from "./pages/components/ViewQuestionnaire.js";
 import FetchPerformanceSummary from "./pages/components/FetchPerformanceSummary.js";
 import FetchPerformanceDetailed from "./pages/components/FetchPerformanceDetailed.js";
 import FetchInbox from "./pages/components/FetchInbox.js";
-import EmailDetailsByIndex from "./pages/components/FetchFirstInbox.js";
+import Inbox from "./pages/components/FetchFirstInbox.js";
+import FetchSubject from "./pages/components/FetchSubject.js";
+import FetchID from "./pages/components/FetchID.js";
+import MarkPhish from "./pages/components/MarkPhish.js";
 
 function App() {
   return (
@@ -53,7 +56,10 @@ function App() {
                 <Route path="FetchPerformanceSummary" element={<FetchPerformanceSummary />} />
                 <Route path="FetchPerformanceDetailed" element={<FetchPerformanceDetailed />} />
                 <Route path="FetchInbox" element={<FetchInbox />} />
-                <Route path="FetchFirstInbox" element={<EmailDetailsByIndex />} />
+                <Route path="FetchFirstInbox" element={<Inbox />} />
+                <Route path="FetchSubject" element={<FetchSubject />} />
+                <Route path="FetchID" element={<FetchID />} />
+                <Route path="MarkPhish" element={<MarkPhish />} />
             </Routes>
         </>
   );

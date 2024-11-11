@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const Inbox = ({ studentId }) => {
-  const [email, setEmail] = useState(null); // We'll store just the first email here
+const FetchSubject = ({ studentId }) => {
+  const [email, setEmail] = useState(null); // Store only the first email
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -51,17 +51,11 @@ const Inbox = ({ studentId }) => {
 
   return (
     <div>
-      <div>
-        <strong>Sender:</strong> {email.sender}
-      </div>
-      <div>
-        <strong>Body:</strong> {email.body}
-      </div>
-      <div>
-        <strong>Sent at:</strong> {new Date(email.sent_at).toLocaleString()}
+      <div> 
+        {email.subject}
       </div>
     </div>
   );
 };
 
-export default Inbox;
+export default FetchSubject;

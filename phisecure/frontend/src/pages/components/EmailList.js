@@ -9,7 +9,7 @@ const EmailList = ({ emails, onEmailSelect }) => {
           <li
             key={email.id}
             onClick={() => onEmailSelect(email)}
-            style={{ display: 'flex', justifyContent: 'space-between' }} // Flex for inline display
+            style={{ display: 'flex', justifyContent: 'space-between' }} 
           >
             <span style={{ display: 'inline' }}>{email.subject}</span>
             <span style={{ display: 'inline', marginLeft: '10px' }}>{email.from}</span>
