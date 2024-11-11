@@ -18,7 +18,7 @@ function Header() {
             <li><NavLink to="/Login">Login</NavLink></li>
             <li><NavLink to="/Dashboard">Dashboard</NavLink></li>
             <li><NavLink to="/ReportsStudents">Reports</NavLink></li>
-            <li><NavLink to="/Mail">Inbox</NavLink></li>
+            <li><NavLink to="/Inbox">Inbox</NavLink></li>
             
           </ul>
         </nav>
