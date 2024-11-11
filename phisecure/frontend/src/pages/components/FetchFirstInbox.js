@@ -23,6 +23,7 @@ const EmailDetailsByIndex = ({ studentId, emailIndex }) => {
           
           // Extract sender, subject, and body
           setEmailDetails({
+            emailid: email.id,
             sender: email.sender,
             subject: email.subject,
             body: email.body
@@ -51,6 +52,7 @@ const EmailDetailsByIndex = ({ studentId, emailIndex }) => {
 
   return (
     <div>
+      <p><strong>ID: </strong>{emailDetails.id}</p>  
       <p><strong>From:</strong> {emailDetails.sender}</p>
       <p><strong>Subject:</strong> {emailDetails.subject}</p>
       <p><strong>Body:</strong> {emailDetails.body}</p>
