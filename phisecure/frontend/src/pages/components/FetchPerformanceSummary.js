@@ -4,7 +4,7 @@ function FetchPerformanceSummary() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("performance/summary/4")
+    fetch("performance/summary/8")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -19,7 +19,6 @@ function FetchPerformanceSummary() {
         <p>Waiting...</p>
       ) : (
         <div>        
-            <p>Total Interactions: {data.total_interactions}</p>
             <p>Total Open: {data.total_opened}</p>
             <p>Total Replied: {data.total_replied}</p>
             <p>Total Links: {data.total_links_clicked}</p>

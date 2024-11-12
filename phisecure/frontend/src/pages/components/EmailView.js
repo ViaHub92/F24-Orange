@@ -19,7 +19,6 @@ function EmailView({ email, onReply }) {
             <p><strong>From:</strong> {email.sender}</p>
             <p><strong>To:</strong> {email.recipient}</p>
             <p><strong>Body:</strong> {email.body}</p>
-            {email.is_phishing && <p>This is a phishing email.</p>}
             
             <form onSubmit={handleReplySubmit}>
                 <textarea

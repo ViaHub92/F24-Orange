@@ -9,7 +9,7 @@ import FetchPerformanceSummary from './FetchPerformanceSummary';
 import FetchPerformanceDetailed from './FetchPerformanceDetailed';
 
 const SidebarComponent = () => {
-  const [studentName, setStudentName] = useState("Joshua");
+  const [studentName, setStudentName] = useState("Ralph");
 
   return (
     <div>
