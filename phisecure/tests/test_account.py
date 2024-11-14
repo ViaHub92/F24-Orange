@@ -1,4 +1,5 @@
 import pytest
+from database.models import Student
 from backend.project import create_app, db
 from backend.config import TestConfig
 
@@ -16,12 +17,11 @@ def client(app):
         yield client
 
 def test_student_account(client):
-    from database.models.student import Student  # Update the import to use Student
-    
+   
     student_data = {
         "username": "teststudent",
         "email": "teststudent@example.com",
-        "password_hash": "hashed_password",
+        "password": "hashed_password",
         "first_name": "Test",
         "last_name": "Student"
     }
@@ -60,3 +60,21 @@ def test_student_account(client):
     # Test trying to delete the same student again
     delete_again = client.delete(f'/account/delete_student/{delete_student_info.id}')
     assert delete_again.status_code == 404, "Should return 404 for already deleted student"
+
+def test_login(client):
+    """
+    Test logging in a student
+    """
+    student_data = {
+        "username": "newuser1234",
+        "email": "testuser123@gmail.com",
+        "password": "password123",
+        "first_name": "Test",
+        "last_name": "User"
+        
+    }
+    create = client.post('/account/create_student', json=student_data)
+    response = client.post('/account/login', json=student_data)
+    assert create.status_code == 201
+    assert response.status_code == 200
+    

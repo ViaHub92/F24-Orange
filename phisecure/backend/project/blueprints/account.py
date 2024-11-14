@@ -19,7 +19,7 @@ def create_student():
     data = request.json
     username = data.get('username')
     email = data.get('email')
-    password_hash = data.get('password_hash')
+    password = data.get('password')
     first_name = data.get('first_name', '')
     last_name = data.get('last_name', '')
 
@@ -44,12 +44,13 @@ def create_student():
     new_student = Student(
         username=username,
         email=email,
-        password_hash=password_hash,
         first_name=first_name,
         last_name=last_name,
         role_id=default_role.id,
         inbox_id=inbox.id 
     )
+    
+    new_student.password = password
     db.session.add(new_student)
     db.session.commit()
 
