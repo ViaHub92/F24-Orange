@@ -1,19 +1,19 @@
 //Mail.js
 import React, { useState } from 'react';
-import axios from 'axios';
-import TestEMail from './email_templates/testemail';
-import Sidebar from './components/Sidebar';
 import EmailList from './components/EmailList';
-import EmailDetail from './components/EmailDetail';
+import Inbox from './components/FetchFirstInbox';
+import FetchSubject from './components/FetchSubject';
+import FetchID from './components/FetchID';
+import MarkPhish from './components/MarkPhish';
 
 
 function Mail() {
   const [selectedEmail, setSelectedEmail] = useState(null);
 
   const emails = [
-    { id: 1, subject: 'Not Spam', body: 'Placeholder' },
-    { id: 2, subject: 'Phisecure', body: 'Placeholder' },
-    { id: 3, subject: 'Not Spam', body: 'Placeholder' },
+    { id: 4, subject: <FetchSubject />, body: <Mail /> },
+    { id: 2, subject: 'Follow Up Question', body: 'Placeholder' },
+    { id: 3, subject: 'Free Money', body: 'Placeholder' },
   ];
 
   const handleEmailSelect = (email) => {
@@ -22,13 +22,23 @@ function Mail() {
 
   return (
     <div className="app">
-
-      <Sidebar />  
+      {/* Email List Component, passing the emails array and handler for selection */}
       <EmailList emails={emails} onEmailSelect={handleEmailSelect} />
-      {selectedEmail && <EmailDetail email={selectedEmail} />}
-  
+      
+      {/* If an email is selected, show the Inbox or other components */}
+      {selectedEmail && (
+        <div>
+          <h2>Email Details</h2>
+          <h3>Subject: {selectedEmail.subject}</h3>
+          <p>Body: {selectedEmail.body}</p>
+
+          {/* Fetch additional email info or actions (like MarkPhish) */}
+          <FetchID emailId={selectedEmail.id} />
+          <MarkPhish emailId={selectedEmail.id} />
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default Mail;

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from backend.project import db
 from database.models.student import Student
 from database.models.email import Email
-from database.models.phishing_email import PhishingEmail  # Import PhishingEmail model
+from database.models.phishing_email import PhishingEmail
 from database.models.inbox import Inbox
 from database.models.user_interaction import UserInteraction
 from database.models.template import Template
@@ -12,12 +12,11 @@ from backend.project.routes import routes
 messaging = Blueprint('messaging', __name__, template_folder='templates')
 
 # Route for the inbox
-@messaging.route('/inbox')
-def inbox():
+@messaging.route('/inbox/<int:student_id>')
+def inbox(student_id):
     """
     Route to retrieve the inbox for a specific student.
     """
-    student_id = request.args.get('student_id')
     if not student_id:
         flash('Student ID is required.')
         return redirect(url_for('routes.index'))
@@ -136,6 +135,7 @@ def compose_phishing_email():
         body=template.body_template,
         sent_at=datetime.now(timezone.utc),
         inbox_id=recipient_student.inbox_id,
+        red_flag=template.template_redflag,
         template_id=template.id
     )
     db.session.add(phishing_email)

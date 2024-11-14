@@ -21,10 +21,17 @@ import { ReportsStudents } from "./pages/ReportsStudents.js";
 import Services from "./pages/Services";
 import SystemAnalytics from "./pages/SystemAnalytics";
 import UserManagement from "./pages/UserManagement";
-import Questionnaire from "./pages/Questionnaire.js";
-
+import ViewQuestionnaire from "./pages/components/ViewQuestionnaire.js";
+import FetchPerformanceSummary from "./pages/components/FetchPerformanceSummary.js";
+import FetchPerformanceDetailed from "./pages/components/FetchPerformanceDetailed.js";
+import FetchInbox from "./pages/components/FetchInbox.js";
+import Inbox from './pages/components/Inbox';
+import FetchSubject from "./pages/components/FetchSubject.js";
+import FetchID from "./pages/components/FetchID.js";
+import MarkPhish from "./pages/components/MarkPhish.js";
 
 function App() {
+  const studentId = 8;
   return (
         <>
             <Header />
@@ -46,8 +53,15 @@ function App() {
                 <Route path="Services" element={<Services />} />
                 <Route path="SystemAnalytics" element={<SystemAnalytics />} />
                 <Route path="UserManagement" element={<UserManagement />} />
-                <Route path="Questionnaire" element={<Questionnaire />} />
-                
+                <Route path="ViewQuestionnaire" element={<ViewQuestionnaire />} />
+                <Route path="FetchPerformanceSummary" element={<FetchPerformanceSummary />} />
+                <Route path="FetchPerformanceDetailed" element={<FetchPerformanceDetailed />} />
+                <Route path="FetchInbox" element={<FetchInbox />} />
+                <Route path="FetchFirstInbox" element={<Inbox />} />
+                <Route path="FetchSubject" element={<FetchSubject />} />
+                <Route path="FetchID" element={<FetchID />} />
+                <Route path="MarkPhish" element={<MarkPhish />} />
+                <Route path="Inbox" element={<Inbox studentId={studentId} />} />
             </Routes>
         </>
   );
