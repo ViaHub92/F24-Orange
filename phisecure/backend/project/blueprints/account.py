@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from backend.project import db
 from database.models.student import Student
 from database.models.role import Role
@@ -54,6 +54,19 @@ def create_student():
     db.session.commit()
 
     return jsonify({"message": "Student created successfully!"}), 201
+
+@account.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    
+    student = Student.query.filter_by(username=username).first()
+    if student and student.check_password(password):
+        session['user_id'] = student.id
+        session['role'] = 'Student'
+        return jsonify({'message': 'Login successful', 'role': 'Student', 'user_id': student.id}), 200
+    return jsonify({'message': 'Invalid credentials'}), 401
 
 #Get student data
 @account.route('/get_student/<username>', methods=['GET'])
