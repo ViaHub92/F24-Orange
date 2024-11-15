@@ -1,5 +1,6 @@
 import pytest
 from database.models import Answer
+from database.models import Student 
 from backend.project import create_app, db
 from backend.config import TestConfig
 
@@ -98,6 +99,15 @@ def test_submit_response(client):
     Args:
         client (_type_): _description_
     """
+    # Ensure the student with ID 1 exists
+    student_data = {
+        "username": "newuser1234",
+        "email": "testuser123@gmail.com",
+        "password": "password123",
+        "first_name": "Test",
+        "last_name": "User"  
+    }
+
     new_submission = {
         "questionnaire_id": 1,
         "student_id": 1,
@@ -112,15 +122,46 @@ def test_submit_response(client):
             }
         ]
     }
-    response = client.post('/questionnaire/Submit', json=new_submission)
+    create = client.post('/account/create_student', json=student_data)
+    response = client.post('/questionnaire/Submit/1', json=new_submission)
     assert response.status_code == 200
     
-def test_update_questions_in_questionnaire(client):
-    """_summary_
-
-    Args:
-        client (_type_): _description_
+def test_retrieve_response(client):
     """
+    Test retrieving a response
+    """
+    
+    new_student_data = {
+        "username": "teststudent",
+        "email": "teststudent@example.com",
+        "password": "hashed_password",
+        "first_name": "Test",
+        "last_name": "Student"
+    }
+    # Ensure a response with ID 1 exists
+    new_response = {
+        "questionnaire_id": 1,
+        "student_id": 1,
+        "answers": [
+            {
+                "question_id": 1,
+                "answer_text": "Yes"
+            },
+            {
+                "question_id": 2,
+                "answer_text": "3 times a day"
+            }
+        ]
+    }
+    post_student = client.post('/account/create_student', json=new_student_data)
+    client.post('/questionnaire/Submit/1', json=new_response)
+    response = client.get('questionnaire/response/1')
+    assert response.status_code == 200
+    print(response.json)
+    
+    
+    
+    
         
 class TestQuestionnaire:
     """

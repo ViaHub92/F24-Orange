@@ -56,8 +56,8 @@ def get_questionnaire(questionnaire_id):
             return jsonify({"error": "Questionnaire not found"}), 404
         return jsonify(found_questionnaire.serialize()), 200
 
-@questionnaire.route("/Submit", methods=["POST"])
-def submit_response():
+@questionnaire.route("/Submit/<int:student_id>", methods=["POST"])
+def submit_response(student_id):
     """
     Route for submitting a response to a questionnaire
     """
@@ -69,11 +69,23 @@ def submit_response():
         try:
             validated_data = schema.load(data) # This will raise a ValidationError if the data is invalid
         except ValidationError as err:
+            print("Validation error", err.messages)
             return jsonify(err.messages), 400 # Return the validation error messages
+        
+          # Check if the student_id exists
+        student = Student.query.get(student_id)
+        if not student:
+            print(f"Student ID {student_id} does not exist")
+            return jsonify({"error": "Student ID does not exist"}), 400
         
         #If the data is valid, create the response
         questionnaire_id = validated_data['questionnaire_id']
-        student_id = validated_data['student_id']
+        #check if a response has already been submitted for this questionnaire by this student
+        existing_response = Response.query.filter_by(student_id=student_id, questionnaire_id=questionnaire_id).first()
+        
+        if existing_response:
+            return jsonify({"error": "A response for this questionnaire already exists for this student."}), 400
+        
         answers = validated_data['answers']
         
         new_response = Response(questionnaire_id=questionnaire_id, student_id=student_id) # create a new response
