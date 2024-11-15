@@ -9,7 +9,7 @@ function EmailView({ email, onReply }) {
 
     const handleReplySubmit = (e) => {
         e.preventDefault();
-        onReply(email.email_id, replyBody);
+        onReply(email.id, replyBody);
         setReplyBody(''); // Clear the reply box after sending
     };
 

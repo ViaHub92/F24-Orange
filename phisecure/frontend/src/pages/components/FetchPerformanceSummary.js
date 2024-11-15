@@ -4,7 +4,9 @@ function FetchPerformanceSummary() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("performance/summary/8")
+    const studentId = localStorage.getItem('student_id');
+
+    fetch(`performance/summary/${studentId}`)
       .then(res => res.json())
       .then(data => {
         setData(data);

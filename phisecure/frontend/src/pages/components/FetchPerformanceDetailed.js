@@ -4,7 +4,9 @@ function FetchPerformanceDetailed() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("/performance/detailed/8")  // Add full URL if needed, like `http://localhost:5000/performance/detailed/4`
+    const studentId = localStorage.getItem('student_id');
+    
+    fetch(`/performance/detailed/${studentId}`)
       .then(res => res.json())
       .then(data => {
         setData(data);

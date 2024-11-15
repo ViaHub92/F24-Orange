@@ -20,6 +20,7 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
+        localStorage.setItem('student_id', data.user_id);
         navigate('/Dashboard');
       } else {
         setError(data.message || 'Invalid login credentials');

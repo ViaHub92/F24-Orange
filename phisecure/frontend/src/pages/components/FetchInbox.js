@@ -1,15 +1,23 @@
 import { useEffect, useState } from 'react';
 
-const FetchInbox = ({ studentId }) => {
+const FetchInbox = () => {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchInbox = async () => {
+      const studentId = localStorage.getItem('student_id');
+
+      if (!studentId) {
+        setError("No student ID found in local storage.");
+        setLoading(false);
+        return;
+      }
+
       try {
         // Make the fetch request to the correct endpoint, using the student_id in the URL path
-        const response = await fetch(`messaging/inbox/4`);
+        const response = await fetch(`/messaging/inbox/${studentId}`);
         
         // Check if the response is OK (status 200)
         if (!response.ok) {
@@ -31,7 +39,7 @@ const FetchInbox = ({ studentId }) => {
 
     // Call the function to fetch inbox data
     fetchInbox();
-  }, [studentId]);
+  }, []);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
