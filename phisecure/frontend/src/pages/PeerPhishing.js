@@ -33,6 +33,7 @@ export function PeerPhishing() {
             data={data}
             options={options}
             />
+            <input type="submit" value="Select"></input>
         </section>
         </main>
         {/* Footer */}

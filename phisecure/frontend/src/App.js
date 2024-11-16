@@ -27,13 +27,14 @@ import FetchPerformanceDetailed from "./pages/components/FetchPerformanceDetaile
 import Inbox from './pages/components/Inbox';
 import FetchID from "./pages/components/FetchID.js";
 import MarkPhish from "./pages/components/MarkPhish.js";
+import PeerPhishingTemplate from "./pages/PeerPhishingTemplate.js"
 
 function App() {
   return (
         <>
             <Header />
             <Routes>
-                <Route path ="Home" element={<Home />} />
+                <Route path="Home" element={<Home />} />
                 <Route path="About" element={<About />} />
                 <Route path="Admin" element={<Admin />} />
                 <Route path="Contact" element={<Contact />} />
@@ -56,6 +57,7 @@ function App() {
                 <Route path="FetchID" element={<FetchID />} />
                 <Route path="MarkPhish" element={<MarkPhish />} />
                 <Route path="Inbox" element={<Inbox />} />
+                <Route path="PeerPhishingTemplate" element={<PeerPhishingTemplate />} />
             </Routes>
         </>
   );
