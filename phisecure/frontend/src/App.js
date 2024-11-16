@@ -28,6 +28,7 @@ import Inbox from './pages/components/Inbox';
 import FetchID from "./pages/components/FetchID.js";
 import MarkPhish from "./pages/components/MarkPhish.js";
 import PeerPhishingTemplate from "./pages/PeerPhishingTemplate.js"
+import GmailClone from "./pages/components/GmailClone.js";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
                 <Route path="MarkPhish" element={<MarkPhish />} />
                 <Route path="Inbox" element={<Inbox />} />
                 <Route path="PeerPhishingTemplate" element={<PeerPhishingTemplate />} />
+                <Route path="GmailClone" element={<GmailClone />} />
             </Routes>
         </>
   );
