@@ -11,7 +11,7 @@ class UserInteraction(db.Model):
     __tablename__ = "user_interaction"
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
-    phishing_email_id = db.Column(db.Integer, db.ForeignKey("phishing_emails.id"), nullable=False)
+    phishing_email_id = db.Column(db.String(36), db.ForeignKey("phishing_emails.id"), nullable=False)
     opened = db.Column(db.Boolean, default=False)
     link_clicked = db.Column(db.Boolean, default=False)
     replied = db.Column(db.Boolean, default=False)

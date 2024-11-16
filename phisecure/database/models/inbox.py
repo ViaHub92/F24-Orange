@@ -16,3 +16,4 @@ class Inbox(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     emails = db.relationship("Email", backref="inbox")
     phishing_emails = db.relationship("PhishingEmail", backref="inbox")
+    

@@ -26,13 +26,14 @@ def test_phishing_template(client):
         "name": "Test Phishing Template",
         "description": "Test phishing template for testing purposes",
         "category": "Test",
-        "tags": "Test, Phishing",
         "difficulty_level": "beginner",
         "sender_template": "genericemail@test.com",
         "subject_template": "Test phishing email",
         "body_template": "This is a test phishing email",
         "link": "http://test.com",
-        "template_redflag": "Test red flag"
+        "template_redflag": "Test red flag",
+        "phishing_emails": [],
+        "tags": [] 
     }
     
     response = client.post('/phishing/templates', json=template_data)

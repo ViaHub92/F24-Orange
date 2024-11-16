@@ -59,7 +59,6 @@ class Template(db.Model):
             'name': self.name,
             'description': self.description,
             'category': self.category,
-            'tags': self.tags,
             'difficulty_level': self.difficulty_level.value,
             'sender_template': self.sender_template,
             'subject_template': self.subject_template,

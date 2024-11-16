@@ -1,5 +1,6 @@
 """ Import the database connection object (db) from the db_connection module.
 """
+import uuid
 from datetime import datetime, timezone
 from backend.project import db
 
@@ -22,7 +23,7 @@ class Email(db.Model):
     
     """
     __tablename__ = "emails"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     sender = db.Column(db.String(120), nullable=False)
     recipient = db.Column(db.String(120), nullable=False)
     sent_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
