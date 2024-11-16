@@ -1,4 +1,6 @@
 import logo from './phimail.png';
+import { PiFishSimpleBold } from "react-icons/pi";
+import { GiFishing } from "react-icons/gi";
 
 /* https://github.com/somanath-goudar/html-css-projects/tree/d0365197c68755a8799987bfa9303bc328e71c25/gmail-clone */
 const GmailClone = () => {
@@ -23,11 +25,11 @@ const GmailClone = () => {
             {/* Sidebar Starts */}
             <div className="sidebar">
               <div className="sidebarOption sidebarOption__active">
-                <span className="material-icons"> inbox </span>
+                <PiFishSimpleBold size={45} /> 
                 <h3>Inbox</h3>
               </div>
               <div className="sidebarOption">
-                <span className="material-icons"> spam </span>
+                <GiFishing size={45} />
                 <h3>Spam</h3>
               </div>        
             </div>
