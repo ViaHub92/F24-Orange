@@ -88,11 +88,7 @@ function Inbox() {
                 ))}
             </ul>
             {selectedEmail && (
-                <div>
-                <h3>Selected Email Details:</h3>
-                <pre>{JSON.stringify(selectedEmail, null, 2)}</pre>
                 <EmailView email={selectedEmail} onReply={handleReplySubmit} />
-            </div>
             )}
         </div>
     );
