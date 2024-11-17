@@ -42,9 +42,9 @@ const GmailClone = () => {
               {/* Settings Ends */}
               {/* Section Starts */}
               <div className="emailList__sections">
-                <div className="section section__selected">
-                  <span className="material-icons"> inbox </span>
-                  <h4>Primary</h4>
+                <div className="section_gmail section__selected">
+                  <PiFishSimpleBold size={45} /> 
+                  <h4>Inbox</h4>
                 </div>
               </div>
               {/* Section Ends */}

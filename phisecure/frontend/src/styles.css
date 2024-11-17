@@ -577,7 +577,7 @@ table, th, td {
     height: 100vh;
   }
   
-  body {
+  .body_gmail {
     height: 100vh;
     overflow-y: hidden;
   }
@@ -609,7 +609,7 @@ table, th, td {
     cursor: pointer;
   }
   
-  .section {
+  .section_gmail {
     display: flex;
     align-items: center;
     border-bottom-width: 2px;

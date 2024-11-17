@@ -21,7 +21,7 @@ export default function Home() {
                 <li><Link to='/Dashboard'>Student Dashboard</Link></li>
                 <li><Link to='/DashboardInstructor'>Instructor Dashboard</Link></li>
                 <li><Link to='/Login'>Login</Link></li>
-                <li><Link to='/Inbox'>Email</Link></li>
+                <li><Link to='/GmailClone'>Email</Link></li>
                 <li><Link to='/Services'>Services</Link></li>
                 <li><Link to='/Questionnaire'>Questionnaire</Link></li>                
                       
