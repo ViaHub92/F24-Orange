@@ -154,7 +154,7 @@ def compose_phishing_email():
     flash('Phishing email sent successfully!')
     return redirect(url_for('messaging.inbox', student_id=recipient_student.id))
 
-@messaging.route('/view/<int:email_id>', methods=['GET'])
+@messaging.route('/view/<email_id>', methods=['GET'])
 def view_email(email_id):
     """
     Route to view a specific email (normal or phishing).
@@ -193,7 +193,7 @@ def view_email(email_id):
 
 
 # Route to handle replying to an email
-@messaging.route('/reply/<int:email_id>', methods=['POST'])
+@messaging.route('/reply/<email_id>', methods=['POST'])
 def reply_email(email_id):
     """
     Route to reply to a specific email.
@@ -228,10 +228,10 @@ def reply_email(email_id):
             flash('No interaction found for this email.')
     
     flash('Reply sent successfully!')
-    return redirect(url_for('messaging.inbox'))
+    return redirect(url_for('messaging.inbox', student_id=student_id))
 
 # Route to handle deleting an email
-@messaging.route('/delete/<int:email_id>', methods=['POST'])
+@messaging.route('/delete/<email_id>', methods=['POST'])
 def delete_email(email_id):
     """
     Route to delete a specific email (normal or phishing).
