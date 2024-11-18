@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify, session
 from backend.project import db
 from database.models.student import Student
+from database.models.instructor import Instructor
+from database.models.course import Course
 from database.models.role import Role
 from database.models.inbox import Inbox
 
@@ -55,6 +57,51 @@ def create_student():
     db.session.commit()
 
     return jsonify({"message": "Student created successfully!"}), 201
+
+#Create a new instructor
+@account.route('/create_instructor', methods=['POST'])
+def create_instructor():
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name', '')
+    last_name = data.get('last_name', '')
+
+    # Check if instructor already exists
+    instructor = Instructor.query.filter_by(email=email).first()
+    if instructor:
+        return jsonify({"message": "Instructor already exists"}), 400
+
+    # Create a default role if it doesn't exist (adjust this based on your role handling)
+    default_role = Role.query.first()
+    if not default_role:
+        default_role = Role(name='Instructor')
+        db.session.add(default_role)
+        db.session.commit()
+
+    # Create inbox for the instructor
+    inbox = Inbox()
+    db.session.add(inbox)
+    db.session.commit()
+
+    # Create new student
+    new_instructor = Instructor(
+        username=username,
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
+        role_id=default_role.id,
+        inbox_id=inbox.id 
+    )
+    
+    instructor.password = password
+    db.session.add(instructor)
+    db.session.commit()
+
+    return jsonify({"message": "Instructor created successfully!"}), 201
+
+
 
 @account.route('/login', methods=['POST'])
 def login():
@@ -113,3 +160,24 @@ def delete_student(student_id):
     db.session.commit()
 
     return jsonify({"message": "Student deleted successfully!"}), 200
+
+#Grab a list of students from an course
+@account.route('/list_course_students', methods=['POST'])
+def list_course_students(course_id):
+    course = db.session.get(Course, course_id)
+    
+    if not course:
+        return jsonify({"message": "Course not found."}), 404
+    
+    students = Student.query(Student).filter(Student.course_id == course_id)
+    if students:
+        student_list = [{
+            "username": student.username,
+            "email": student.email,
+            "first_name": student.first_name,
+            "last_name": student.last_name,
+            "student_id": student.id
+        } for student in students]
+        return jsonify(student_list), 200
+    else:
+        return jsonify({"message": "No students found in course"}), 404
