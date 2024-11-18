@@ -36,6 +36,9 @@ function Inbox() {
 
     const handleEmailClick = (emailId) => {
         console.log('email id', emailId); 
+        console.log('student id', studentId);
+        const email = emails.find(e => e.id === emailId);
+        setSelectedEmail(email);
         if (!studentId) {
             setError("Student ID not found.");
             return;
@@ -44,24 +47,30 @@ function Inbox() {
         // Fetch the email details when clicked
         axios.get(`/messaging/view/${emailId}?student_id=${studentId}`)
             .then(response => {
+                console.log('Email details from API:', response.data);
                 setSelectedEmail(response.data);
+                console.log('email id', emailId);
             })
             .catch(error => console.error('Error viewing email:', error));
     };
 
     const handleReplySubmit = (emailId, replyBody) => {
+        console.log('email id', emailId);
+
         if (!studentId) {
             setError("Student ID not found.");
             return;
         }
 
-        // Send a reply to the selected email
-        axios.post(`/messaging/reply/${emailId}?student_id=${studentId}`, { reply_body: replyBody })
-            .then(() => {
-                alert('Reply sent successfully!');
-                // Optionally, re-fetch or update the interaction status
-            })
-            .catch(error => console.error('Error sending reply:', error));
+        axios.post(`/messaging/reply/${emailId}?student_id=${studentId}`, { reply_body: replyBody }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(() => {
+            alert('Reply sent successfully!');
+        })
+        .catch(error => console.error('Error sending reply:', error));
     };
 
     if (loading) return <div>Loading...</div>;
@@ -88,7 +97,7 @@ function Inbox() {
                 ))}
             </ul>
             {selectedEmail && (
-                <EmailView email={selectedEmail} onReply={handleReplySubmit} />
+                <EmailView email={selectedEmail} onReply={(replyBody) => handleReplySubmit(selectedEmail.email_id, replyBody)} />
             )}
         </div>
     );
