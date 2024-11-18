@@ -78,9 +78,26 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False, unique=True)
     templates = relationship("Template", secondary="template_tags", back_populates="tags")
+    student_profiles = relationship("StudentProfile", secondary="student_profile_tags", back_populates="tags")
 
     
-
+class StudentProfile(db.Model):
+    """Represents a student profile in the database table.
+    Args:
+        db (_type_): _description_
+    """
+    __tablename__ = "student_profiles"
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+    first_name = db.Column(db.String(120), nullable=False)
+    email_used_for_platforms = db.Column(db.String(120), nullable=False)
+    employement_status = db.Column(db.String(120), nullable=False)
+    employer = db.Column(db.String(120), nullable=True)
+    risk_level = db.Column(db.String(120), nullable=False)
+    attention_to_detail = db.Column(db.String(120), nullable=False)
+    tags = relationship("Tag", secondary="student_profile_tags", back_populates="student_profiles")
+    responses = relationship("Response", back_populates="student_profile")
+    
 class TemplateTag(db.Model):
     """Association table for many-to-many relationship between Template and Tag
     Args:
@@ -99,3 +116,20 @@ class TemplateTag(db.Model):
             'tag_id': self.tag_id
         }
 
+class StudentProfileTag(db.Model):
+    """Association table for many-to-many relationship between StudentProfile and Tag
+    Args:
+        db (_type_): _description_
+    """
+    __tablename__ = "student_profile_tags"
+    student_profile_id = db.Column(db.Integer, db.ForeignKey('student_profiles.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+    
+    def serialize(self):
+        """
+        Convert model of a student profile tag into a serializable dictionary
+        """
+        return {
+            'student_profile_id': self.student_profile_id,
+            'tag_id': self.tag_id
+        }

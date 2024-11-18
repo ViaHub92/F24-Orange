@@ -101,6 +101,7 @@ class Response(db.Model):
     
     answers = relationship("Answer", back_populates="response")
     student = relationship("Student", back_populates="responses")
+    student_profile = relationship("StudentProfile", back_populates="responses")
     
     def serialize(self):
         """
