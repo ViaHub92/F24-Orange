@@ -78,7 +78,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False, unique=True)
     templates = relationship("Template", secondary="template_tags", back_populates="tags")
-    students = relationship("Student", secondary="student_tags", back_populates="tags")
+
     
 
 class TemplateTag(db.Model):
