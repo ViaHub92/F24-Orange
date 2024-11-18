@@ -96,6 +96,7 @@ class Response(db.Model):
     __tablename__ = "response"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
+    student_profile_id = db.Column(db.Integer, db.ForeignKey("student_profiles.id"), nullable=False)
     questionnaire_id = db.Column(db.Integer, db.ForeignKey("questionnaire.id"), nullable=False)
     submitted_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     
