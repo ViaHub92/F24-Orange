@@ -78,7 +78,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False, unique=True)
     templates = relationship("Template", secondary="template_tags", back_populates="tags")
-    
+    students = relationship("Student", secondary="student_tags", back_populates="tags")
     
 
 class TemplateTag(db.Model):
@@ -96,5 +96,23 @@ class TemplateTag(db.Model):
         """
         return {
             'template_id': self.template_id,
+            'tag_id': self.tag_id
+        }
+
+class StudentTags(db.Model):
+    """Association table for many-to-many relationship between Student and Tag
+    Args:
+        db (_type_): _description_
+    """
+    __tablename__ = "student_tags"
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+    
+    def serialize(self):
+        """
+        Convert model of a student tag into a serializable dictionary
+        """
+        return {
+            'student_id': self.student_id,
             'tag_id': self.tag_id
         }

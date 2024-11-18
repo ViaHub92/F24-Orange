@@ -1,4 +1,5 @@
 import pytest
+from database.models import Template, Tag, TemplateTag, StudentTags
 from backend.project import create_app, db
 from backend.config import TestConfig
 
@@ -15,7 +16,8 @@ def app():
 def client(app):
     with app.test_client() as client:
         yield client
-        
+
+
 
 def test_phishing_template(client):
     """ Test creating a phishing template endpoint
@@ -42,5 +44,23 @@ def test_phishing_template(client):
     assert response.json['template']['name'] == template_data['name'], "Template name matches"
     assert response.json['template']['description'] == template_data['description'], "Template description matches"
     
-   
+
+class TestTagsWithTemplatesAndStudents:
+    """Test class for tags with templates and students
+    """
+
+def test_tag_creation(self, db_session):
+    """Test creating a new tag
+    Args:
+        db_session (Session): A SQLAlchemy session object used to interact with the database.
+    """
+    tag = Tag(name="Test Tag")
+    
+    db_session.add(tag)
+    db_session.commit()
+    
+    retrieved_tag = db_session.query(Tag).filter_by(name="Test Tag").first()
+    
+    assert retrieved_tag is not None, "Tag created successfully"
+    assert retrieved_tag.name == "Test Tag", "Tag name matches"
     
