@@ -99,20 +99,3 @@ class TemplateTag(db.Model):
             'tag_id': self.tag_id
         }
 
-class StudentTags(db.Model):
-    """Association table for many-to-many relationship between Student and Tag
-    Args:
-        db (_type_): _description_
-    """
-    __tablename__ = "student_tags"
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), primary_key=True)
-    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
-    
-    def serialize(self):
-        """
-        Convert model of a student tag into a serializable dictionary
-        """
-        return {
-            'student_id': self.student_id,
-            'tag_id': self.tag_id
-        }
