@@ -98,6 +98,22 @@ class StudentProfile(db.Model):
     tags = relationship("Tag", secondary="student_profile_tags", back_populates="student_profiles")
     responses = relationship("Response", back_populates="student_profile")
     
+    def serialize(self):
+        """
+        Convert model of a student profile into a serializable dictionary
+        """
+        return {
+            'id': self.id,
+            'student_id': self.student_id,
+            'first_name': self.first_name,
+            'email_used_for_platforms': self.email_used_for_platforms,
+            'employement_status': self.employement_status,
+            'employer': self.employer,
+            'risk_level': self.risk_level,
+            'attention_to_detail': self.attention_to_detail,
+            'tags': [tag.serialize() for tag in self.tags],
+            'responses': [response.serialize() for response in self.responses]
+        }
 class TemplateTag(db.Model):
     """Association table for many-to-many relationship between Template and Tag
     Args:

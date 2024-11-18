@@ -111,6 +111,7 @@ class Response(db.Model):
         return {
             'id': self.id,
             'student_id': self.student_id,
+            'student_profile_id': self.student_profile_id,
             'questionnaire_id': self.questionnaire_id,
             'submitted_at': self.submitted_at,
             'answers': [answer.serialize() for answer in self.answers]

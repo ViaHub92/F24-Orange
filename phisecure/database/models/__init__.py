@@ -10,7 +10,7 @@ from database.models.course import Course
 from database.models.admin import Admin
 from database.models.instructor import Instructor
 from database.models.student import Student
-from database.models.template import Template, Tag, TemplateTag
+from database.models.template import Template, Tag, TemplateTag, StudentProfile, StudentProfileTag
 from database.models.phishing_email import PhishingEmail
 from database.models.questionnaire import Questionnaire, Question, Response, Answer, Option
 
