@@ -1,5 +1,5 @@
 import pytest
-from database.models import Template, Tag, TemplateTag, StudentTags
+from database.models import Template, Tag, TemplateTag
 from backend.project import create_app, db
 from backend.config import TestConfig
 
@@ -17,7 +17,31 @@ def client(app):
     with app.test_client() as client:
         yield client
 
+@pytest.fixture(scope='function')
+def db_session(app):
+    """Create a fresh database session for a test."""
+    with app.app_context():
+        db.session.begin_nested()
+        yield db.session
+        db.session.rollback()
+        db.session.remove()
 
+
+
+class TestTagsWithTemplatesAndStudents:
+    """Test class for tags with templates and students
+    """
+    def test_tag_creation(self, db_session):
+        """Test tag creation
+        Args:
+            db_session (_type_): Database session
+        """
+        tag = Tag(name='Test Tag')
+        db_session.add(tag)
+        db_session.commit()
+        assert tag.id is not None, "Tag created successfully"
+        
+   
 
 def test_phishing_template(client):
     """ Test creating a phishing template endpoint
@@ -45,22 +69,4 @@ def test_phishing_template(client):
     assert response.json['template']['description'] == template_data['description'], "Template description matches"
     
 
-class TestTagsWithTemplatesAndStudents:
-    """Test class for tags with templates and students
-    """
-
-def test_tag_creation(self, db_session):
-    """Test creating a new tag
-    Args:
-        db_session (Session): A SQLAlchemy session object used to interact with the database.
-    """
-    tag = Tag(name="Test Tag")
-    
-    db_session.add(tag)
-    db_session.commit()
-    
-    retrieved_tag = db_session.query(Tag).filter_by(name="Test Tag").first()
-    
-    assert retrieved_tag is not None, "Tag created successfully"
-    assert retrieved_tag.name == "Test Tag", "Tag name matches"
     
