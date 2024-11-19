@@ -28,7 +28,7 @@ def create_course():
     instructor_id = data.get('instructor_id')
 
     # Check if course already exists
-    course = Course.query.filter_by(course_name).first()
+    course = Course.query.filter_by(course_name=course_name).first()
     if course:
         return jsonify({"message": "Course already exists"}), 400
 
@@ -41,14 +41,28 @@ def create_course():
 
     # Create new course
     new_course = Course(
-        id=id,
         course_name=course_name,
+        instructor_id=instructor_id
     )
     
     db.session.add(new_course)
     db.session.commit()
 
     return jsonify({"message": "Course created successfully!"}), 201
+
+#Deletea course
+@course.route('/delete_course/<int:course_id>', methods=['DELETE'])
+def delete_course(course_id):
+    # Find the student by ID
+    course = db.session.get(Course, course_id)
+    if not course:
+        return jsonify({"message": "Course not found"}), 404
+
+    # Delete the student
+    db.session.delete(course)
+    db.session.commit()
+
+    return jsonify({"message": "Course deleted successfully!"}), 200
 
 #Get course data
 @course.route('/get_course/<course_name>', methods=['GET'])

@@ -75,22 +75,22 @@ def create_instructor():
         db.session.add(default_role)
         db.session.commit()
 
+    '''
     # Create inbox for the instructor
     inbox = Inbox()
     db.session.add(inbox)
     db.session.commit()
+    '''
 
-    # Create new student
+    # Create new instructor
     new_instructor = Instructor(
         username=username,
         email=email,
         first_name=first_name,
         last_name=last_name,
-        role_id=default_role.id,
-        inbox_id=inbox.id 
     )
     
-    instructor.password = password
+    new_instructor.password = password
     db.session.add(instructor)
     db.session.commit()
 
@@ -126,6 +126,23 @@ def get_student(username):
         }), 200
     else:
         return jsonify({"message": "Student not found"}), 404
+    
+#Get instructor data
+@account.route('/get_instructor/<username>', methods=['GET'])
+def get_instructor(username):
+    instructor = Instructor.query.filter_by(username=username).first()
+    if instructor:
+        return jsonify({
+            "id": instructor.id,
+            "username": instructor.username,
+            "email": instructor.email,
+            "first_name": instructor.first_name,
+            "last_name": instructor.last_name,
+            "course_id": instructor.course_id,
+            "courses": instructor.courses
+        }), 200
+    else:
+        return jsonify({"message": "Instructor not found"}), 404
 
 #List all students
 @account.route('/list_students', methods=['GET'])

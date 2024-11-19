@@ -23,12 +23,14 @@ def create_app(config_class=Config):
     from backend.project.blueprints.performance import performance
     from backend.project.blueprints.phishing_templates import phishing_templates
     from backend.project.blueprints.questionnaire import questionnaire
+    from backend.project.blueprints.course import course
     app.register_blueprint(routes)
     app.register_blueprint(account, url_prefix='/account')
     app.register_blueprint(messaging, url_prefix='/messaging')
     app.register_blueprint(performance, url_prefix='/performance')
     app.register_blueprint(phishing_templates, url_prefix='/phishing')
     app.register_blueprint(questionnaire, url_prefix='/questionnaire')
+    app.register_blueprint(course, url_prefix='/course')
     
     """
     with app.app_context():
