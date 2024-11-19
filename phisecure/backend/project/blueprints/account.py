@@ -6,13 +6,6 @@ from database.models.course import Course
 from database.models.role import Role
 from database.models.inbox import Inbox
 
-"""
-account.py
-Team Orange
-Last Modified: 10/11/24
-Purpose: Creation and management of student accounts.
-"""
-
 account = Blueprint('account', __name__)
 
 #Create a new student
@@ -24,6 +17,7 @@ def create_student():
     password = data.get('password')
     first_name = data.get('first_name', '')
     last_name = data.get('last_name', '')
+    course_id = data.get('course_id')
 
     # Check if student already exists
     student = Student.query.filter_by(email=email).first()
@@ -49,7 +43,8 @@ def create_student():
         first_name=first_name,
         last_name=last_name,
         role_id=default_role.id,
-        inbox_id=inbox.id 
+        inbox_id=inbox.id,
+        course_id=course_id
     )
     
     new_student.password = password
@@ -126,7 +121,8 @@ def get_student(username):
             "username": student.username,
             "email": student.email,
             "first_name": student.first_name,
-            "last_name": student.last_name
+            "last_name": student.last_name,
+            "course_id": student.course_id
         }), 200
     else:
         return jsonify({"message": "Student not found"}), 404
@@ -162,7 +158,7 @@ def delete_student(student_id):
     return jsonify({"message": "Student deleted successfully!"}), 200
 
 #Grab a list of students from an course
-@account.route('/list_course_students', methods=['POST'])
+@account.route('/list_course_students/<int:course_id>', methods=['POST'])
 def list_course_students(course_id):
     course = db.session.get(Course, course_id)
     
