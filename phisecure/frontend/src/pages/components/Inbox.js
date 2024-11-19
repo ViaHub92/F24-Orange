@@ -77,22 +77,29 @@ function Inbox() {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="inbox">
-            <h2>Inbox</h2>
-            <ul className="email-list">
+        <div className="emailList__list">
+            <ul  className="email-list">
                 {emails.map(email => (
                     <li 
                         key={email.id} 
-                        className="email-item" 
+                        className="emailRow" 
                         onClick={() => handleEmailClick(email.id)}
                     >
-                        <div className="email-header">
-                            <strong>{email.subject}</strong>
-                            <span className="email-sender">{email.sender}</span>
+                        <div className="emailRow__options">
+                            <input type="checkbox" name id />
+                            <span className="material-icons"> star_border </span>
+                            <span className="material-icons"> label_important </span>
                         </div>
-                        <span className="email-timestamp">
-                            {new Date(email.sent_at).toLocaleString()}
-                        </span>
+
+                    
+                        <h3 className="emailRow__title">{email.sender}</h3>
+                            <div className="emailRow__message">
+                                <h4>
+                                {email.subject}
+                                </h4>
+                            </div>
+                            <p className="emailRow__time">{new Date(email.sent_at).toLocaleString()}</p>                               
+
                     </li>
                 ))}
             </ul>

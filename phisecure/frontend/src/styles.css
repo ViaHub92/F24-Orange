@@ -705,3 +705,25 @@ table, th, td {
     font-weight: 400;
     color: gray;
   }
+
+  .email-view {
+    position: fixed; /* Fixed to the top of the screen */
+    top: 1;
+    left: 5;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 1000; /* Makes sure it's above the email list */
+    padding: 20px;
+    overflow-y: auto; /* Scrollable content */
+    display: flex;
+    flex-direction: column;
+    width:40%;
+    height:60%;
+    flex: 3; /* Takes up 3 parts of available space, making it larger than the email list */
+    background-color: white;
+    padding: 20px;
+    overflow-y: auto; /* Allow scrolling for the email content */
+    border-top: 1px solid #ddd; /* Visual separator from the email list */
+    transition: transform 0.3s ease; /* Optional: Add transitions for smooth effects */
+  }

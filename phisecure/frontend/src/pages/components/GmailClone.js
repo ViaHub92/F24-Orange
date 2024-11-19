@@ -1,6 +1,5 @@
 import logo from './phimail.png';
-import { PiFishSimpleBold } from "react-icons/pi";
-import { GiFishing } from "react-icons/gi";
+import Inbox from './Inbox';
 
 /* https://github.com/somanath-goudar/html-css-projects/tree/d0365197c68755a8799987bfa9303bc328e71c25/gmail-clone */
 const GmailClone = () => {
@@ -108,7 +107,9 @@ const GmailClone = () => {
           </div>
           {/* Section Ends */}
           {/* Email List rows starts */}
-          <div className="emailList__list">
+          
+          <div className="email-list">
+          <Inbox />
             {/* Email Row Starts */}
             <div className="emailRow">
               <div className="emailRow__options">
