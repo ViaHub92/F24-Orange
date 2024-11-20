@@ -72,7 +72,7 @@ const SidebarComponent = () => {
                 <td><FetchPerformanceSummary /></td>
               </tr>
               <tr>
-                <td>Risk Meter</td>
+              
               </tr>
             </tbody>
           </table>

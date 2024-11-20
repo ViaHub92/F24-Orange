@@ -727,3 +727,15 @@ table, th, td {
     border-top: 1px solid #ddd; /* Visual separator from the email list */
     transition: transform 0.3s ease; /* Optional: Add transitions for smooth effects */
   }
+
+  .performance-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
