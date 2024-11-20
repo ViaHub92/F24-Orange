@@ -30,6 +30,7 @@ const SidebarComponent = () => {
           </div>
         </div>
         <hr />
+        
         <div className="w3-container">
           <h5>Student Dashboard</h5>
         </div>
