@@ -78,7 +78,7 @@ def submit_response(student_id):
             print(f"Student ID {student_id} does not exist")
             return jsonify({"error": "Student ID does not exist"}), 400
         
-        #Create a student profile
+        #Create a student profile with default values if it does not exist
         student_profile = StudentProfile.query.filter_by(student_id=student_id).first()
         if not student_profile:
             student_profile = StudentProfile(
@@ -90,10 +90,10 @@ def submit_response(student_id):
                 risk_level="Low",
                 attention_to_detail="High"
             )
-            db.session.add(student_profile)
+            db.session.add(student_profile) 
             
             try:
-                db.session.commit()  # Commit to get the ID
+                db.session.commit()  
                 print(f"Created student profile with ID: {student_profile.id}")
             except Exception as e:
                 print(f"Error creating student profile: {str(e)}")
@@ -112,9 +112,10 @@ def submit_response(student_id):
         
         answers = validated_data['answers']
         
+        #Create a new response
         new_response = Response(questionnaire_id=questionnaire_id, 
                                 student_id=student_id, 
-                                student_profile_id=student_profile.id) # create a new response
+                                student_profile_id=student_profile.id) 
         for answer in answers: # loop to iterate through the answers
             question_id = answer.get('question_id') # get the question id
             answer_text = answer.get('answer_text') # get the answer text
@@ -126,6 +127,9 @@ def submit_response(student_id):
             db.session.add(new_answer)
         db.session.add(new_response)
         db.session.commit()
+        
+        #Update the student profile employment status and employer information based on answers given.
+        student_profile.update_attributes_from_answers(questionnaire_id)
         return jsonify(new_response.serialize()), 200
     
 @questionnaire.route("/questions/<question_id>", methods=["PUT"])

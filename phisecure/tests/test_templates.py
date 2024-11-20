@@ -123,5 +123,6 @@ def test_check_responses(init_database):
     Test checking responses
     """
     student_profile_in_db = StudentProfile.query.first()
-    student_profile_in_db_responses = student_profile_in_db.responses(questionnaire=1)
-    assert student_profile_in_db_responses is not None, "Responses found"
+    answers = student_profile_in_db.get_answers_from_questionnaire(questionnaire_id=1)
+    assert answers is not None, "Response answers found"
+    assert len(answers) == 1, "Response answers length is correct"
