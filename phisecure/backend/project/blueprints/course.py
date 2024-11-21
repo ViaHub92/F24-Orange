@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 from backend.project import db
 from database.models.course import Course
-from database.models.role import Role
 
 course = Blueprint('course', __name__)
 
@@ -32,13 +31,6 @@ def create_course():
     if course:
         return jsonify({"message": "Course already exists"}), 400
 
-    # Create a default role if it doesn't exist (adjust this based on your role handling)
-    default_role = Role.query.first()
-    if not default_role:
-        default_role = Role(name='Course')
-        db.session.add(default_role)
-        db.session.commit()
-
     # Create new course
     new_course = Course(
         course_name=course_name,
@@ -53,12 +45,12 @@ def create_course():
 #Deletea course
 @course.route('/delete_course/<int:course_id>', methods=['DELETE'])
 def delete_course(course_id):
-    # Find the student by ID
+    # Find the Course by ID
     course = db.session.get(Course, course_id)
     if not course:
         return jsonify({"message": "Course not found"}), 404
 
-    # Delete the student
+    # Delete the Course
     db.session.delete(course)
     db.session.commit()
 
@@ -66,7 +58,7 @@ def delete_course(course_id):
 
 #Get course data
 @course.route('/get_course/<course_name>', methods=['GET'])
-def get_course(course):
+def get_course(course_name):
     course = Course.query.filter_by(course_name=course_name).first()
     if course:
         return jsonify({
