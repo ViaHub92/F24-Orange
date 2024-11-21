@@ -153,6 +153,39 @@ class StudentProfile(db.Model):
             
         db.session.commit()
         
+        
+    def assign_tags_to_profiles(self, questionnaire_id):
+        """Assign tags to student profiles based on questionnaire answers
+
+        Args:
+            question_id (_type_):   question id of the questionnaire answer to be used to assign tags
+
+        """
+        answers = self.get_answers_from_questionnaire(questionnaire_id)
+        for answer in answers:
+            question_id = answer['question_id']
+            answer_text = answer['answer_text']
+            if question_id == 1:
+                if answer_text.lower() == 'yes':
+                    tag = Tag.query.filter_by(name='phishing-aware').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='phishing-unaware').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+        db.session.commit()
+    
+    def get_assigned_tags_from_student_profile(self):
+        """ Get the tags assigned to a student profile
+
+        Returns:
+            _type_: list of tags assigned to the student profile
+        """
+        
+        return [tag.name for tag in self.tags]
+            
+           
 class TemplateTag(db.Model):
     """Association table for many-to-many relationship between Template and Tag
     Args:

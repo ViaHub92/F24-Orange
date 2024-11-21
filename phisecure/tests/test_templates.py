@@ -45,9 +45,25 @@ def init_database(db_session):
     db.session.commit()
 
     # Insert question data
-    question = Question(questionnaire_id=questionnaire.id, question_text='Test Question', question_type='short answer')
-    db.session.add(question)
-    db.session.commit()
+    questions = [
+        ("Has your college and/or place of employment recently suffered a wide-scale spear phishing attack?", "Yes/No"),
+        ("How often do you change your password?", "Multiple Choice"),
+        ("Do you reuse passwords for multiple accounts?", "Yes/No"),
+        ("Do you check the senders email address before clicking on links or replying to emails?", "Yes/No"),
+        ("Do you shop online? If yes, which platforms do you use most?", "Multiple Choice"),
+        ("Do you manage your finances online? Which platforms do you use?", "Multiple Choice"),
+        ("Which work or school-related tools do you use frequently?", "Multiple Choice"),
+        ("What type of email are you most likely to open immediately?", "Multiple Choice"),
+        ("What social media services do you use?", "Multiple Choice"),
+        ("Are you currently employed? if so enter the name of your employer (if your not employed simply enter N/A)", "Short Answer")
+    ]
+    
+    question_objects = []
+    for question_text, question_type in questions:
+        question = Question(questionnaire_id=questionnaire.id, question_text=question_text, question_type=question_type)
+        db.session.add(question)
+        db.session.commit()
+        question_objects.append(question)
 
     # Insert student profile data
     student_profile = StudentProfile(
@@ -68,9 +84,71 @@ def init_database(db_session):
     db.session.commit()
 
     # Insert answer data
-    answer = Answer(response_id=response.id, question_id=question.id, answer_text='')
-    db.session.add(answer)
-    db.session.commit()
+    answers = [
+        "Yes",
+        "Every 3 months",
+        "No",
+        "Yes",
+        "Amazon",
+        "Banking apps",
+        "Microsoft Office 365",
+        "Work/School related",
+        "Facebook",
+        "N/A"
+    ]
+    
+    for question, answer_text in zip(question_objects, answers):
+        answer = Answer(response_id=response.id, question_id=question.id, answer_text=answer_text)
+        db.session.add(answer)
+        db.session.commit()
+    
+    tags = [
+        "phishing-aware",
+        "incident-experienced",
+        "unique-password-user",
+        "link-checker",
+        "moderate-security-conscious",
+        "vigilant-email-user",
+        "non-vigilant-email-user",
+        "phishing-unaware",
+        "low-risk",
+        "password-reuse",
+        "amazon-shopper",
+        "ebay-shopper",
+        "walmar-shopper",
+        "target-shopper",
+        "general online shopper",
+        "non-online-shopper",
+        "banking-app-user",
+        "paypal-user",
+        "venmo-user",
+        "cash-app-user",
+        "zelle-user",
+        "non-online-banking-user",
+        "microsoft-tools-user",
+        "google-tools-user",
+        "zoom-user",
+        "slack-user",
+        "microsoft-teams-user",
+        "other-work-school-tools-user",
+        "work-email-priority",
+        "personal-email-priority",
+        "shopping-email-priority",
+        "social-media-email-priority",
+        "finance-email-priority",
+        "facebook-user",
+        "instagram-user",
+        "twitter-user",
+        "linkedin-user",
+        "snapchat-user",
+        "tiktok-user",
+        "non-social-media-user"
+    ]
+    
+    for tag_name in tags:
+        tag = Tag(name=tag_name)
+        db.session.add(tag)
+        db.session.commit()
 
     yield db  # this is where the testing happens!
 
@@ -125,4 +203,25 @@ def test_check_responses(init_database):
     student_profile_in_db = StudentProfile.query.first()
     answers = student_profile_in_db.get_answers_from_questionnaire(questionnaire_id=1)
     assert answers is not None, "Response answers found"
-    assert len(answers) == 1, "Response answers length is correct"
+    assert len(answers) == 10, "Correct number of answers found"
+    assert answers[0]['answer_text'] == "Yes", "First answer matches"
+
+def test_assign_tags_to_profiles(init_database):
+    """
+    Test assigning tags to profiles
+    """
+    student_profile_in_db = StudentProfile.query.first()
+    assigned_tags= student_profile_in_db.assign_tags_to_profiles(questionnaire_id=1)
+    assert assigned_tags is not None, "Tags assigned successfully"
+
+    
+def test_get_assigned_tags_from_student_profile(init_database):
+    """
+    Test getting assigned tags from student profile
+    """
+    student_profile_in_db = StudentProfile.query.first()
+    student_profile_in_db.assign_tags_to_profiles(questionnaire_id=1)
+    assigned_tags = student_profile_in_db.get_assigned_tags_from_student_profile()
+    
+    assert len(assigned_tags) > 0, "Tags assigned to student profile"
+    assert assigned_tags[0] == "phishing-aware", "First tag name matches"
