@@ -1,4 +1,3 @@
-import logo from './phimail.png';
 import Inbox from './Inbox';
 
 /* https://github.com/somanath-goudar/html-css-projects/tree/d0365197c68755a8799987bfa9303bc328e71c25/gmail-clone */

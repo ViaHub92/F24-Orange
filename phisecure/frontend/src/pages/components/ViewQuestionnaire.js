@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSnapchat, FaInstagram, FaTwitter } from "react-icons/fa";
+import { Mosaic } from "react-loading-indicators"
 import '../../styles/styles.css'; 
 
 
@@ -108,7 +109,7 @@ const ViewQuestionnaire = () => {
               </div>
             ))
           ) : (
-            <p>No questions available</p>
+            <p><Mosaic color="#231D6C" size="small" text="" textColor="" /></p>
           )}
           <button type="submit" className="submit-button">Submit</button>
         </form>

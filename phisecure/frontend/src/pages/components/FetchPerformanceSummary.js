@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2"; 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'; 
 import '../../styles.css';  
+import { Mosaic } from "react-loading-indicators"
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -75,7 +76,7 @@ if (riskPercentage > 66) {
   return (
     <div className="performance-summary">
       {data.length === 0 ? (
-        <p>Waiting...</p>
+        <p><Mosaic color="#231D6C" size="small" text="" textColor="" /></p>
       ) : (
         <div>
           <h3>Performance Summary</h3>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Mosaic } from "react-loading-indicators"
 
 function FetchPerformanceDetailed() {
   const [data, setData] = useState([]);
@@ -19,7 +20,7 @@ function FetchPerformanceDetailed() {
     <>
       {data.length === 0 ? (
         <tr>
-          <td colSpan="3">Waiting...</td>
+          <p style={{textAlign: "center"}}><Mosaic color="#231D6C" size="small" text="" textColor="" /></p>
         </tr>
       ) : (
         data.map((item, index) => (

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Routes, Route} from "react-router-dom";
-import FetchAllUsers from "./pages/components/FetchUsers.js";
 import Header from "./pages/components/Header.js";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -13,7 +12,6 @@ import Dashboard from "./pages/Dashboard";
 import DashboardInstructor from "./pages/DashboardInstructor.js";
 import Dataanalytics from "./pages/Dataanalytics";
 import Login from "./pages/Login";
-import Mail from "./pages/Mail.js";
 import PhishingAssesment from "./pages/PhishingAssessment";
 import { PeerPhishing } from "./pages/PeerPhishing.js";
 import { ReportsInstructor } from "./pages/ReportsInstructor.js";
@@ -26,7 +24,6 @@ import FetchPerformanceSummary from "./pages/components/FetchPerformanceSummary.
 import FetchPerformanceDetailed from "./pages/components/FetchPerformanceDetailed.js";
 import Inbox from './pages/components/Inbox';
 import FetchID from "./pages/components/FetchID.js";
-import MarkPhish from "./pages/components/MarkPhish.js";
 import PeerPhishingTemplate from "./pages/PeerPhishingTemplate.js"
 import GmailClone from "./pages/components/GmailClone.js";
 
@@ -44,7 +41,6 @@ function App() {
                 <Route path="DashboardInstructor" element={<DashboardInstructor />} />
                 <Route path="Dataanalytics" element={<Dataanalytics />} />
                 <Route path="Login" element={<Login />} />
-                <Route path="Mail" element={<Mail />} />
                 <Route path="PeerPhishing" element={<PeerPhishing />} />
                 <Route path="PhishingAssesment" element={<PhishingAssesment />} />
                 <Route path="ReportsInstructor" element={<ReportsInstructor />} />
@@ -56,7 +52,6 @@ function App() {
                 <Route path="FetchPerformanceSummary" element={<FetchPerformanceSummary />} />
                 <Route path="FetchPerformanceDetailed" element={<FetchPerformanceDetailed />} />
                 <Route path="FetchID" element={<FetchID />} />
-                <Route path="MarkPhish" element={<MarkPhish />} />
                 <Route path="Inbox" element={<Inbox />} />
                 <Route path="PeerPhishingTemplate" element={<PeerPhishingTemplate />} />
                 <Route path="GmailClone" element={<GmailClone />} />
