@@ -22,4 +22,3 @@ gradle-app.setting
 # Python cache
 __pycache__/
 venv/
-.vscode/settings.json
