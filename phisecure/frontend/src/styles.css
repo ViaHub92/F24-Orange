@@ -250,6 +250,7 @@ input[type="password"] {
     border-radius: 8px;
     width: 500px;
     flex: 1;
+    z-index: 0;
   }  
 
 .email-detail {
@@ -626,7 +627,7 @@ table, th, td {
     display: flex;
     background-color: white;
     border-bottom: 1px solid whitesmoke;
-    z-index: 999;
+    z-index: 5;
   }
   
   .section__selected {
@@ -666,7 +667,7 @@ table, th, td {
     height: 50px;
     border-bottom: 1px solid whitesmoke;
     cursor: pointer;
-    z-index: 999;
+    z-index: 1;
   }
   
   .emailRow:hover {
@@ -713,7 +714,7 @@ table, th, td {
     right: 0;
     bottom: 0;
     background-color: white;
-    z-index: 1000; /* Makes sure it's above the email list */
+    z-index: 10; /* Makes sure it's above the email list */
     padding: 20px;
     overflow-y: auto; /* Scrollable content */
     display: flex;
