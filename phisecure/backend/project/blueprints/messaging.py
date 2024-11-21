@@ -107,52 +107,60 @@ def compose_email():
 @messaging.route('/compose_phishing_email', methods=['POST'])
 def compose_phishing_email():
     """
-    Route to send a phishing email using a specified template.
+    Compose a phishing email by populating the template with recipient data.
     """
-    recipient_email = request.form.get('recipient')
+    data = request.get_json()
+    recipient_id = data.get('recipient_id')
+    template_id = data.get('template_id')
 
-    # Check if the recipient is valid
-    recipient_student = Student.query.filter_by(email=recipient_email).first()
-    if not recipient_student:
-        flash('Recipient does not exist.')
-        return redirect(url_for('messaging.compose_phishing_email'))
+    # Retrieve the recipient data
+    recipient = Student.query.get(recipient_id)
+    if not recipient:
+        return jsonify({'error': 'Recipient not found'}), 404
 
-    # For phishing emails, fetch and apply the template
-    template_id = request.form.get('template_id')
+    # Retrieve the phishing template
     template = Template.query.get(template_id)
     if not template:
-        flash('Template does not exist.')
-        return redirect(url_for('messaging.compose_phishing_email'))
+        return jsonify({'error': 'Template not found'}), 404
 
-    # Get sender from the request
-    sender = request.form.get('sender', 'default_sender@example.com')  # Optional default sender
+    # Fill placeholders in the template
+    try:
+        subject = template.subject_template.format(first_name=recipient.first_name)
+        body = template.body_template.format(first_name=recipient.first_name)
+    except KeyError as e:
+        return jsonify({'error': f'Missing placeholder in recipient data: {e}'}), 400
 
-    # Create a phishing email with the template
     phishing_email = PhishingEmail(
-        sender=request.form.get('sender'),
-        recipient=recipient_email,
-        subject=template.subject_template,
-        body=template.body_template,
+        sender=template.sender_template,
+        recipient=recipient.email,
+        subject=subject,
+        body=body,
         sent_at=datetime.now(timezone.utc),
-        inbox_id=recipient_student.inbox_id,
+        inbox_id=recipient.inbox_id,
         red_flag=template.template_redflag,
         template_id=template.id
     )
     db.session.add(phishing_email)
 
-    # Create interaction record for phishing email
+    # Track the email interaction (optional)
     interaction = UserInteraction(
-        student_id=recipient_student.id,
+        student_id=recipient.id,
         phishing_email=phishing_email,
         opened=False,
         link_clicked=False,
         replied=False
     )
     db.session.add(interaction)
-    
+
     db.session.commit()
-    flash('Phishing email sent successfully!')
-    return redirect(url_for('messaging.inbox', student_id=recipient_student.id))
+
+    # Return the generated email as JSON
+    return jsonify({
+        'recipient': recipient.email,
+        'subject': subject,
+        'body': body,
+        'sent_at': phishing_email.sent_at.isoformat()
+    }), 201
 
 @messaging.route('/view/<email_id>', methods=['GET'])
 def view_email(email_id):
@@ -211,7 +219,8 @@ def reply_email(email_id):
         return redirect(url_for('messaging.inbox'))
 
     # Get reply message from the form
-    reply_body = request.form.get('reply_body')
+    data = request.get_json()
+    reply_body = data.get('reply_body')
     
     student_id = request.args.get('student_id')
     if not student_id:

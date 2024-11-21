@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from backend.project import db
 from database.models.questionnaire import Questionnaire, Question, Response, Answer, Option
 from database.models.student import Student
-from datetime import datetime, timezone
+from database.models.template import StudentProfile
 from backend.project.routes import routes
 from marshmallow import Schema, fields, ValidationError
 from database.schemas.response_schema import ResponseSchema
@@ -78,6 +78,30 @@ def submit_response(student_id):
             print(f"Student ID {student_id} does not exist")
             return jsonify({"error": "Student ID does not exist"}), 400
         
+        #Create a student profile with default values if it does not exist
+        student_profile = StudentProfile.query.filter_by(student_id=student_id).first()
+        if not student_profile:
+            student_profile = StudentProfile(
+                student_id=student_id,
+                first_name=student.first_name,
+                email_used_for_platforms=student.email,
+                employement_status="Unemployed",
+                employer=None,
+                risk_level="Low",
+                attention_to_detail="High"
+            )
+            db.session.add(student_profile) 
+            
+            try:
+                db.session.commit()  
+                print(f"Created student profile with ID: {student_profile.id}")
+            except Exception as e:
+                print(f"Error creating student profile: {str(e)}")
+                db.session.rollback()
+                return jsonify({"error": "Failed to create student profile"}), 500
+        else:
+            print(f"Found existing student profile with ID: {student_profile.id}")
+            
         #If the data is valid, create the response
         questionnaire_id = validated_data['questionnaire_id']
         #check if a response has already been submitted for this questionnaire by this student
@@ -88,7 +112,10 @@ def submit_response(student_id):
         
         answers = validated_data['answers']
         
-        new_response = Response(questionnaire_id=questionnaire_id, student_id=student_id) # create a new response
+        #Create a new response
+        new_response = Response(questionnaire_id=questionnaire_id, 
+                                student_id=student_id, 
+                                student_profile_id=student_profile.id) 
         for answer in answers: # loop to iterate through the answers
             question_id = answer.get('question_id') # get the question id
             answer_text = answer.get('answer_text') # get the answer text
@@ -100,6 +127,9 @@ def submit_response(student_id):
             db.session.add(new_answer)
         db.session.add(new_response)
         db.session.commit()
+        
+        #Update the student profile employment status and employer information based on answers given.
+        student_profile.update_attributes_from_answers(questionnaire_id)
         return jsonify(new_response.serialize()), 200
     
 @questionnaire.route("/questions/<question_id>", methods=["PUT"])

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from backend.project import db
-from database.models.template import Template, DifficultyLevel
+from database.models.template import Template, DifficultyLevel, Tag
 
 
 phishing_templates = Blueprint("phishing_templates", __name__)
@@ -44,7 +44,7 @@ def create_template():
         name = data.get('name')
         description = data.get('description')
         category = data.get('category')
-        tags = data.get('tags')
+        tag_names = data.get('tags')
         difficulty_level_str = data.get('difficulty_level')
         sender_template = data.get('sender_template')
         subject_template = data.get('subject_template')
@@ -63,17 +63,26 @@ def create_template():
         except KeyError:
             return jsonify(message="Invalid difficulty level!"), 400
         
+        tag_objects = []
+        if tag_names:
+            for tag_name in tag_names:
+                tag = Tag.query.filter_by(name=tag_name).first()
+                if not tag:
+                    tag = Tag(name=tag_name)  # Create a new tag if it doesn't exist
+                    db.session.add(tag)
+                tag_objects.append(tag)
+        
         template = Template(
                 name = name,
                 description=description,
                 category = category,
-                tags=tags,
                 difficulty_level=difficulty_level,
                 sender_template=sender_template,
                 subject_template=subject_template,
                 body_template=body_template,
                 link=link,
-                template_redflag=template_redflag
+                template_redflag=template_redflag,
+                tags=tag_objects
             )
         db.session.add(template)
         db.session.commit()

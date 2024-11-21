@@ -30,6 +30,7 @@ const SidebarComponent = () => {
           </div>
         </div>
         <hr />
+        
         <div className="w3-container">
           <h5>Student Dashboard</h5>
         </div>
@@ -72,7 +73,7 @@ const SidebarComponent = () => {
                 <td><FetchPerformanceSummary /></td>
               </tr>
               <tr>
-                <td>Risk Meter</td>
+              
               </tr>
             </tbody>
           </table>

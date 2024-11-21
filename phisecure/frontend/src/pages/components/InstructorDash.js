@@ -79,7 +79,6 @@ const InstructorDashboard = () => {
         {/* Student Interaction Monitoring Section */}
         <div className="w3-container">
           <h5>Student Interaction Monitoring</h5>
-          <FetchPerformanceSummary />
           <p>Click details to view interaction summary or individual actions taken by students.</p>
         </div>
         <hr />

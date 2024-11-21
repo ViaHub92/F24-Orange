@@ -11,7 +11,7 @@ const ViewQuestionnaire = () => {
     const studentId = 9;
 
     useEffect(() => {
-        fetch("/questionnaire/2")
+        fetch("/questionnaire/3")
           .then(res => res.json())
           .then(data => {
             setData(data);
@@ -64,16 +64,23 @@ const ViewQuestionnaire = () => {
         }
     };
   
-      return (
-        <div className="container">
-          <h1 className="title">{data.name}</h1>
-          <p className="description">{data.description}</p>
-          <form onSubmit={handleSubmit}>
+    return (
+      <div className="container">
+        <h1 className="title">{data.name}</h1>
+        <p className="description">{data.description}</p>
+        <form onSubmit={handleSubmit}>
           {data.questions && data.questions.length > 0 ? (
             data.questions.map((question, i) => (
               <div key={question.id} className="question">
                 <p className="question-text">Question {i + 1}: {question.question_text}</p>
-                {question.options && question.options.length > 0 && (
+                {question.question_type === 'short answer' ? (
+                  <textarea 
+                    name={`question-${question.id}`}
+                    rows="3"
+                    className="w-full p-2 border rounded"
+                    placeholder="Enter your answer here..."
+                  />
+                ) : question.options && question.options.length > 0 && (
                   <ul className="options">
                     {question.options.map((option, j) => (
                       <li key={j} className="option">
@@ -83,16 +90,16 @@ const ViewQuestionnaire = () => {
                             name={`question-${question.id}`}
                             value={option.option_text}
                           />
-                         {option.option_text}
-                                    {question.question_type === 'multiple choice' && option.option_text === 'Snapchat' && (
-                                        <span style={{ marginLeft: '4px' }}><FaSnapchat /></span>
-                                    )}
-                                    {question.question_type === 'multiple choice' && option.option_text === 'Instagram' && (
-                                        <span style={{ marginLeft: '4px' }}><FaInstagram /></span>
-                                    )}
-                                    {question.question_type === 'multiple choice' && option.option_text === 'X' && (
-                                        <span style={{ marginLeft: '4px' }}><FaTwitter /></span>
-                                    )}
+                          {option.option_text}
+                          {question.question_type === 'multiple choice' && option.option_text === 'Snapchat' && (
+                            <span style={{ marginLeft: '4px' }}><FaSnapchat /></span>
+                          )}
+                          {question.question_type === 'multiple choice' && option.option_text === 'Instagram' && (
+                            <span style={{ marginLeft: '4px' }}><FaInstagram /></span>
+                          )}
+                          {question.question_type === 'multiple choice' && option.option_text === 'X' && (
+                            <span style={{ marginLeft: '4px' }}><FaTwitter /></span>
+                          )}
                         </label>
                       </li>
                     ))}
@@ -103,11 +110,10 @@ const ViewQuestionnaire = () => {
           ) : (
             <p>No questions available</p>
           )}
-          <button type="submit"  className="submit-button">Submit</button>
-
-          </form>
-        </div>
-      );
+          <button type="submit" className="submit-button">Submit</button>
+        </form>
+      </div>
+    );
 }
 
 export default ViewQuestionnaire;
