@@ -68,19 +68,6 @@ def create_instructor():
     if instructor:
         return jsonify({"message": "Instructor already exists"}), 400
 
-    # Create a default role if it doesn't exist (adjust this based on your role handling)
-    default_role = Role.query.first()
-    if not default_role:
-        default_role = Role(name='Instructor')
-        db.session.add(default_role)
-        db.session.commit()
-
-    '''
-    # Create inbox for the instructor
-    inbox = Inbox()
-    db.session.add(inbox)
-    db.session.commit()
-    '''
 
     # Create new instructor
     new_instructor = Instructor(
@@ -91,7 +78,7 @@ def create_instructor():
     )
     
     new_instructor.password = password
-    db.session.add(instructor)
+    db.session.add(new_instructor)
     db.session.commit()
 
     return jsonify({"message": "Instructor created successfully!"}), 201

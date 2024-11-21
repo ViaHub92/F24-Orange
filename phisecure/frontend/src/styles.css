@@ -9,7 +9,7 @@ body {
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-attachment: fixed; /* Keeps the background image fixed when scrolling */
     color: #333; /* Default text color */
-    background-color: #f4f7fa; 
+    background-color: #f8f8f8; 
 }
 :root {
     --primary-color: #231D6C;
@@ -727,3 +727,76 @@ table, th, td {
     border-top: 1px solid #ddd; /* Visual separator from the email list */
     transition: transform 0.3s ease; /* Optional: Add transitions for smooth effects */
   }
+
+  .performance-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+
+
+
+/* Welcome Section */
+.hero {
+  text-align: center;
+  background: linear-gradient(45deg, #ffffff, #ffffff);
+  color: rgb(0, 0, 0);
+  padding: 5rem 2rem;
+}
+
+.hero-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-button {
+  background-color: #231D6C;
+  color: #fff;
+  padding: 0.9rem 1.5em;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-top: 1.5rem;
+  display: inline-block;
+}
+
+.cta-button:hover {
+  background-color: #08033d;
+}
+
+/* Site Map Section */
+.section {
+  padding: 2rem;
+}
+
+.site-map {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.site-map-card {
+  display: block;
+  background-color: #ffffff;
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.site-map-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+

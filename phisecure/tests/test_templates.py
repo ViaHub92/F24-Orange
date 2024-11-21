@@ -1,6 +1,7 @@
 import pytest
 from database.models import Template, Tag, TemplateTag
 from database.models import StudentProfile, Response, Answer, Student
+from database.models import Questionnaire, Question
 from backend.project import create_app, db
 from backend.config import TestConfig
 from datetime import datetime, timezone
@@ -27,7 +28,53 @@ def db_session(app):
         yield db.session
         db.session.rollback()
         db.session.remove()
+@pytest.fixture(scope='function')
+def init_database(db_session):
+    # Create the database and the database table(s)
+    db.create_all()
 
+    # Insert student data
+    student = Student(username='testuser', email='testuser@example.com', first_name='Test', last_name='User', inbox_id=1, role_id=1, course_id=1)
+    student.password = 'password'
+    db.session.add(student)
+    db.session.commit()
+
+    # Insert questionnaire data
+    questionnaire = Questionnaire(name='Test Questionnaire', description='A test questionnaire')
+    db.session.add(questionnaire)
+    db.session.commit()
+
+    # Insert question data
+    question = Question(questionnaire_id=questionnaire.id, question_text='Test Question', question_type='short answer')
+    db.session.add(question)
+    db.session.commit()
+
+    # Insert student profile data
+    student_profile = StudentProfile(
+        student_id=student.id,
+        first_name=student.first_name,
+        email_used_for_platforms=student.email,
+        employement_status="Unemployed",
+        employer=None,
+        risk_level="Low",
+        attention_to_detail="High"
+    )
+    db.session.add(student_profile)
+    db.session.commit()
+
+    # Insert response data
+    response = Response(questionnaire_id=questionnaire.id, student_id=student.id, student_profile_id=student_profile.id)
+    db.session.add(response)
+    db.session.commit()
+
+    # Insert answer data
+    answer = Answer(response_id=response.id, question_id=question.id, answer_text='')
+    db.session.add(answer)
+    db.session.commit()
+
+    yield db  # this is where the testing happens!
+
+    db.drop_all()
 
 
 class TestTagsWithTemplatesAndStudents:
@@ -71,49 +118,11 @@ def test_phishing_template(client):
     assert response.json['template']['description'] == template_data['description'], "Template description matches"
     
 
-class TestStudentProfileLogic:
+def test_check_responses(init_database):
     """
-    Testing student profile logic
+    Test checking responses
     """
-    def test_student_profile_creation(self, db_session):
-        """
-        Test student profile creation
-        Args:
-            db_session (_type_): Database session
-            
-        """
-       
-        student_profile = StudentProfile(
-            student_id=1,
-            first_name='Test',
-            email_used_for_platforms='default value',
-            employement_status='employed',
-            employer='Test Employer',
-            risk_level='high',
-            attention_to_detail='low'
-            
-        )
-        db_session.add(student_profile)
-        db_session.commit()
-        
-        new_response = Response(
-            student_id=1,
-            student_profile_id=student_profile.id,
-            questionnaire_id=1,
-            submitted_at=datetime.now(timezone.utc),
-            answers=[
-                Answer(
-                    question_id=1,
-                    answer_text='yes'
-                )
-            ]
-        )
-        db_session.add(new_response)
-        db_session.commit()
-        
-        retrieved_student_profile = StudentProfile.query.get(student_profile.id)
-        retrieved_student_profile.attention_to_detail = 'High'
-    
-        retrieve_response = Response.query.get(new_response.id)
-        assert retrieve_response.student_profile_id == student_profile.id, "Student profile ID matches"
-        assert retrieve_response.student_profile.attention_to_detail == 'High'
+    student_profile_in_db = StudentProfile.query.first()
+    answers = student_profile_in_db.get_answers_from_questionnaire(questionnaire_id=1)
+    assert answers is not None, "Response answers found"
+    assert len(answers) == 1, "Response answers length is correct"

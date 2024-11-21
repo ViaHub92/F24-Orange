@@ -114,6 +114,45 @@ class StudentProfile(db.Model):
             'tags': [tag.serialize() for tag in self.tags],
             'responses': [response.serialize() for response in self.responses]
         }
+    
+    def get_answers_from_questionnaire(self, questionnaire_id):
+        """
+        Get the answers from a questionnaire
+        Args:
+            questionnaire_id (_type_): _description_
+        """
+        answers = []
+        for response in self.responses:
+            if response.questionnaire_id == questionnaire_id:
+                for answer in response.answers:
+                    answers.append({
+                        'question_id': answer.question_id,
+                        'answer_text': answer.answer_text
+                    })
+        return answers
+    
+    def update_attributes_from_answers(self, questionnaire_id):
+        """ Update information in student profile such as employement status and employer from questionnaire
+
+        Args:
+            questionnaire_id (_type_): _description_
+
+        """
+        answers = self.get_answers_from_questionnaire(questionnaire_id)
+        for answer in answers:
+            question_id = answer['question_id']
+            answer_text = answer['answer_text']
+            
+            if question_id == 29:
+                if answer_text.lower() == 'n/a':
+                    self.employement_status = 'Unemployed'
+                    self.employer = None
+                else:
+                    self.employement_status = 'Employed'
+                    self.employer = answer_text
+            
+        db.session.commit()
+        
 class TemplateTag(db.Model):
     """Association table for many-to-many relationship between Template and Tag
     Args:
