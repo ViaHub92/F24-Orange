@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { IoMdClose } from "react-icons/io";
 
-function EmailView({ email, onReply }) {
+function EmailView({ email, onReply, onClose }) {
     const [replyBody, setReplyBody] = useState('');
 
     const handleReplyChange = (e) => {
@@ -13,8 +14,12 @@ function EmailView({ email, onReply }) {
         setReplyBody(''); // Clear the reply box after sending
     };
 
+
     return (
         <div className="email-view">
+            <button onClick={onClose} className="closeButton">
+                <IoMdClose size={30} color="black" />
+            </button>
             <h3>{email.subject}</h3>
             <p><strong>From:</strong> {email.sender}</p>
             <p><strong>To:</strong> {email.recipient}</p>

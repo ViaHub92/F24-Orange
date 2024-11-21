@@ -73,6 +73,10 @@ function Inbox() {
         .catch(error => console.error('Error sending reply:', error));
     };
 
+    const handleCloseEmailView = () => {
+        setSelectedEmail(null); 
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -104,7 +108,11 @@ function Inbox() {
                 ))}
             </ul>
             {selectedEmail && (
-                <EmailView email={selectedEmail} onReply={(replyBody) => handleReplySubmit(selectedEmail.email_id, replyBody)} />
+                <EmailView
+                    email={selectedEmail}
+                    onReply={(replyBody) => handleReplySubmit(selectedEmail.email_id, replyBody)}
+                    onClose={handleCloseEmailView} // Pass handleCloseEmailView to close the email view
+                />
             )}
         </div>
     );
