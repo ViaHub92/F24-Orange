@@ -160,24 +160,3 @@ def delete_student(student_id):
     db.session.commit()
 
     return jsonify({"message": "Student deleted successfully!"}), 200
-
-#Grab a list of students from an course
-@account.route('/list_course_students/<int:course_id>', methods=['POST'])
-def list_course_students(course_id):
-    course = db.session.get(Course, course_id)
-    
-    if not course:
-        return jsonify({"message": "Course not found."}), 404
-    
-    students = Student.query(Student).filter(Student.course_id == course_id)
-    if students:
-        student_list = [{
-            "username": student.username,
-            "email": student.email,
-            "first_name": student.first_name,
-            "last_name": student.last_name,
-            "student_id": student.id
-        } for student in students]
-        return jsonify(student_list), 200
-    else:
-        return jsonify({"message": "No students found in course"}), 404

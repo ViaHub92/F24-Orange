@@ -12,8 +12,7 @@ def list_courses():
         course_list = [{
             "id": course.id,
             "course_name": course.course_name,
-            "instructor_id": course.instructor_id,
-            "students": course.students,
+            "instructor_id": course.instructor_id
         } for course in courses]
         return jsonify(course_list), 200
     else:
