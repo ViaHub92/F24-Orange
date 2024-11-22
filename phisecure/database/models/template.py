@@ -165,6 +165,7 @@ class StudentProfile(db.Model):
         for answer in answers:
             question_id = answer['question_id']
             answer_text = answer['answer_text']
+            #question 1: Phishing awareness
             if question_id == 1:
                 if answer_text.lower() == 'yes':
                     tag = Tag.query.filter_by(name='phishing-aware').first()
@@ -174,6 +175,39 @@ class StudentProfile(db.Model):
                     tag = Tag.query.filter_by(name='phishing-unaware').first()
                     if tag not in self.tags:
                         self.tags.append(tag)
+                        
+                #question 2: Password change frequency
+            elif question_id == 2:
+                if answer_text.lower() == 'every month':
+                    tag = Tag.query.filter_by(name='highly-security-conscious').first()
+                elif answer_text.lower() == 'every 3 months':
+                    tag = Tag.query.filter_by(name='security-conscious').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'every 6 months':
+                    tag = Tag.query.filter_by(name='moderate-security-conscious').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'every year':
+                    tag = Tag.query.filter_by(name='low-security-awareness').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'never':
+                    tag = Tag.query.filter_by(name='high-risk').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+            
+            #question 3: Do you reuse passwords for multiple accounts?
+            elif question_id == 3:
+                if answer_text.lower() == 'yes':
+                    tag = Tag.query.filter_by(name='password-reuse').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='unique-password-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+            
         db.session.commit()
     
     def get_assigned_tags_from_student_profile(self):

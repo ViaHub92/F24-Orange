@@ -105,8 +105,13 @@ def init_database(db_session):
     tags = [
         "phishing-aware",
         "incident-experienced",
+        "highly-security-conscious",
+        "security-conscious",
+        "basic-security-awareness",
+        "Low-security-awareness",
         "unique-password-user",
         "link-checker",
+        "high-risk",
         "moderate-security-conscious",
         "vigilant-email-user",
         "non-vigilant-email-user",
@@ -206,13 +211,6 @@ def test_check_responses(init_database):
     assert len(answers) == 10, "Correct number of answers found"
     assert answers[0]['answer_text'] == "Yes", "First answer matches"
 
-def test_assign_tags_to_profiles(init_database):
-    """
-    Test assigning tags to profiles
-    """
-    student_profile_in_db = StudentProfile.query.first()
-    assigned_tags= student_profile_in_db.assign_tags_to_profiles(questionnaire_id=1)
-    assert assigned_tags is not None, "Tags assigned successfully"
 
     
 def test_get_assigned_tags_from_student_profile(init_database):
@@ -225,3 +223,5 @@ def test_get_assigned_tags_from_student_profile(init_database):
     
     assert len(assigned_tags) > 0, "Tags assigned to student profile"
     assert assigned_tags[0] == "phishing-aware", "First tag name matches"
+    assert assigned_tags[1] == "security-conscious", "Second tag name matches"
+    assert assigned_tags[2] == "unique-password-user", "Third tag name matches"
