@@ -93,6 +93,65 @@ def test_retriveing_questionnaire(client):
     get = client.get(f'/questionnaire/{response.json["id"]}')
     assert get.status_code == 200
 
+def test_update_questionnaire(client):
+        """
+        Test updating a questionnaire
+        """
+        # Create a new questionnaire first
+        new_questionnaire = {
+            "name": "Initial Questionnaire",
+            "description": "Initial description",
+            'questions': [
+                {
+                    'question_text': 'Is the earth flat?',
+                    'question_type': 'true/false',
+                    'options': [
+                        {"option_text": "True"},
+                        {"option_text": "False"}
+                    ]
+                }
+            ]
+        }
+        response = client.post('/questionnaire', json=new_questionnaire)
+        assert response.status_code == 200
+        questionnaire_id = response.json['id']
+
+        # Update the created questionnaire
+        updated_questionnaire = {
+            "name": "Updated Questionnaire",
+            "description": "Updated description",
+            'questions': [
+                {
+                    'id': response.json['questions'][0]['id'],
+                    'question_text': 'Whats the capital of France?',
+                    'question_type': 'multiple choice',
+                    'options': [
+                        {"option_text": "Berlin"},
+                        {"option_text": "Paris"},
+                        {"option_text": "London"},
+                        {"option_text": "Madrid"}
+                    ]
+                },
+                { #add a new question
+                    'question_text': 'Are you ready to graduate?',
+                    'question_type': 'yes/no',
+                    'options': [
+                        {"option_text": "Yes"},
+                        {"option_text": "No"}
+                    ]
+                }
+            ]
+        }
+        update_response = client.put(f'/questionnaire/{questionnaire_id}', json=updated_questionnaire)
+        assert update_response.status_code == 200
+        assert update_response.json['name'] == 'Updated Questionnaire'
+        assert update_response.json['description'] == 'Updated description'
+        assert len(update_response.json['questions']) == 2
+        assert update_response.json['questions'][0]['question_text'] == 'Whats the capital of France?'
+        assert update_response.json['questions'][1]['question_text'] == 'Are you ready to graduate?'
+    
+    
+    
 def test_submit_response(client):
     """
     Test submitting questionnaire
@@ -187,3 +246,5 @@ def test_analyze_answers():
     print(submission_data)
     assert submission_data['question_id'] == 1
     assert submission_data['answer_text'] == "Yes"
+    
+

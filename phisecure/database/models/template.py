@@ -176,7 +176,7 @@ class StudentProfile(db.Model):
                     if tag not in self.tags:
                         self.tags.append(tag)
                         
-                #question 2: Password change frequency
+            #question 2: Password change frequency
             elif question_id == 2:
                 if answer_text.lower() == 'every month':
                     tag = Tag.query.filter_by(name='highly-security-conscious').first()

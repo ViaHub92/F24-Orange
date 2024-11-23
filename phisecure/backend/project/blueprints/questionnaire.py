@@ -56,6 +56,93 @@ def get_questionnaire(questionnaire_id):
             return jsonify({"error": "Questionnaire not found"}), 404
         return jsonify(found_questionnaire.serialize()), 200
 
+@questionnaire.route("/<questionnaire_id>", methods=["PUT"])
+def update_questionnaire(questionnaire_id):
+    """  backend endpoint for updating a questionnaire
+    Args:
+        questionnaire_id (_type_): unique identifier for the questionnaire.
+
+    Returns:
+    
+        _type_: newly updated questionnaire
+    """
+    if request.method == "PUT":
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+
+        # Fetch the questionnaire to update
+        questionnaire = Questionnaire.query.get(questionnaire_id)
+        if not questionnaire:
+            return jsonify({"error": "Questionnaire not found"}), 404
+
+        # Update questionnaire's basic details
+        if name:
+            # Check for duplicate name
+            existing_questionnaire = Questionnaire.query.filter_by(name=name).first()
+            if existing_questionnaire and existing_questionnaire.id != questionnaire_id:
+                return jsonify({"error": "Another questionnaire with this name already exists"}), 400
+            questionnaire.name = name
+        
+        if description:
+            questionnaire.description = description
+
+        # Update or add questions
+        for question_data in data.get('questions', []):
+            question_id = question_data.get('id')  # Existing question ID (if updating)
+            question_text = question_data.get('question_text')
+            question_type = question_data.get('question_type')
+
+            if question_id:
+                # Update existing question
+                question = Question.query.get(question_id)
+                if question:
+                    question.question_text = question_text or question.question_text
+                    question.question_type = question_type or question.question_type
+
+                    # Update options for existing question
+                    if question_type in ["true/false", "multiple choice", "yes/no"]:
+                        for option_data in question_data.get('options', []):
+                            option_id = option_data.get('id')
+                            option_text = option_data.get('option_text')
+
+                            if option_id:
+                                # Update existing option
+                                option = Option.query.get(option_id)
+                                if option:
+                                    option.option_text = option_text
+                            else:
+                                # Add a new option to the existing question
+                                new_option = Option(question=question, option_text=option_text)
+                                db.session.add(new_option)
+                else:
+                    return jsonify({"error": f"Question with ID {question_id} not found"}), 404
+            else:
+                # Add new question
+                new_question = Question(
+                    questionnaire=questionnaire, 
+                    question_text=question_text, 
+                    question_type=question_type
+                )
+
+                # Add options for the new question
+                if question_type in ["true/false", "multiple choice", "yes/no"]:
+                    for option in question_data.get('options', []):
+                        option_text = option.get('option_text')
+                        new_option = Option(question=new_question, option_text=option_text)
+                        db.session.add(new_option)
+
+                db.session.add(new_question)
+
+        try:
+            # Save changes to the database
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": f"Failed to update questionnaire: {str(e)}"}), 500
+
+        return jsonify(questionnaire.serialize()), 200
+    
 @questionnaire.route("/Submit/<int:student_id>", methods=["POST"])
 def submit_response(student_id):
     """
