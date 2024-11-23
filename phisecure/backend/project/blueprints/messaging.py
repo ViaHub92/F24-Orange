@@ -123,7 +123,7 @@ def compose_phishing_email():
     if not template:
         return jsonify({'error': 'Template not found'}), 404
     
-    link = data.get('link', None)
+    link = template.link
 
     # Fill placeholders in the template
     try:
@@ -275,22 +275,29 @@ def delete_email(email_id):
     flash('Email deleted successfully!')
     return redirect(url_for('messaging.inbox'))  # Redirect back to inbox
 
-@messaging.route('/track/<uuid:email_id>/<int:student_id>', methods=['GET'])
-def track_link(email_id, student_id):
+# Route to handle tracking link clicks for phishing emails
+@messaging.route('/track/<email_id>', methods=['POST'])
+def track_link(email_id):
     """
     Track when a phishing email link is clicked.
     """
+
+    student_id = request.args.get('student_id')  
+    if not student_id:
+        
+        return jsonify({'error': 'Student ID is missing'}), 400   
+    
     interaction = UserInteraction.query.filter_by(
-        phishing_email_id=str(email_id), student_id=student_id
+        phishing_email_id=email_id, student_id=student_id
     ).first()
 
     if not interaction:
         return jsonify({'error': 'Interaction record not found'}), 404
 
-    # Mark the link as clicked
     if not interaction.link_clicked:
         interaction.link_clicked = True
         db.session.commit()
 
     return jsonify({'message': 'Interaction recorded'}), 200
+
 

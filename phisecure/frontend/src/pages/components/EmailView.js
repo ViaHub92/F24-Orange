@@ -1,8 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-function EmailView({ email, onReply, onClose }) {
+const convertMarkdownToHtml = (text) => {
+    const urlRegex = /\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g;
+    return text.replace(urlRegex, (match, label, url) => {
+        return `<a href="${url}" class="email-link" data-email-id="${label}" data-url="${url}" target="_blank">${label}</a>`;
+    });
+};
+
+function EmailView({ email, onReply, onClose, onLinkClick }) {
     const [replyBody, setReplyBody] = useState('');
+    const [emailBodyHtml, setEmailBodyHtml] = useState('');
+
+    useEffect(() => {
+        if (email && email.body) {
+            setEmailBodyHtml(convertMarkdownToHtml(email.body));
+        }
+    }, [email]);
 
     const handleReplyChange = (e) => {
         setReplyBody(e.target.value);
@@ -11,9 +25,14 @@ function EmailView({ email, onReply, onClose }) {
     const handleReplySubmit = (e) => {
         e.preventDefault();
         onReply(email.id, replyBody);
-        setReplyBody(''); // Clear the reply box after sending
+        setReplyBody('');
     };
 
+    const handleLinkClick = (e) => {
+
+        e.preventDefault();
+        onLinkClick(email.id);
+    };
 
     return (
         <div className="email-view">
@@ -23,8 +42,11 @@ function EmailView({ email, onReply, onClose }) {
             <h3>{email.subject}</h3>
             <p><strong>From:</strong> {email.sender}</p>
             <p><strong>To:</strong> {email.recipient}</p>
-            <p><strong>Body:</strong> {email.body}</p>
-            
+
+            <div
+                dangerouslySetInnerHTML={{ __html: emailBodyHtml }}
+                onClick={handleLinkClick}
+            />
             <form onSubmit={handleReplySubmit}>
                 <textarea
                     value={replyBody}

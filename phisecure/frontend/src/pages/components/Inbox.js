@@ -7,7 +7,7 @@ function Inbox() {
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [studentId, setStudentId] = useState(null); // Added state for studentId
+    const [studentId, setStudentId] = useState(null);
 
     useEffect(() => {
         const storedStudentId = localStorage.getItem('student_id');
@@ -19,9 +19,8 @@ function Inbox() {
             return;
         }
 
-        setStudentId(storedStudentId); // Set the studentId in the state
+        setStudentId(storedStudentId);
 
-        // Fetch inbox emails for the specific student
         axios.get(`/messaging/inbox/${storedStudentId}`)
             .then(response => {
                 console.log('Fetched emails:', response.data.inbox);
@@ -31,7 +30,7 @@ function Inbox() {
                 console.error('Error fetching inbox:', error);
                 setError(error.message);
             })
-            .finally(() => setLoading(false)); // Stop loading after fetch
+            .finally(() => setLoading(false));
     }, []);
 
     const handleEmailClick = (emailId) => {
@@ -44,7 +43,6 @@ function Inbox() {
             return;
         }
 
-        // Fetch the email details when clicked
         axios.get(`/messaging/view/${emailId}?student_id=${studentId}`)
             .then(response => {
                 console.log('Email details from API:', response.data);
@@ -71,6 +69,25 @@ function Inbox() {
             alert('Reply sent successfully!');
         })
         .catch(error => console.error('Error sending reply:', error));
+    };
+
+    const handleLinkClick = (emailId, url) => {
+        
+        console.log('Link clicked: ', emailId, studentId, url);
+
+        fetch(`messaging/track/${emailId}?student_id=${studentId}`, {
+            method: 'POST',
+        })
+            .then((response) => {
+                if (response.ok) {
+                    console.log('Link click tracked');
+                } else {
+                    console.error('Failed to track link click');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     };
 
     const handleCloseEmailView = () => {
@@ -111,7 +128,8 @@ function Inbox() {
                 <EmailView
                     email={selectedEmail}
                     onReply={(replyBody) => handleReplySubmit(selectedEmail.email_id, replyBody)}
-                    onClose={handleCloseEmailView} // Pass handleCloseEmailView to close the email view
+                    onLinkClick={(url) => handleLinkClick(selectedEmail.email_id, url)}
+                    onClose={handleCloseEmailView}
                 />
             )}
         </div>
