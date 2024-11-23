@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect
 from backend.project import db
 from database.models.template import Template, DifficultyLevel, Tag
+from database.models.phishing_email import PhishingEmail
 
 
 phishing_templates = Blueprint("phishing_templates", __name__)
@@ -118,3 +119,21 @@ def delete_template(template_id):
         db.session.delete(template)
         db.session.commit()
         return jsonify(message="Template deleted successfully!"), 200
+    
+@phishing_templates.route('/track/<int:email_id>', methods=['GET'])
+def track_link(email_id):
+    """
+    Endpoint to track when a phishing link is clicked.
+    """
+    email = PhishingEmail.query.get(email_id)
+    if not email:
+        return jsonify({'error': 'Invalid email ID'}), 404
+
+    # Update the tracking information
+    email.is_link_clicked = True
+    db.session.commit()
+
+    # Redirect the user to the original link (optional)
+    template = email.template
+    original_link = template.link if template else '/'
+    return redirect(original_link)

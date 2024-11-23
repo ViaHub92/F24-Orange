@@ -122,11 +122,20 @@ def compose_phishing_email():
     template = Template.query.get(template_id)
     if not template:
         return jsonify({'error': 'Template not found'}), 404
+    
+    link = data.get('link', None)
 
     # Fill placeholders in the template
     try:
+        if '{link}' in template.body_template and not link:
+            return jsonify({'error': 'Template requires a link, but none was provided.'}), 400
+
+        body = template.body_template.format(
+            first_name=recipient.first_name,
+            link=link if '{link}' in template.body_template else ""  # Only include the link if it's in the template
+        )
         subject = template.subject_template.format(first_name=recipient.first_name)
-        body = template.body_template.format(first_name=recipient.first_name)
+
     except KeyError as e:
         return jsonify({'error': f'Missing placeholder in recipient data: {e}'}), 400
 
@@ -135,7 +144,7 @@ def compose_phishing_email():
         recipient=recipient.email,
         subject=subject,
         body=body,
-        sent_at=datetime.now(timezone.utc),
+        sent_at=datetime.now(timezone.utc), 
         inbox_id=recipient.inbox_id,
         red_flag=template.template_redflag,
         template_id=template.id
@@ -265,3 +274,23 @@ def delete_email(email_id):
     
     flash('Email deleted successfully!')
     return redirect(url_for('messaging.inbox'))  # Redirect back to inbox
+
+@messaging.route('/track/<uuid:email_id>/<int:student_id>', methods=['GET'])
+def track_link(email_id, student_id):
+    """
+    Track when a phishing email link is clicked.
+    """
+    interaction = UserInteraction.query.filter_by(
+        phishing_email_id=str(email_id), student_id=student_id
+    ).first()
+
+    if not interaction:
+        return jsonify({'error': 'Interaction record not found'}), 404
+
+    # Mark the link as clicked
+    if not interaction.link_clicked:
+        interaction.link_clicked = True
+        db.session.commit()
+
+    return jsonify({'message': 'Interaction recorded'}), 200
+
