@@ -246,7 +246,7 @@ class StudentProfile(db.Model):
                     if tag not in self.tags:
                         self.tags.append(tag)
             
-            # Do you manage your finances online? if yes, which platform do you use?
+            #question 6: Do you manage your finances online? if yes, which platform do you use?
             elif question_id == 6:
                 if answer_text.lower() == 'banking apps':
                     tag = Tag.query.filter_by(name='banking-app-user').first()
@@ -272,7 +272,91 @@ class StudentProfile(db.Model):
                     tag = Tag.query.filter_by(name='non-online-banking-user').first()
                     if tag not in self.tags:
                         self.tags.append(tag)
-                        
+            
+            #question 7: Which work or school-related tools do you use frequently?
+            elif question_id == 7:
+                if answer_text.lower() == 'microsoft-office-365':
+                    tag = Tag.query.filter_by(name='microsoft-tools-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'google-workspace':
+                    tag = Tag.query.filter_by(name='google-tools-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'Zoom':
+                    tag = Tag.query.filter_by(name='zoom-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'Slack':
+                    tag = Tag.query.filter_by(name='slack-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'Microsoft-Teams':
+                    tag = Tag.query.filter_by(name='microsoft-teams-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='other-work-school-tools-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+            
+            #question 8: What type of email are you most likely to open immediately?
+            elif question_id == 8:
+                if answer_text.lower() == 'work/school-related':
+                    tag = Tag.query.filter_by(name='work-school-email-priority').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'personal correspondence':
+                    tag = Tag.query.filter_by(name='personal-email-priority').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'shopping/retail':
+                    tag = Tag.query.filter_by(name='shopping-email-priority').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'financial notifications':
+                    tag = Tag.query.filter_by(name='financial-email-priority').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'social media notifications':
+                    tag = Tag.query.filter_by(name='social-media-email-priority').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='generic-email-priority').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+            
+            #question 9: Which social media services do you use?
+            elif question_id == 9:
+                if answer_text.lower() == 'facebook':
+                    tag = Tag.query.filter_by(name='facebook-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'instagram':
+                    tag = Tag.query.filter_by(name='instagram-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'twitter':
+                    tag = Tag.query.filter_by(name='twitter-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'linkedin':
+                    tag = Tag.query.filter_by(name='linkedin-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'snapchat':
+                    tag = Tag.query.filter_by(name='snapchat-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'tiktok':
+                    tag = Tag.query.filter_by(name='tiktok-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='non-social-media-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
         db.session.commit()
     
     def get_assigned_tags_from_student_profile(self):

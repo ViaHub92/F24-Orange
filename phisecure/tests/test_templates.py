@@ -91,8 +91,8 @@ def init_database(db_session):
         "Yes",
         "Amazon",
         "Banking apps",
-        "Microsoft Office 365",
-        "Work/School related",
+        "Microsoft-Office-365",
+        "Work/School-related",
         "Facebook",
         "N/A"
     ]
@@ -137,11 +137,12 @@ def init_database(db_session):
         "slack-user",
         "microsoft-teams-user",
         "other-work-school-tools-user",
-        "work-email-priority",
+        "work-school-email-priority",
         "personal-email-priority",
         "shopping-email-priority",
         "social-media-email-priority",
-        "finance-email-priority",
+        "financial-email-priority",
+        "generic-email-priority",
         "facebook-user",
         "instagram-user",
         "twitter-user",
@@ -229,3 +230,6 @@ def test_get_assigned_tags_from_student_profile(init_database):
     assert assigned_tags[3] == "vigilant-email-user", "Fourth tag name matches"
     assert assigned_tags[4] == "amazon-shopper", "Fifth tag name matches"
     assert assigned_tags[5] == "banking-app-user", "Sixth tag name matches"
+    assert assigned_tags[6] == "microsoft-tools-user", "Seventh tag name matches"
+    assert assigned_tags[7] == "work-school-email-priority", "Eighth tag name matches"
+    assert assigned_tags[8] == "facebook-user", "Ninth tag name matches"
