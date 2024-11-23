@@ -208,6 +208,71 @@ class StudentProfile(db.Model):
                     if tag not in self.tags:
                         self.tags.append(tag)
             
+            #question 4: Do you check the senders email address before clicking on a link or replying to emails?
+            elif question_id == 4:
+                if answer_text.lower() == 'yes':
+                    tag = Tag.query.filter_by(name='vigilant-email-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='link-clicker').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+            
+            #question 5: Do you shop online? if yes, which platform do you use?
+            elif question_id == 5:
+                if answer_text.lower() == 'amazon':
+                    tag = Tag.query.filter_by(name='amazon-shopper').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'ebay':
+                    tag = Tag.query.filter_by(name='ebay-shopper').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'walmart':
+                    tag = Tag.query.filter_by(name='walmart-shopper').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'Target':
+                    tag = Tag.query.filter_by(name='target-shopper').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'Other retail websites':
+                    tag = Tag.query.filter_by(name='other-online-shopper').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='non-online-shopper').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+            
+            # Do you manage your finances online? if yes, which platform do you use?
+            elif question_id == 6:
+                if answer_text.lower() == 'banking apps':
+                    tag = Tag.query.filter_by(name='banking-app-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'paypal':
+                    tag = Tag.query.filter_by(name='paypal-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'venmo':
+                    tag = Tag.query.filter_by(name='venmo-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'cash app':
+                    tag = Tag.query.filter_by(name='cash-app-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                elif answer_text.lower() == 'investment platforms':
+                    tag = Tag.query.filter_by(name='investment-app-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                else:
+                    tag = Tag.query.filter_by(name='non-online-banking-user').first()
+                    if tag not in self.tags:
+                        self.tags.append(tag)
+                        
         db.session.commit()
     
     def get_assigned_tags_from_student_profile(self):

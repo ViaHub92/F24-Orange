@@ -111,6 +111,7 @@ def init_database(db_session):
         "Low-security-awareness",
         "unique-password-user",
         "link-checker",
+        "link-clicker",
         "high-risk",
         "moderate-security-conscious",
         "vigilant-email-user",
@@ -120,7 +121,7 @@ def init_database(db_session):
         "password-reuse",
         "amazon-shopper",
         "ebay-shopper",
-        "walmar-shopper",
+        "walmart-shopper",
         "target-shopper",
         "general online shopper",
         "non-online-shopper",
@@ -225,3 +226,6 @@ def test_get_assigned_tags_from_student_profile(init_database):
     assert assigned_tags[0] == "phishing-aware", "First tag name matches"
     assert assigned_tags[1] == "security-conscious", "Second tag name matches"
     assert assigned_tags[2] == "unique-password-user", "Third tag name matches"
+    assert assigned_tags[3] == "vigilant-email-user", "Fourth tag name matches"
+    assert assigned_tags[4] == "amazon-shopper", "Fifth tag name matches"
+    assert assigned_tags[5] == "banking-app-user", "Sixth tag name matches"
