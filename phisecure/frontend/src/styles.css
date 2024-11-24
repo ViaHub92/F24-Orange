@@ -104,11 +104,21 @@ footer p {
 }
 
 /* Login form */
+.section-create{
+  display: flexbox;                /* Enables flexbox */
+  justify-content: center;      /* Centers horizontally */
+  align-items: center;          /* Centers vertically */     
+  text-align: center;
+  padding: 100px;
+  box-sizing:content-box;
+
+}
 .input-group {
     margin-bottom: 15px;
-    text-align: left;
+    text-align: center;
     display: inline-block;
     width: 100%;
+    
 }
 
 label {
@@ -116,24 +126,32 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+.input-group input[type="text"]{
+  width: 220px; /* Adjust width to make the inputs smaller */
+  padding: 8px; /* Reduce padding for smaller height */
+  font-size: 14px; /* Set a smaller font size */
+  margin: 8px 0; /* Adjust margins for spacing */
+  border: 2px solid #ccc; /* Add a border if desired */
+  border-radius: 10px; 
+}
+input[type="password"],
+input[type="email"] {
+  width: 200px; /* Adjust width to make the inputs smaller */
+  padding: 8px; /* Reduce padding for smaller height */
+  font-size: 14px; /* Set a smaller font size */
+  margin: 8px 0; /* Adjust margins for spacing */
+  border: 2px solid #ccc; /* Add a border if desired */
+  border-radius: 10px; 
 }
 
 .login-button {
-    background-color: #4CAF50;
+    background-color: #231D6C;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
+    width: 100px;
     font-size: 16px;
 }
 
