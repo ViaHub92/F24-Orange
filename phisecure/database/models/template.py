@@ -90,6 +90,7 @@ class StudentProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
     first_name = db.Column(db.String(120), nullable=False)
+    major = db.Column(db.String(120), nullable=False)
     email_used_for_platforms = db.Column(db.String(120), nullable=False)
     employement_status = db.Column(db.String(120), nullable=False)
     employer = db.Column(db.String(120), nullable=True)
@@ -106,6 +107,7 @@ class StudentProfile(db.Model):
             'id': self.id,
             'student_id': self.student_id,
             'first_name': self.first_name,
+            'major': self.major,
             'email_used_for_platforms': self.email_used_for_platforms,
             'employement_status': self.employement_status,
             'employer': self.employer,
@@ -158,205 +160,142 @@ class StudentProfile(db.Model):
         """Assign tags to student profiles based on questionnaire answers
 
         Args:
-            question_id (_type_):   question id of the questionnaire answer to be used to assign tags
+        question_id (_type_):   question id of the questionnaire answer to be used to assign tags
 
         """
         answers = self.get_answers_from_questionnaire(questionnaire_id)
+        tags_to_add = []
+        
         for answer in answers:
             question_id = answer['question_id']
             answer_text = answer['answer_text']
-            #question 1: Phishing awareness
-            if question_id == 1:
+            tag_name = None
+
+            # question 1: Phishing awareness
+            if question_id == 20:
                 if answer_text.lower() == 'yes':
-                    tag = Tag.query.filter_by(name='phishing-aware').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'phishing-aware'
                 else:
-                    tag = Tag.query.filter_by(name='phishing-unaware').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-                        
-            #question 2: Password change frequency
-            elif question_id == 2:
+                    tag_name = 'phishing-unaware'
+
+            # question 2: Password change frequency
+            elif question_id == 21:
                 if answer_text.lower() == 'every month':
-                    tag = Tag.query.filter_by(name='highly-security-conscious').first()
+                    tag_name = 'highly-security-conscious'
                 elif answer_text.lower() == 'every 3 months':
-                    tag = Tag.query.filter_by(name='security-conscious').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'security-conscious'
                 elif answer_text.lower() == 'every 6 months':
-                    tag = Tag.query.filter_by(name='moderate-security-conscious').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'moderate-security-conscious'
                 elif answer_text.lower() == 'every year':
-                    tag = Tag.query.filter_by(name='low-security-awareness').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'low-security-awareness'
                 elif answer_text.lower() == 'never':
-                    tag = Tag.query.filter_by(name='high-risk').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-            
-            #question 3: Do you reuse passwords for multiple accounts?
-            elif question_id == 3:
+                    tag_name = 'high-risk'
+
+            # question 3: Do you reuse passwords for multiple accounts?
+            elif question_id == 22:
                 if answer_text.lower() == 'yes':
-                    tag = Tag.query.filter_by(name='password-reuse').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'password-reuse'
                 else:
-                    tag = Tag.query.filter_by(name='unique-password-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-            
-            #question 4: Do you check the senders email address before clicking on a link or replying to emails?
-            elif question_id == 4:
+                    tag_name = 'unique-password-user'
+
+            # question 4: Do you check the senders email address before clicking on a link or replying to emails?
+            elif question_id == 23:
                 if answer_text.lower() == 'yes':
-                    tag = Tag.query.filter_by(name='vigilant-email-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'vigilant-email-user'
                 else:
-                    tag = Tag.query.filter_by(name='link-clicker').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-            
-            #question 5: Do you shop online? if yes, which platform do you use?
-            elif question_id == 5:
+                    tag_name = 'link-clicker'
+
+            # question 5: Do you shop online? if yes, which platform do you use?
+            elif question_id == 24:
                 if answer_text.lower() == 'amazon':
-                    tag = Tag.query.filter_by(name='amazon-shopper').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'amazon-shopper'
                 elif answer_text.lower() == 'ebay':
-                    tag = Tag.query.filter_by(name='ebay-shopper').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'ebay-shopper'
                 elif answer_text.lower() == 'walmart':
-                    tag = Tag.query.filter_by(name='walmart-shopper').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-                elif answer_text.lower() == 'Target':
-                    tag = Tag.query.filter_by(name='target-shopper').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-                elif answer_text.lower() == 'Other retail websites':
-                    tag = Tag.query.filter_by(name='other-online-shopper').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'walmart-shopper'
+                elif answer_text.lower() == 'target':
+                    tag_name = 'target-shopper'
+                elif answer_text.lower() == 'other retail websites':
+                    tag_name = 'other-online-shopper'
                 else:
-                    tag = Tag.query.filter_by(name='non-online-shopper').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-            
-            #question 6: Do you manage your finances online? if yes, which platform do you use?
-            elif question_id == 6:
+                    tag_name = 'non-online-shopper'
+
+            # question 6: Do you manage your finances online? if yes, which platform do you use?
+            elif question_id == 25:
                 if answer_text.lower() == 'banking apps':
-                    tag = Tag.query.filter_by(name='banking-app-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'banking-app-user'
                 elif answer_text.lower() == 'paypal':
-                    tag = Tag.query.filter_by(name='paypal-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'paypal-user'
                 elif answer_text.lower() == 'venmo':
-                    tag = Tag.query.filter_by(name='venmo-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'venmo-user'
                 elif answer_text.lower() == 'cash app':
-                    tag = Tag.query.filter_by(name='cash-app-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'cash-app-user'
                 elif answer_text.lower() == 'investment platforms':
-                    tag = Tag.query.filter_by(name='investment-app-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'investment-app-user'
                 else:
-                    tag = Tag.query.filter_by(name='non-online-banking-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-            
-            #question 7: Which work or school-related tools do you use frequently?
-            elif question_id == 7:
-                if answer_text.lower() == 'microsoft-office-365':
-                    tag = Tag.query.filter_by(name='microsoft-tools-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-                elif answer_text.lower() == 'google-workspace':
-                    tag = Tag.query.filter_by(name='google-tools-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-                elif answer_text.lower() == 'Zoom':
-                    tag = Tag.query.filter_by(name='zoom-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-                elif answer_text.lower() == 'Slack':
-                    tag = Tag.query.filter_by(name='slack-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-                elif answer_text.lower() == 'Microsoft-Teams':
-                    tag = Tag.query.filter_by(name='microsoft-teams-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'non-online-banking-user'
+
+            # question 7: Which work or school-related tools do you use frequently?
+            elif question_id == 26:
+                if answer_text.lower() == 'microsoft office 365':
+                    tag_name = 'microsoft-tools-user'
+                elif answer_text.lower() == 'google workspace':
+                    tag_name = 'google-tools-user'
+                elif answer_text.lower() == 'zoom':
+                    tag_name = 'zoom-user'
+                elif answer_text.lower() == 'slack':
+                    tag_name = 'slack-user'
+                elif answer_text.lower() == 'microsoft teams':
+                    tag_name = 'microsoft-teams-user'
                 else:
-                    tag = Tag.query.filter_by(name='other-work-school-tools-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-            
-            #question 8: What type of email are you most likely to open immediately?
-            elif question_id == 8:
-                if answer_text.lower() == 'work/school-related':
-                    tag = Tag.query.filter_by(name='work-school-email-priority').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'other-work-school-tools-user'
+
+            # question 8: What type of email are you most likely to open immediately?
+            elif question_id == 27:
+                if answer_text.lower() == 'work/school related':
+                    tag_name = 'work-school-email-priority'
                 elif answer_text.lower() == 'personal correspondence':
-                    tag = Tag.query.filter_by(name='personal-email-priority').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'personal-email-priority'
                 elif answer_text.lower() == 'shopping/retail':
-                    tag = Tag.query.filter_by(name='shopping-email-priority').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'shopping-email-priority'
                 elif answer_text.lower() == 'financial notifications':
-                    tag = Tag.query.filter_by(name='financial-email-priority').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'financial-email-priority'
                 elif answer_text.lower() == 'social media notifications':
-                    tag = Tag.query.filter_by(name='social-media-email-priority').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'social-media-email-priority'
                 else:
-                    tag = Tag.query.filter_by(name='generic-email-priority').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
-            
-            #question 9: Which social media services do you use?
-            elif question_id == 9:
+                    tag_name = 'generic-email-priority'
+
+            # question 9: Which social media services do you use?
+            elif question_id == 28:
                 if answer_text.lower() == 'facebook':
-                    tag = Tag.query.filter_by(name='facebook-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'facebook-user'
                 elif answer_text.lower() == 'instagram':
-                    tag = Tag.query.filter_by(name='instagram-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'instagram-user'
                 elif answer_text.lower() == 'twitter':
-                    tag = Tag.query.filter_by(name='twitter-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'twitter-user'
                 elif answer_text.lower() == 'linkedin':
-                    tag = Tag.query.filter_by(name='linkedin-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'linkedin-user'
                 elif answer_text.lower() == 'snapchat':
-                    tag = Tag.query.filter_by(name='snapchat-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'snapchat-user'
                 elif answer_text.lower() == 'tiktok':
-                    tag = Tag.query.filter_by(name='tiktok-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'tiktok-user'
                 else:
-                    tag = Tag.query.filter_by(name='non-social-media-user').first()
-                    if tag not in self.tags:
-                        self.tags.append(tag)
+                    tag_name = 'non-social-media-user'
+
+            if tag_name:
+                tag = Tag.query.filter_by(name=tag_name).first()
+                if not tag:
+                    tag = Tag(name=tag_name)
+                    db.session.add(tag)
+                    db.session.flush()
+                 
+                if tag:
+                    tags_to_add.append(tag)
+                    
+        for tag in tags_to_add:
+            if tag not in self.tags:
+                self.tags.append(tag)
+
         db.session.commit()
     
     def get_assigned_tags_from_student_profile(self):

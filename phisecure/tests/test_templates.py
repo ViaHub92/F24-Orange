@@ -55,7 +55,8 @@ def init_database(db_session):
         ("Which work or school-related tools do you use frequently?", "Multiple Choice"),
         ("What type of email are you most likely to open immediately?", "Multiple Choice"),
         ("What social media services do you use?", "Multiple Choice"),
-        ("Are you currently employed? if so enter the name of your employer (if your not employed simply enter N/A)", "Short Answer")
+        ("Are you currently employed? if so enter the name of your employer (if your not employed simply enter N/A)", "Short Answer"),
+        ("What is your major? (if you are undecided enter undecided)", "Short Answer")
     ]
     
     question_objects = []
@@ -94,7 +95,8 @@ def init_database(db_session):
         "Microsoft-Office-365",
         "Work/School-related",
         "Facebook",
-        "N/A"
+        "N/A",
+        "Computer Science"
     ]
     
     for question, answer_text in zip(question_objects, answers):
@@ -233,3 +235,4 @@ def test_get_assigned_tags_from_student_profile(init_database):
     assert assigned_tags[6] == "microsoft-tools-user", "Seventh tag name matches"
     assert assigned_tags[7] == "work-school-email-priority", "Eighth tag name matches"
     assert assigned_tags[8] == "facebook-user", "Ninth tag name matches"
+    

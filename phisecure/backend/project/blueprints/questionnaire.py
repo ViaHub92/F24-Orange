@@ -171,6 +171,7 @@ def submit_response(student_id):
             student_profile = StudentProfile(
                 student_id=student_id,
                 first_name=student.first_name,
+                major="Undeclared",
                 email_used_for_platforms=student.email,
                 employement_status="Unemployed",
                 employer=None,
@@ -213,10 +214,24 @@ def submit_response(student_id):
             )
             db.session.add(new_answer)
         db.session.add(new_response)
-        db.session.commit()
+       
         
         #Update the student profile employment status and employer information based on answers given.
         student_profile.update_attributes_from_answers(questionnaire_id)
+        
+        #Assign tags to the student profile based on the answers given
+        try:
+            student_profile.assign_tags_to_profiles(questionnaire_id)
+            assigned_tags = student_profile.get_assigned_tags_from_student_profile()
+            
+            if not assigned_tags:
+                raise Exception("No tags assigned")
+        except Exception as e:
+            print(f"Error assigning tags: {str(e)}")
+            db.session.rollback()
+            return jsonify({"error": "Failed to assign tags"}), 500
+        
+        db.session.commit()
         return jsonify(new_response.serialize()), 200
     
 @questionnaire.route("/questions/<question_id>", methods=["PUT"])
