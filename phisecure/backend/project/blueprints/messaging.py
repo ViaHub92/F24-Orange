@@ -105,8 +105,8 @@ def compose_email():
     return redirect(url_for('messaging.inbox', student_id=recipient_student.id))
 
 
-@messaging.route('/new_compose_phishing_email', methods=['POST'])
-def new_compose_phishing_email():
+@messaging.route('/compose_phishing_email', methods=['POST'])
+def compose_phishing_email():
     """
     Compose a phishing email by finding a matching template based on recipient tags
     and populating the template with recipient data. If no matching template is found, 
@@ -142,11 +142,9 @@ def new_compose_phishing_email():
     if not matching_templates:
         return jsonify({'error': 'No templates match the recipient tags'}), 404
 
-    # Check if the template has already been sent to the recipient
     sent_templates = PhishingEmail.query.filter_by(inbox_id=recipient.inbox_id).all()
     sent_template_ids = {email.template_id for email in sent_templates}
     
-    # Find the first matching template that has not been sent yet
     available_template = None
     for template in matching_templates:
         if template.id not in sent_template_ids:
@@ -154,11 +152,13 @@ def new_compose_phishing_email():
             break
 
     if not available_template:
-        # If no matching template is found, use the "generic" template
-        generic_template = Template.query.join(Template.tags).filter(Tag.name == "generic").first()
-        if not generic_template:
-            return jsonify({'error': 'No matching or generic templates available'}), 404
-        available_template = generic_template
+        generic_templates = Template.query.join(Template.tags).filter(Tag.name == "generic").all()
+        for generic_template in generic_templates:
+            if generic_template.id not in sent_template_ids:
+                available_template = generic_template
+                break
+        if not available_template:
+            return jsonify({'error': 'No templates left to send to this student'}), 404
 
     template = available_template
 
@@ -169,8 +169,9 @@ def new_compose_phishing_email():
     try:
         body = template.body_template.format(
             first_name=recipient.first_name,
-            link=link if '{link}' in template.body_template else "" 
-        )
+            link=link if '{link}' in template.body_template else "",
+            date=datetime.now().strftime("%B %d, %Y") 
+        ).replace('\n', '<br>')
         subject = template.subject_template.format(first_name=recipient.first_name)
     except KeyError as e:
         return jsonify({'error': f'Missing placeholder in recipient data: {e}'}), 400
@@ -206,74 +207,6 @@ def new_compose_phishing_email():
         'sent_at': phishing_email.sent_at.isoformat()
     }), 201
 
-
-
-@messaging.route('/compose_phishing_email', methods=['POST'])
-def compose_phishing_email():
-    """
-    Compose a phishing email by populating the template with recipient data.
-    """
-    data = request.get_json()
-    recipient_id = data.get('recipient_id')
-    template_id = data.get('template_id')
-
-    # Retrieve the recipient data
-    recipient = Student.query.get(recipient_id)
-    if not recipient:
-        return jsonify({'error': 'Recipient not found'}), 404
-
-    # Retrieve the phishing template
-    template = Template.query.get(template_id)
-    if not template:
-        return jsonify({'error': 'Template not found'}), 404
-    
-    link = template.link
-
-    # Fill placeholders in the template
-    try:
-        if '{link}' in template.body_template and not link:
-            return jsonify({'error': 'Template requires a link, but none was provided.'}), 400
-
-        body = template.body_template.format(
-            first_name=recipient.first_name,
-            link=link if '{link}' in template.body_template else ""  # Only include the link if it's in the template
-        )
-        subject = template.subject_template.format(first_name=recipient.first_name)
-
-    except KeyError as e:
-        return jsonify({'error': f'Missing placeholder in recipient data: {e}'}), 400
-
-    phishing_email = PhishingEmail(
-        sender=template.sender_template,
-        recipient=recipient.email,
-        subject=subject,
-        body=body,
-        sent_at=datetime.now(timezone.utc), 
-        inbox_id=recipient.inbox_id,
-        red_flag=template.template_redflag,
-        template_id=template.id
-    )
-    db.session.add(phishing_email)
-
-    # Track the email interaction (optional)
-    interaction = UserInteraction(
-        student_id=recipient.id,
-        phishing_email=phishing_email,
-        opened=False,
-        link_clicked=False,
-        replied=False
-    )
-    db.session.add(interaction)
-
-    db.session.commit()
-
-    # Return the generated email as JSON
-    return jsonify({
-        'recipient': recipient.email,
-        'subject': subject,
-        'body': body,
-        'sent_at': phishing_email.sent_at.isoformat()
-    }), 201
 
 @messaging.route('/view/<email_id>', methods=['GET'])
 def view_email(email_id):

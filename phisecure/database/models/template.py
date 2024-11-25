@@ -43,7 +43,7 @@ class Template(db.Model):
     difficulty_level = db.Column(Enum(DifficultyLevel), nullable=False)
     sender_template = db.Column(db.String(120), nullable=False)
     subject_template = db.Column(db.String(120), nullable=False)
-    body_template = db.Column(db.String(500), nullable=False)
+    body_template = db.Column(db.Text, nullable=False)
     link = db.Column(db.String(100))
     template_redflag=db.Column(db.Text, nullable=True)
     

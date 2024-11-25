@@ -34,11 +34,7 @@ function FetchPerformanceDetailed() {
             
             {/* Email Body Column */}
             <td>
-              
-            <div className="email-body-container">
-            {item.email_body}
-            </div>
-
+              <div className="email-body-container" dangerouslySetInnerHTML={{ __html: item.email_body }}></div>
             </td>
 
 
