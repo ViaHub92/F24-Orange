@@ -11,8 +11,7 @@ def performance_report(student_id):
     """
     Gets a performance report based on student interactions with phishing_emails
     """
-    # Get all student interactions
-    interactions = UserInteraction.query.filter_by(student_id=student_id).all()
+    interactions = UserInteraction.query.filter_by(student_id=student_id, opened=True).all()
 
     report = []
 
@@ -22,14 +21,12 @@ def performance_report(student_id):
 
         if student and phishing_email:
             report.append({
-                "student_id": student.id, #Used only for testing purposes
                 "student_email": student.email,
                 "email_body": phishing_email.body,
                 "opened": interaction.opened,
                 "link_clicked": interaction.link_clicked,
                 "replied": interaction.replied,
                 "red_flag": phishing_email.red_flag,
-                "template_id": phishing_email.template_id #Used only for testing purposes
             })
 
     return jsonify(report), 200
