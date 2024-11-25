@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { FaEnvelope } from "react-icons/fa";
@@ -7,10 +7,26 @@ import { FaCog } from "react-icons/fa";
 import 'w3-css/w3.css';
 import FetchPerformanceSummary from './FetchPerformanceSummary';
 import FetchPerformanceDetailed from './FetchPerformanceDetailed';
+import axios from "axios";
 
 const SidebarComponent = () => {
-  const [studentName, setStudentName] = useState("Ralph");
-
+  const [studentName, setStudentName] = useState("Loading...");
+  const studentId = localStorage.getItem('student_id');
+  useEffect(() => {
+    if (studentId) {
+        axios.get(`account/get_student/${studentId}`)
+            .then(response => {
+                const { first_name } = response.data;
+                setStudentName(first_name);
+            })
+            .catch(error => {
+                console.error("Error fetching student data:", error);
+                setStudentName("Unknown Student");
+            });
+    } else {
+        setStudentName("Student ID Missing");
+    }
+}, [studentId]);
   return (
     <div>
       <Helmet>

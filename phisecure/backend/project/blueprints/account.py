@@ -99,9 +99,9 @@ def login():
     return jsonify({'message': 'Invalid credentials'}), 401
 
 #Get student data
-@account.route('/get_student/<username>', methods=['GET'])
-def get_student(username):
-    student = Student.query.filter_by(username=username).first()
+@account.route('/get_student/<int:student_id>', methods=['GET'])
+def get_student(student_id):
+    student = Student.query.filter_by(id=student_id).first()
     if student:
         return jsonify({
             "id": student.id,
