@@ -103,7 +103,7 @@ const InstructorPerformance = ({ courseId }) => {
           
         </div>
       ) : (
-        <p>No data available.</p>
+        <p>Enter a Course ID.</p>
       )}
     </div>
   );
