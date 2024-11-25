@@ -1,15 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { FaEnvelope } from "react-icons/fa";
 import { GoPersonFill } from "react-icons/go";
 import { FaCog } from "react-icons/fa";
 import 'w3-css/w3.css';
-import FetchPerformanceSummary from './FetchPerformanceSummary';
-import FetchPerformanceDetailed from './FetchPerformanceDetailed';
-
+import InstructorPerformance from './InstructorPerformance';
+import CreateCourseForm from './CreateCourseForm';
+import axios from 'axios';
+import DeleteCourseForm from './DeleteCourseForm';
+import CourseList from './CourseList';
 const InstructorDashboard = () => {
   const [studentName, setStudentName] = useState("Instructor");
+  const [courseId, setCourseId] = useState("");
+  const [courses, setCourses] = useState([]);
+  const [showCourses, setShowCourses] = useState(false);
+
+  const handleCourseIdChange = (e) => {
+    const value = e.target.value;
+
+    // Allow only numbers or an empty string
+    if (/^\d*$/.test(value)) {
+      setCourseId(value);
+    }
+  };
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get('course/list_courses'); 
+      setCourses(response.data);
+      setShowCourses(true);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      setCourses([]);
+      setShowCourses(false);
+    }
+  };
+
+  // Function to handle a successful delete operation
+  const handleDeleteSuccess = (deletedCourseId) => {
+    setCourses((prevCourses) => prevCourses.filter(course => course.id !== deletedCourseId));
+  };
 
   return (
     <div>
@@ -58,13 +89,34 @@ const InstructorDashboard = () => {
           <h5><b><i className="fa fa-dashboard"></i> Instructor Dashboard</b></h5>
         </header>
 
-        {/* Manage Students Section */}
+        {/* Create Course Section */}
         <div className="w3-container">
-          <h5>Manage Students</h5>
-          <button className="w3-button w3-green">Add Student</button>
-          <button className="w3-button w3-red">Remove Student</button>
-          <button className="w3-button w3-yellow">Modify Student</button>
+          <h5>Create a Course</h5>
+          <CreateCourseForm />
         </div>
+        <hr />
+
+        {/* My Courses Section */}
+        <div>
+          <h3>My Courses</h3>
+          <div>
+            {courses.map((course) => (
+              <div key={course.id} className="course-item w3-container w3-border-bottom">
+                <p>{course.course_name}</p>
+                <DeleteCourseForm
+                  courseId={course.id}
+                  courseName={course.course_name}
+                  onDeleteSuccess={handleDeleteSuccess}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+ {/* My Courses Section */}
+ <CourseList /> {/* Use the CourseList component here */}
+       
+
+       
         <hr />
 
         {/* Customized Phishing Attacks Section */}
@@ -76,21 +128,27 @@ const InstructorDashboard = () => {
         </div>
         <hr />
 
-        {/* Student Interaction Monitoring Section */}
-        <div className="w3-container">
+        {/* Student Interaction Monitoring */}
+        <div className="w3-container course-section">
           <h5>Student Interaction Monitoring</h5>
-          <p>Click details to view interaction summary or individual actions taken by students.</p>
-        </div>
-        <hr />
+          <p>Monitor students' performance by selecting the course and viewing the reports below.</p>
 
-        {/* Grade Overview Section */}
-        <div className="w3-container">
-          <h5>Grade Overview</h5>
-          <table className="w3-table w3-bordered w3-striped">
-            <tr><th>Student Name</th><th>Grade</th></tr>
-            <tr><td>Student A</td><td>A</td></tr>
-            <tr><td>Student B</td><td>B</td></tr>
-          </table>
+          {/* Course ID Selector */}
+          <div className="course-id-section">
+            <label htmlFor="courseId" className="course-label">Select Course:</label>
+            <input
+              type="text"
+              id="courseId"
+              value={courseId}
+              onChange={handleCourseIdChange}
+              className="w3-input course-input"
+              placeholder="Enter Course ID"
+              style={{ marginBottom: '10px' }}
+            />
+          </div>
+
+          {/* Display students for the selected course */}
+          <InstructorPerformance courseId={courseId} />
         </div>
       </main>
 

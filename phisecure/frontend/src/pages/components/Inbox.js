@@ -74,6 +74,7 @@ function Inbox() {
     const handleLinkClick = (emailId, url) => {
         
         console.log('Link clicked: ', emailId, studentId, url);
+        console.log('Link clicked: ', emailId, studentId, url);
 
         fetch(`messaging/track/${emailId}?student_id=${studentId}`, {
             method: 'POST',
