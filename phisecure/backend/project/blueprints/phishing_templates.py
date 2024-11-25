@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, redirect
 from backend.project import db
-from database.models.template import Template, DifficultyLevel, Tag
+from database.models.template import Template, DifficultyLevel, Tag, StudentProfile
 from database.models.phishing_email import PhishingEmail
 
 
@@ -60,7 +60,7 @@ def create_template():
             return jsonify(message="Template name already exists!"), 409
         
         try:
-            difficulty_level = DifficultyLevel[difficulty_level_str]  # Convert string to enum
+            difficulty_level = DifficultyLevel[difficulty_level_str]
         except KeyError:
             return jsonify(message="Invalid difficulty level!"), 400
         
@@ -69,7 +69,7 @@ def create_template():
             for tag_name in tag_names:
                 tag = Tag.query.filter_by(name=tag_name).first()
                 if not tag:
-                    tag = Tag(name=tag_name)  # Create a new tag if it doesn't exist
+                    tag = Tag(name=tag_name)
                     db.session.add(tag)
                 tag_objects.append(tag)
         
@@ -119,21 +119,19 @@ def delete_template(template_id):
         db.session.delete(template)
         db.session.commit()
         return jsonify(message="Template deleted successfully!"), 200
-    
-@phishing_templates.route('/track/<int:email_id>', methods=['GET'])
-def track_link(email_id):
-    """
-    Endpoint to track when a phishing link is clicked.
-    """
-    email = PhishingEmail.query.get(email_id)
-    if not email:
-        return jsonify({'error': 'Invalid email ID'}), 404
 
-    # Update the tracking information
-    email.is_link_clicked = True
-    db.session.commit()
+@phishing_templates.route('/<int:profile_id>/tags', methods=['GET'])
+def get_student_profile_tags(profile_id):
+    try:
+        # Query the student profile by ID
+        profile = StudentProfile.query.get(profile_id)
+        
+        if not profile:
+            return jsonify({"error": "StudentProfile not found"}), 404
+        
+        # Retrieve tags associated with the student profile
+        tags = [tag.name for tag in profile.tags]  # Assuming `Tag` model has a `name` field
 
-    # Redirect the user to the original link (optional)
-    template = email.template
-    original_link = template.link if template else '/'
-    return redirect(original_link)
+        return jsonify({"profile_id": profile_id, "tags": tags}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

@@ -5,7 +5,7 @@ from database.models.email import Email
 from database.models.phishing_email import PhishingEmail
 from database.models.inbox import Inbox
 from database.models.user_interaction import UserInteraction
-from database.models.template import Template, StudentProfile, TemplateTag
+from database.models.template import Template, StudentProfile, TemplateTag, Tag
 from datetime import datetime, timezone
 from backend.project.routes import routes
 
@@ -109,7 +109,8 @@ def compose_email():
 def new_compose_phishing_email():
     """
     Compose a phishing email by finding a matching template based on recipient tags
-    and populating the template with recipient data.
+    and populating the template with recipient data. If no matching template is found, 
+    a "generic" template will be used instead.
     """
     data = request.get_json()
     recipient_id = data.get('recipient_id')
@@ -122,7 +123,12 @@ def new_compose_phishing_email():
     if not profile:
         return jsonify({'error': 'Recipient profile not found'}), 404
 
-    recipient_tags = {tag.name for tag in profile.tags}
+    employement_status = profile.employement_status
+    if employement_status == 'employed':
+        recipient_tags = {'employed'}
+    else:
+        recipient_tags = {tag.name for tag in profile.tags}
+
     if not recipient_tags:
         return jsonify({'error': 'Recipient has no associated tags'}), 400
 
@@ -136,12 +142,29 @@ def new_compose_phishing_email():
     if not matching_templates:
         return jsonify({'error': 'No templates match the recipient tags'}), 404
 
-    template = matching_templates[0]
+    # Check if the template has already been sent to the recipient
+    sent_templates = PhishingEmail.query.filter_by(inbox_id=recipient.inbox_id).all()
+    sent_template_ids = {email.template_id for email in sent_templates}
+    
+    # Find the first matching template that has not been sent yet
+    available_template = None
+    for template in matching_templates:
+        if template.id not in sent_template_ids:
+            available_template = template
+            break
+
+    if not available_template:
+        # If no matching template is found, use the "generic" template
+        generic_template = Template.query.join(Template.tags).filter(Tag.name == "generic").first()
+        if not generic_template:
+            return jsonify({'error': 'No matching or generic templates available'}), 404
+        available_template = generic_template
+
+    template = available_template
 
     link = template.link
     if '{link}' in template.body_template and not link:
         return jsonify({'error': 'Template requires a link, but none was provided.'}), 400
-
 
     try:
         body = template.body_template.format(
@@ -152,7 +175,6 @@ def new_compose_phishing_email():
     except KeyError as e:
         return jsonify({'error': f'Missing placeholder in recipient data: {e}'}), 400
 
-    # Create and save the phishing email
     phishing_email = PhishingEmail(
         sender=template.sender_template,
         recipient=recipient.email,
@@ -183,6 +205,7 @@ def new_compose_phishing_email():
         'body': body,
         'sent_at': phishing_email.sent_at.isoformat()
     }), 201
+
 
 
 @messaging.route('/compose_phishing_email', methods=['POST'])
