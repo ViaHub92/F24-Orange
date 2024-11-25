@@ -829,3 +829,72 @@ h3 {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Section for the course selection */
+.course-section {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Course label */
+.course-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1976d2;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+/* Styling for the course ID input */
+.course-input {
+  padding: 5px;
+  border-radius: 2px;
+  width: 100px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.course-input:focus {
+  border-color: #1976d2;
+  outline: none;
+}
+
+/* Space for future student expansion */
+.w3-container {
+  padding: 20px;
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-table th, .student-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.student-table th {
+  background-color: #1976d2;
+  color: white;
+}
+
+/* Responsive design adjustments */
+@media screen and (max-width: 768px) {
+  .course-section {
+    padding: 15px;
+  }
+
+  .course-input {
+    width: 100%;
+  }
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 600px;  
+  height: 300px;     
+  margin: 0 auto;   
+}
