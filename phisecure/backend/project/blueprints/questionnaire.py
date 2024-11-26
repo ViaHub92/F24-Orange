@@ -6,6 +6,7 @@ from database.models.template import StudentProfile
 from backend.project.routes import routes
 from marshmallow import Schema, fields, ValidationError
 from database.schemas.response_schema import ResponseSchema
+from flask import current_app
 
 
 questionnaire = Blueprint('questionnaire', __name__)
@@ -232,6 +233,26 @@ def submit_response(student_id):
             return jsonify({"error": "Failed to assign tags"}), 500
         
         db.session.commit()
+        
+        for i in range(5):
+            try:
+                # Prepare the data for the phishing email
+                phishing_email_data = {
+                    'recipient_id': student_id  # Assuming you want to send to the same student
+                }
+                
+                # Call the phishing email endpoint using Flask test client
+                with current_app.test_client() as client:
+                    response = client.post('/messaging/compose_phishing_email', json=phishing_email_data)
+                    
+                    if response.status_code != 201:
+                        print(f"Failed to send phishing email: {response.json.get('error')}")
+            except Exception as e:
+                print(f"Error calling phishing email endpoint: {str(e)}")
+                db.session.rollback()
+                return jsonify({"error": "Failed to call phishing email endpoint"}), 500
+        
+        
         return jsonify(new_response.serialize()), 200
     
 @questionnaire.route("/questions/<question_id>", methods=["PUT"])

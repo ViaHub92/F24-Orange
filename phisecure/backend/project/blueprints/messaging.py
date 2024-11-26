@@ -109,7 +109,7 @@ def compose_email():
 def compose_phishing_email():
     """
     Compose a phishing email by finding a matching template based on recipient tags
-    and populating the template with recipient data. If no matching template is found, 
+    and populating the template with recipient data. If no matching template is found,
     a "generic" template will be used instead.
     """
     data = request.get_json()
@@ -123,11 +123,7 @@ def compose_phishing_email():
     if not profile:
         return jsonify({'error': 'Recipient profile not found'}), 404
 
-    employement_status = profile.employement_status
-    if employement_status == 'employed':
-        recipient_tags = {'employed'}
-    else:
-        recipient_tags = {tag.name for tag in profile.tags}
+    recipient_tags = {tag.name for tag in profile.tags}
 
     if not recipient_tags:
         return jsonify({'error': 'Recipient has no associated tags'}), 400
@@ -206,7 +202,6 @@ def compose_phishing_email():
         'body': body,
         'sent_at': phishing_email.sent_at.isoformat()
     }), 201
-
 
 @messaging.route('/view/<email_id>', methods=['GET'])
 def view_email(email_id):
