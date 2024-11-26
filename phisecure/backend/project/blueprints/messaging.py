@@ -134,9 +134,6 @@ def compose_phishing_email():
         .distinct()
         .all()
     )
-    
-    if not matching_templates:
-        return jsonify({'error': 'No templates match the recipient tags'}), 404
 
     sent_templates = PhishingEmail.query.filter_by(inbox_id=recipient.inbox_id).all()
     sent_template_ids = {email.template_id for email in sent_templates}
@@ -153,7 +150,8 @@ def compose_phishing_email():
             if generic_template.id not in sent_template_ids:
                 available_template = generic_template
                 break
-        if not available_template:
+            
+    if not available_template:
             return jsonify({'error': 'No templates left to send to this student'}), 404
 
     template = available_template
