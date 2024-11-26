@@ -9,7 +9,7 @@ import '../../styles/styles.css';
 const ViewQuestionnaire = () => { 
     const [data, setData] = useState([]);
     const [selectedOption, setSelectedOption] = useState();
-    const studentId = 9;
+    const studentId = localStorage.getItem('student_id');
 
     useEffect(() => {
         fetch("/questionnaire/3")
