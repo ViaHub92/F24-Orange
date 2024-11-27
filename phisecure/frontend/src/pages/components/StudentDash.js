@@ -11,6 +11,7 @@ import axios from "axios";
 
 const SidebarComponent = () => {
   const [studentName, setStudentName] = useState("Loading...");
+  const [courses, setCourses] = useState([]);
   const studentId = localStorage.getItem('student_id');
   useEffect(() => {
     if (studentId) {
@@ -23,6 +24,9 @@ const SidebarComponent = () => {
                 console.error("Error fetching student data:", error);
                 setStudentName("Unknown Student");
             });
+
+    
+
     } else {
         setStudentName("Student ID Missing");
     }

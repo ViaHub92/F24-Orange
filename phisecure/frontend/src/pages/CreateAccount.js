@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function CreateAccount() {
   const [username, setUsername] = useState('');
@@ -6,21 +7,42 @@ function CreateAccount() {
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
+  const [courseId, setCourseId] = useState(''); // For course selection
+  const [courses, setCourses] = useState([]); // Course list
   const [message, setMessage] = useState('');
   const [accountType, setAccountType] = useState('student'); // Default to 'student'
 
+  // Fetch available courses when the component mounts
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get('/course/list_courses'); // Adjust endpoint as necessary
+        setCourses(response.data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        setCourses([]); // Ensure courses state is cleared if fetching fails
+      }
+    };
+
+    if (accountType === 'student') {
+      fetchCourses();
+    }
+  }, [accountType]); // Re-fetch courses if account type changes
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const accountData = {
       username,
       password,
       first_name: firstname,
       last_name: lastname,
       email,
+      course_id: accountType === 'student' ? courseId : undefined, // Include courseId only for students
     };
 
-    const endpoint = accountType === 'student' ? '/account/create_student' : '/account/create_instructor';
+    const endpoint =
+      accountType === 'student' ? '/account/create_student' : '/account/create_instructor';
 
     try {
       const response = await fetch(endpoint, {
@@ -98,7 +120,7 @@ function CreateAccount() {
                 required
               />
             </div>
-            
+
             {/* Account Type Selection */}
             <div className="input-group">
               <label>Account Type</label>
@@ -124,7 +146,31 @@ function CreateAccount() {
               </div>
             </div>
 
-            <button type="submit" className="login-button">Submit</button>
+            {/* Course Selection (Only for Student) */}
+            {accountType === 'student' && (
+              <div className="input-group">
+                <label htmlFor="course">Select a Course</label>
+                <select
+                  id="course"
+                  value={courseId}
+                  onChange={(e) => setCourseId(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Choose a course
+                  </option>
+                  {courses.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.course_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <button type="submit" className="login-button">
+              Submit
+            </button>
           </form>
           {message && <p>{message}</p>}
         </section>
