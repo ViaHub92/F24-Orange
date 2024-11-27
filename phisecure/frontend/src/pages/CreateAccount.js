@@ -7,20 +7,20 @@ function CreateAccount() {
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
-  const [courseId, setCourseId] = useState(''); // For course selection
-  const [courses, setCourses] = useState([]); // Course list
+  const [courseId, setCourseId] = useState(''); 
+  const [courses, setCourses] = useState([]); 
   const [message, setMessage] = useState('');
-  const [accountType, setAccountType] = useState('student'); // Default to 'student'
+  const [accountType, setAccountType] = useState('student'); 
 
   // Fetch available courses when the component mounts
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('/course/list_courses'); // Adjust endpoint as necessary
+        const response = await axios.get('/course/list_courses'); 
         setCourses(response.data);
       } catch (error) {
         console.error('Error fetching courses:', error);
-        setCourses([]); // Ensure courses state is cleared if fetching fails
+        setCourses([]); 
       }
     };
 
@@ -38,7 +38,7 @@ function CreateAccount() {
       first_name: firstname,
       last_name: lastname,
       email,
-      course_id: accountType === 'student' ? courseId : undefined, // Include courseId only for students
+      course_id: accountType === 'student' ? courseId : undefined, 
     };
 
     const endpoint =

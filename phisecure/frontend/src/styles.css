@@ -898,3 +898,16 @@ h3 {
   height: 300px;     
   margin: 0 auto;   
 }
+
+
+tr.green {
+  background-color: #1f7433; 
+}
+
+tr.yellow {
+  background-color: #e0c465; 
+}
+
+tr.red {
+  background-color: #814449;
+}
