@@ -153,6 +153,9 @@ class StudentProfile(db.Model):
                     self.employement_status = 'Employed'
                     self.employer = answer_text
             
+            elif question_id == 30:
+                self.major = answer_text
+            
         db.session.commit()
         
         
@@ -281,6 +284,14 @@ class StudentProfile(db.Model):
                     tag_name = 'tiktok-user'
                 else:
                     tag_name = 'non-social-media-user'
+                    
+            elif question_id == 29:
+                if answer_text.lower() == 'n/a':
+                    tag_name = 'unemployed'
+                else:
+                    tag_name = 'employed'
+                    
+            
 
             if tag_name:
                 tag = Tag.query.filter_by(name=tag_name).first()
