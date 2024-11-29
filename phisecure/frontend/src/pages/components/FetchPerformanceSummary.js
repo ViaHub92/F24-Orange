@@ -59,11 +59,15 @@ function FetchPerformanceSummary() {
 
 const totalActions = data.total_opened + data.total_replied + data.total_links_clicked;
 const maxRiskScore = 300; 
-const currentRiskScore = totalActions;
+const currentRiskScore = 
+  (data.total_opened * -15) + 
+  (data.total_replied * 50) + 
+  (data.total_links_clicked * 100);
 
-// Determine the color based on the risk score
+
+const riskPercentage = Math.max(0, Math.min((currentRiskScore / maxRiskScore) * 100, 100));
+
 let riskColor = 'green';
-let riskPercentage = (currentRiskScore / maxRiskScore) * 100;
 
 if (riskPercentage > 66) {
   riskColor = 'red'; // High risk
