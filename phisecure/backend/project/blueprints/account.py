@@ -86,7 +86,7 @@ def create_instructor():
 
 #Create a new admin
 @account.route('/create_admin', methods=['POST'])
-def create_student():
+def create_admin():
     data = request.json
     username = data.get('username')
     email = data.get('email')

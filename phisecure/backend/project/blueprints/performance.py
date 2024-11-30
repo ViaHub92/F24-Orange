@@ -19,7 +19,7 @@ def performance_report(student_id):
         student = Student.query.get(interaction.student_id)
         phishing_email = PhishingEmail.query.get(interaction.phishing_email_id)
 
-        if student and phishing_email:
+        if student and phishing_email:  
             report.append({
                 "student_email": student.email,
                 "email_body": phishing_email.body,
@@ -27,6 +27,7 @@ def performance_report(student_id):
                 "link_clicked": interaction.link_clicked,
                 "replied": interaction.replied,
                 "red_flag": phishing_email.red_flag,
+                "instructor_feedback": phishing_email.instructor_feedback,
             })
 
     return jsonify(report), 200

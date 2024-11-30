@@ -5,7 +5,9 @@ from database.models.instructor import Instructor
 from database.models.course import Course
 from database.models.role import Role
 from database.models.inbox import Inbox
+from database.models.phishing_email import PhishingEmail
 from database.models.user_interaction import UserInteraction
+from datetime import datetime, timezone
 import backend.project.blueprints.performance
 
 instructor_dashboard = Blueprint('instructor_dashboard', __name__)
@@ -81,3 +83,41 @@ def get_class_performance_data(course_id):
         return jsonify(summary_report_list), 200
     else:
         return jsonify({"message": "No students in course."}), 404
+    
+@instructor_dashboard.route('/phishing_email/<email_id>/feedback', methods=['PATCH'])
+def leave_feedback(email_id):
+    """
+    Allows an instructor to leave feedback on a phishing email.
+    
+    Args:
+    email_id: The ID of the phishing email to be updated.
+
+    Request JSON:
+    {
+        "instructor_feedback": "Detailed feedback or comment on the email."
+    }
+    
+    Returns:
+    Success: 200 with the updated email details.
+    Failure: 404 if email is not found, 400 for invalid input.
+    """
+    data = request.get_json()
+    feedback = data.get('instructor_feedback')
+
+    if not feedback:
+        return jsonify({'error': 'Instructor feedback is required.'}), 400
+
+    phishing_email = PhishingEmail.query.get(email_id)
+    if not phishing_email:
+        return jsonify({'error': 'Phishing email not found.'}), 404
+
+    phishing_email.instructor_feedback = feedback
+    db.session.commit()
+
+    return jsonify({
+        'email_id': phishing_email.id,
+        'recipient': phishing_email.recipient,
+        'subject': phishing_email.subject,
+        'instructor_feedback': phishing_email.instructor_feedback,
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    }), 200
