@@ -5,6 +5,7 @@ from database.models.instructor import Instructor
 from database.models.course import Course
 from database.models.role import Role
 from database.models.inbox import Inbox
+from database.models.admin import Admin
 
 account = Blueprint('account', __name__)
 
@@ -83,6 +84,34 @@ def create_instructor():
 
     return jsonify({"message": "Instructor created successfully!"}), 201
 
+#Create a new admin
+@account.route('/create_admin', methods=['POST'])
+def create_student():
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name', '')
+    last_name = data.get('last_name', '')
+
+    # Check if student already exists
+    student = Admin.query.filter_by(email=email).first()
+    if Admin:
+        return jsonify({"message": "Admin already exists"}), 400
+
+    # Create new admin
+    new_admin = Admin(
+        username=username,
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
+    )
+    
+    new_admin.password = password
+    db.session.add(new_admin)
+    db.session.commit()
+
+    return jsonify({"message": "admin created successfully!"}), 201
 
 
 @account.route('/login', methods=['POST'])
@@ -130,6 +159,21 @@ def get_instructor(username):
         }), 200
     else:
         return jsonify({"message": "Instructor not found"}), 404
+
+#Get admin data
+@account.route('/get_admin/<int:admin_id>', methods=['GET'])
+def get_admin(admin_id):
+    admin = Admin.query.filter_by(id=admin_id).first()
+    if admin:
+        return jsonify({
+            "id": admin.id,
+            "username": admin.username,
+            "email": admin.email,
+            "first_name": admin.first_name,
+            "last_name": admin.last_name,
+        }), 200
+    else:
+        return jsonify({"message": "Admin not found"}), 404
 
 #List all students
 @account.route('/list_students', methods=['GET'])
