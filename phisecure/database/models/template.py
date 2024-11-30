@@ -68,6 +68,17 @@ class Template(db.Model):
 
         }
         
+    def get_interactions_for_template(self):
+        """
+        Get the interactions for a template
+        """
+        
+        interactions = []
+        for email in self.phishing_emails:
+            for interaction in email.interactions:
+                interactions.append(interaction)
+        return interactions
+        
 class Tag(db.Model):
     """can represent keyword associated with a user based on questionnaire answers and phishing templates
     Args:

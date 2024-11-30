@@ -1,6 +1,7 @@
 import pytest
 from database.models.template import Template, Tag, TemplateTag
 from database.models import StudentProfile, Response, Answer, Student
+from database.models import PhishingEmail, UserInteraction
 from database.models import Questionnaire, Question
 from backend.project import create_app, db
 from backend.config import TestConfig
@@ -85,6 +86,46 @@ def init_database(db_session):
     db.session.add(response)
     db.session.commit()
 
+
+    #create several templates
+
+    template1 = Template(name="Phishing Template 1", 
+                         description="Phishing Template 1", 
+                         category="Phishing", 
+                         difficulty_level="beginner", 
+                         sender_template="phisecurephisher@gmail.com",
+                         subject_template="Important Message",
+                         body_template="Please click on the link below to verify your account",
+                         link = "fakelinkplaceholder.com",
+                        template_redflag="supicious link")
+    
+    db.session.add(template1)
+    db.session.commit()
+    
+    # Insert phishing email data
+    phishing_email = PhishingEmail(
+        sender="phisecurephisher@gmail.com",
+        recipient=student.email,
+        subject="Important Message",
+        body="Please click on the link below to verify your account",
+        red_flag="suspicious link",
+        inbox_id=1,
+        template_id=template1.id
+    )
+    db.session.add(phishing_email)
+    db.session.commit()
+
+    # Insert user interaction data
+    user_interaction = UserInteraction(
+        student_id=student.id,
+        phishing_email_id=phishing_email.id,
+        opened=True,
+        link_clicked=False,
+        replied=False,
+        reported=False
+    )
+    db.session.add(user_interaction)
+    db.session.commit()
     # Insert answer data
     answers = [
         (20, "Yes"),
@@ -236,3 +277,14 @@ def test_get_assigned_tags_from_student_profile(init_database):
     assert assigned_tags[7] == "work-school-email-priority", "Eighth tag name matches"
     assert assigned_tags[8] == "facebook-user", "Ninth tag name matches"
     
+
+def test_get_interactions_for_template(init_database):
+    """
+    Test getting interactions for template
+    """
+    template_in_db = Template.query.first()
+    interactions = template_in_db.get_interactions_for_template()
+    
+    first_interaction = interactions[0]
+    assert len(interactions) > 0, "Interactions found for template"
+    assert first_interaction.opened == True, "Interaction opened matches"
