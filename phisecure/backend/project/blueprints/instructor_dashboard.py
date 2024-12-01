@@ -182,9 +182,16 @@ def get_most_successful_template(course_id):
     
     most_successful_template = max(interaction_rates, key=lambda x: x['interaction_rate'])
     
+    template = Template.query.get(most_successful_template['template_id'])
+    
+    if not template:
+        return jsonify({"error": "Template not found"}), 404
+    
     return jsonify({
         "template_id": most_successful_template['template_id'],
         "template_name": most_successful_template['template_name'],
+        "subject": template.subject_template,
+        "body": template.body_template,
         "total_interactions": most_successful_template['total_interactions'],
         "total_opened": most_successful_template['total_opened'],
         "total_links_clicked": most_successful_template['total_links_clicked'],
