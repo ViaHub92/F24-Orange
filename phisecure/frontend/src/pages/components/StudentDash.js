@@ -109,7 +109,7 @@ const SidebarComponent = () => {
                 <th>Interactions</th>
                 <th>Email Title</th>
                 <th>Red Flags</th>
-                <th>Instructor Notes</th>
+                <th>Instructor Feedback</th>
               </tr>
             </thead>
             <tbody>
