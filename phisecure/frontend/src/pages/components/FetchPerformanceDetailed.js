@@ -53,6 +53,12 @@ function FetchPerformanceDetailed() {
                 {item.red_flag ? item.red_flag : "No Red Flags"}
               </div>
             </td>
+            {/* Instructor Feeback */}
+            <td>
+              <div className="email-body-container">
+                {item.instructor_feedback || "No Instructor Feedback at this time"}
+              </div>
+            </td>
           </tr>
         ))
       )}
