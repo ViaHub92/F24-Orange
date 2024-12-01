@@ -125,6 +125,14 @@ label {
     display: block;
     margin-bottom: 5px;
 }
+.input-group-course {
+  width: 220px;
+  align-items: center;
+  padding: 8px; /* Reduce padding for smaller height */
+  font-size: 14px; /* Set a smaller font size */
+  margin: 8px 730px; /* Adjust margins for spacing */
+  border: 2px solid #ccc; /* Add a border if desired */
+}
 
 .input-group input[type="text"]{
   width: 220px; /* Adjust width to make the inputs smaller */

@@ -148,7 +148,7 @@ function CreateAccount() {
 
             {/* Course Selection (Only for Student) */}
             {accountType === 'student' && (
-              <div className="input-group">
+              <div className="input-group-course">
                 <label htmlFor="course">Select a Course</label>
                 <select
                   id="course"
