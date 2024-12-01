@@ -25,6 +25,7 @@ def create_app(config_class=Config):
     from backend.project.blueprints.questionnaire import questionnaire
     from backend.project.blueprints.course import course
     from backend.project.blueprints.instructor_dashboard import instructor_dashboard
+    from backend.project.blueprints.admin_dashboard import admin_dashboard
     app.register_blueprint(routes)
     app.register_blueprint(account, url_prefix='/account')
     app.register_blueprint(messaging, url_prefix='/messaging')
@@ -33,6 +34,7 @@ def create_app(config_class=Config):
     app.register_blueprint(questionnaire, url_prefix='/questionnaire')
     app.register_blueprint(course, url_prefix='/course')
     app.register_blueprint(instructor_dashboard, url_prefix='/instructor_dashboard')
+    app.register_blueprint(admin_dashboard, url_prefix='/admin_dashboard')
     
     """
     with app.app_context():

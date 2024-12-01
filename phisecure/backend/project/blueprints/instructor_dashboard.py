@@ -8,7 +8,6 @@ from database.models.inbox import Inbox
 from database.models.phishing_email import PhishingEmail
 from database.models.user_interaction import UserInteraction
 from datetime import datetime, timezone
-import backend.project.blueprints.performance
 
 instructor_dashboard = Blueprint('instructor_dashboard', __name__)
 
