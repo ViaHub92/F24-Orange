@@ -99,6 +99,28 @@ def init_database(db_session):
                          link = "fakelinkplaceholder.com",
                         template_redflag="supicious link")
     
+    template2 = Template(name="Phishing Template 2", 
+                         description="Phishing Template 2", 
+                         category="Phishing", 
+                         difficulty_level="intermediate", 
+                         sender_template="phisher2@gmail.com",
+                         subject_template="Urgent: Account Verification Required",
+                         body_template="Your account has been compromised. Click the link to secure it.",
+                         link="fakelink2.com",
+                         template_redflag="urgent request")
+
+    template3 = Template(name="Phishing Template 3", 
+                         description="Phishing Template 3", 
+                         category="Phishing", 
+                         difficulty_level="advanced", 
+                         sender_template="phisher3@gmail.com",
+                         subject_template="Security Alert: Unusual Activity Detected",
+                         body_template="We detected unusual activity on your account. Verify your identity by clicking the link.",
+                         link="fakelink3.com",
+                         template_redflag="security alert")
+
+    db.session.add(template2)
+    db.session.add(template3)
     db.session.add(template1)
     db.session.commit()
     
@@ -112,6 +134,51 @@ def init_database(db_session):
         inbox_id=1,
         template_id=template1.id
     )
+    phishing_email2 = PhishingEmail(
+        sender="phisher2@gmail.com",
+        recipient=student.email,
+        subject="Urgent: Account Verification Required",
+        body="Your account has been compromised. Click the link to secure it.",
+        red_flag="urgent request",
+        inbox_id=1,
+        template_id=template2.id
+    )
+
+    phishing_email3 = PhishingEmail(
+        sender="phisher2@gmail.com",
+        recipient=student.email,
+        subject="Urgent: Account Verification Required",
+        body="Your account has been compromised. Click the link to secure it.",
+        red_flag="urgent request",
+        inbox_id=1,
+        template_id=template2.id
+    )
+
+    phishing_email4 = PhishingEmail(
+        sender="phisher2@gmail.com",
+        recipient=student.email,
+        subject="Urgent: Account Verification Required",
+        body="Your account has been compromised. Click the link to secure it.",
+        red_flag="urgent request",
+        inbox_id=1,
+        template_id=template2.id
+    )
+
+    phishing_email5 = PhishingEmail(
+        sender="phisher3@gmail.com",
+        recipient=student.email,
+        subject="Security Alert: Unusual Activity Detected",
+        body="We detected unusual activity on your account. Verify your identity by clicking the link.",
+        red_flag="security alert",
+        inbox_id=1,
+        template_id=template3.id
+    )
+
+    db.session.add(phishing_email2)
+    db.session.add(phishing_email3)
+    db.session.add(phishing_email4)
+    db.session.add(phishing_email5)
+    
     db.session.add(phishing_email)
     db.session.commit()
 
@@ -124,6 +191,46 @@ def init_database(db_session):
         replied=False,
         reported=False
     )
+    user_interaction2 = UserInteraction(
+        student_id=student.id,
+        phishing_email_id=phishing_email2.id,
+        opened=True,
+        link_clicked=True,
+        replied=False,
+        reported=False
+    )
+
+    user_interaction3 = UserInteraction(
+        student_id=student.id,
+        phishing_email_id=phishing_email3.id,
+        opened=True,
+        link_clicked=False,
+        replied=True,
+        reported=False
+    )
+
+    user_interaction4 = UserInteraction(
+        student_id=student.id,
+        phishing_email_id=phishing_email4.id,
+        opened=False,
+        link_clicked=False,
+        replied=False,
+        reported=True
+    )
+
+    user_interaction5 = UserInteraction(
+        student_id=student.id,
+        phishing_email_id=phishing_email5.id,
+        opened=True,
+        link_clicked=True,
+        replied=True,
+        reported=True
+    )
+
+    db.session.add(user_interaction2)
+    db.session.add(user_interaction3)
+    db.session.add(user_interaction4)
+    db.session.add(user_interaction5)
     db.session.add(user_interaction)
     db.session.commit()
     # Insert answer data
@@ -201,7 +308,13 @@ def init_database(db_session):
         db.session.add(tag)
         db.session.commit()
 
-    yield db  # this is where the testing happens!
+    yield {
+        "email1_id": phishing_email.id,
+        "email2_id": phishing_email2.id,
+        "email3_id": phishing_email3.id,
+        "email4_id": phishing_email4.id,
+        "email5_id": phishing_email5.id,
+    }
 
     db.drop_all()
 
@@ -287,4 +400,45 @@ def test_get_interactions_for_template(init_database):
     
     first_interaction = interactions[0]
     assert len(interactions) > 0, "Interactions found for template"
-    assert first_interaction.opened == True, "Interaction opened matches"
+    assert first_interaction.opened, "Interaction opened matches"
+    assert not first_interaction.link_clicked, "Interaction link clicked matches"
+    assert not first_interaction.replied, "Interaction replied matches"
+    assert not first_interaction.reported, "Interaction reported matches"
+    
+
+def test_calculate_interactions_per_email(init_database):
+    """
+    Test calculating interactions per email
+    """
+    email_ids = init_database
+    interactions_per_email = PhishingEmail.calculate_interactions_per_email()
+    
+    print("interactions per email")
+    print(interactions_per_email)
+  
+    #Check interactions for each phishing email
+    for interaction in interactions_per_email:
+        if interaction.id == email_ids['email1_id']:
+            assert interaction.total_interactions == 1, "total interactions for Phishing Email 1 matches"
+            assert interaction.total_opened == 1
+            assert interaction.total_links_clicked == 0
+            assert interaction.total_replied == 0
+            
+            
+    
+def test_calculate_interaction_rate(init_database):
+    """
+    Test calculating interaction rate
+    """
+    interaction_rates = Template.calculate_interaction_rate()
+    
+    print("interaction rate")
+    print(interaction_rates)
+    
+    
+    
+    assert interaction_rates is not None, "Interaction rate calculated"
+    assert len(interaction_rates) > 0, "Interaction rate list is not empty"
+    for rate in interaction_rates:
+        if rate['template_name'] == "Phishing Template 2":
+            assert rate['interaction_rate'] == 100.0, "Interaction rate for Phishing Template 2 matches"

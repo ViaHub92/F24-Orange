@@ -2,7 +2,11 @@
 
 import enum
 from datetime import datetime, timezone
+from sqlalchemy import cast, Integer
 from backend.project import db
+from sqlalchemy.sql import func
+from database.models.phishing_email import PhishingEmail
+from database.models.user_interaction import UserInteraction
 from sqlalchemy import Enum
 from sqlalchemy.orm import relationship
 
@@ -67,6 +71,18 @@ class Template(db.Model):
             'template_redflag': self.template_redflag
 
         }
+    
+    
+        
+    @classmethod
+    def calculate_interaction_rate(cls):
+        """
+        calculate the interaction rate across all templates
+        """
+        
+    
+        
+        
         
     def get_interactions_for_template(self):
         """

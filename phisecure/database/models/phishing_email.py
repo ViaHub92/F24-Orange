@@ -1,6 +1,8 @@
 import uuid
 from datetime import datetime, timezone
 from backend.project import db
+from database.models.user_interaction import UserInteraction
+from sqlalchemy import func, cast, Integer
 
 
 class PhishingEmail(db.Model):
@@ -32,3 +34,20 @@ class PhishingEmail(db.Model):
     #Attribute of the PhishingEmail model. it is deinfed using the relationship function that creates a realationship with user interaction model
     interactions = db.relationship("UserInteraction", back_populates="phishing_email")
     template = db.relationship("Template", back_populates="phishing_emails")
+    
+    
+    @classmethod
+    def calculate_interactions_per_email(cls):
+        """
+        Calculate the number of interactions for each phishing email.
+        """
+        interactions_per_email = db.session.query(
+            cls.id,
+            cls.template_id,
+            func.count(UserInteraction.id).label("total_interactions"),
+            func.sum(UserInteraction.opened.cast(db.Integer)).label("total_opened"),
+            func.sum(UserInteraction.link_clicked.cast(db.Integer)).label("total_links_clicked"),
+            func.sum(UserInteraction.replied.cast(db.Integer)).label("total_replied")
+        ).outerjoin(UserInteraction, cls.id == UserInteraction.phishing_email_id).group_by(cls.id).all()
+        
+        return interactions_per_email
