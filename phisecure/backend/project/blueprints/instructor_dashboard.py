@@ -7,13 +7,15 @@ from database.models.role import Role
 from database.models.inbox import Inbox
 from database.models.phishing_email import PhishingEmail
 from database.models.user_interaction import UserInteraction
+from database.models.template import StudentProfile, Template
 from datetime import datetime, timezone
+from collections import Counter
 
 instructor_dashboard = Blueprint('instructor_dashboard', __name__)
 
 
 #Grab a list of students from an course
-@instructor_dashboard.route('/list_course_students/<int:course_id>', methods=['POST'])
+@instructor_dashboard.route('/list_course_students/<int:course_id>', methods=['GET'])
 def list_course_students(course_id):
     course = db.session.get(Course, course_id)
     
@@ -49,7 +51,7 @@ def list_instructor_courses(instructor_id):
 
 
 #Create a report from all students in a class about their performance
-@instructor_dashboard.route('/get_class_performance_data/<int:course_id>', methods=['POST'])
+@instructor_dashboard.route('/get_class_performance_data/<int:course_id>', methods=['GET'])
 def get_class_performance_data(course_id):
     course = Course.query.filter_by(id=course_id).first()
     redirect_string = "/summary"
@@ -119,4 +121,34 @@ def leave_feedback(email_id):
         'subject': phishing_email.subject,
         'instructor_feedback': phishing_email.instructor_feedback,
         'updated_at': datetime.now(timezone.utc).isoformat()
+    }), 200
+
+@instructor_dashboard.route('/common_tag/<int:course_id>', methods=['GET'])
+def common_tag(course_id):
+    """
+    Provides the most common tag shared by the class
+    
+    Args:
+        course_id: ID of the course.
+    
+    Returns:
+        A JSON object containing the most common tag and the most successful template.
+    """
+    # Fetch the course
+    course = Course.query.get(course_id)
+    if not course:
+        return jsonify({"error": "Course not found"}), 404
+
+    # Get students in the course
+    student_ids = [student.id for student in course.students]
+    student_profiles = StudentProfile.query.filter(StudentProfile.student_id.in_(student_ids)).all()
+
+    # Calculate the most common tag
+    tags = [tag.name for profile in student_profiles for tag in profile.tags]
+    most_common_tag = Counter(tags).most_common(1)
+    most_common_tag = most_common_tag[0][0] if most_common_tag else None
+
+    # Response
+    return jsonify({
+        "most_common_tag": most_common_tag,
     }), 200

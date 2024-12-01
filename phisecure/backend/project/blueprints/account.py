@@ -148,14 +148,21 @@ def get_student(student_id):
 def get_instructor(username):
     instructor = Instructor.query.filter_by(username=username).first()
     if instructor:
+        serialized_courses = [
+            {
+                "id": course.id,
+                "course_name": course.course_name,
+            }
+            for course in instructor.courses
+        ]
+    if instructor:
         return jsonify({
             "id": instructor.id,
             "username": instructor.username,
             "email": instructor.email,
             "first_name": instructor.first_name,
             "last_name": instructor.last_name,
-            "course_id": instructor.course_id,
-            "courses": instructor.courses
+            "courses": serialized_courses
         }), 200
     else:
         return jsonify({"message": "Instructor not found"}), 404

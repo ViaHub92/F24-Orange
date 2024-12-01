@@ -163,8 +163,10 @@ def compose_phishing_email():
     try:
         body = template.body_template.format(
             first_name=recipient.first_name,
+            employer=profile.employer,
+            company_name=profile.employer,
             link=link if '{link}' in template.body_template else "",
-            date=datetime.now().strftime("%B %d, %Y") 
+            date=datetime.now().strftime("%B %d, %Y")
         ).replace('\n', '<br>')
         subject = template.subject_template.format(first_name=recipient.first_name)
     except KeyError as e:
