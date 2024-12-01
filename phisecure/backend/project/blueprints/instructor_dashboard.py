@@ -84,6 +84,56 @@ def get_class_performance_data(course_id):
         return jsonify(summary_report_list), 200
     else:
         return jsonify({"message": "No students in course."}), 404
+
+@instructor_dashboard.route('/detailed_report/<int:course_id>', methods=['GET'])
+def detailed_report(course_id):
+    """
+    Gets a detailed performance report for each student in the instructor's course.
+    
+    Args:
+        course_id: The ID of the course to get student reports for.
+    
+    Returns:
+        A JSON object containing detailed performance reports for all students.
+    """
+    course = Course.query.get(course_id)
+    
+    if not course:
+        return jsonify({"error": "Course not found"}), 404
+    
+    detailed_reports = []
+
+    for student in course.students:
+        interactions = UserInteraction.query.filter_by(student_id=student.id, opened=True).all()
+
+        report = []
+        for interaction in interactions:
+            phishing_email = PhishingEmail.query.get(interaction.phishing_email_id)
+
+            if phishing_email:  
+                report.append({
+                    "student_email": student.email,
+                    "email_body": phishing_email.body,
+                    "email_subject": phishing_email.subject,
+                    "opened": interaction.opened,
+                    "link_clicked": interaction.link_clicked,
+                    "replied": interaction.replied,
+                    "red_flag": phishing_email.red_flag,
+                    "instructor_feedback": phishing_email.instructor_feedback,
+                })
+
+        if report:
+            detailed_reports.append({
+                "student_id": student.id,
+                "student_name": student.username,
+                "report": report
+            })
+    
+    if not detailed_reports:
+        return jsonify({"message": "No interactions found for students in this course."}), 404
+
+    return jsonify(detailed_reports), 200
+
     
 @instructor_dashboard.route('/phishing_email/<email_id>/feedback', methods=['PATCH'])
 def leave_feedback(email_id):
