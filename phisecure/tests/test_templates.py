@@ -432,13 +432,11 @@ def test_calculate_interaction_rate(init_database):
     """
     interaction_rates = Template.calculate_interaction_rate()
     
-    print("interaction rate")
-    print(interaction_rates)
-    
-    
-    
-    assert interaction_rates is not None, "Interaction rate calculated"
-    assert len(interaction_rates) > 0, "Interaction rate list is not empty"
+    print("interaction rates")
     for rate in interaction_rates:
-        if rate['template_name'] == "Phishing Template 2":
-            assert rate['interaction_rate'] == 100.0, "Interaction rate for Phishing Template 2 matches"
+        print(f"Template ID: {rate['template_id']}, Template Name: {rate['template_name']}, Total Interactions: {rate['total_interactions']}, Total Opened: {rate['total_opened']}, Total Links Clicked: {rate['total_links_clicked']}, Total Replied: {rate['total_replied']}, Interaction Rate: {rate['interaction_rate']}")
+    
+    assert len(interaction_rates) > 0, "Interaction rates calculated"
+    for rate in interaction_rates:
+        if rate['template_id'] == 2:
+            assert rate['interaction_rate'] == 3.0, "Interaction rate for Phishing Template 1 matches"

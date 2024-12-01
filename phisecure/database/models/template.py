@@ -79,21 +79,53 @@ class Template(db.Model):
         """
         calculate the interaction rate across all templates
         """
+        interactions_per_email = PhishingEmail.calculate_interactions_per_email()
         
+        #Aggregate interactions by template
+        interactions_by_template = {}
+        for email in interactions_per_email:
+            if email.template_id not in interactions_by_template:
+                interactions_by_template[email.template_id] = {
+                    'total_interactions': 0,
+                    'total_opened': 0,
+                    'total_links_clicked': 0,
+                    'total_replied': 0
+                }
+            interactions_by_template[email.template_id]['total_interactions'] += email.total_interactions
+            interactions_by_template[email.template_id]['total_opened'] += email.total_opened
+            interactions_by_template[email.template_id]['total_links_clicked'] += email.total_links_clicked
+            interactions_by_template[email.template_id]['total_replied'] += email.total_replied
+            
+        #Calculate interaction rate for each template
+        interaction_rates = []
+        for template_id, data in interactions_by_template.items():
+            template = cls.query.get(template_id)
+            total_interactions = data['total_interactions']
+            total_opened = data['total_opened']
+            total_links_clicked = data['total_links_clicked']
+            total_replied = data['total_replied']
+            
+            interaction_rate = {
+                'template_id': template_id,
+                'template_name': template.name,
+                'total_interactions': total_interactions,
+                'total_opened': total_opened,
+                'total_links_clicked': total_links_clicked,
+                'total_replied': total_replied,
+                'interaction_rate': 0
+            }
+            
+            if total_interactions > 0:
+                interaction_rate['interaction_rate'] = round((total_opened + total_links_clicked + total_replied) / total_interactions, 2)
+                
+            interaction_rates.append(interaction_rate)
     
         
         
         
-    def get_interactions_for_template(self):
-        """
-        Get the interactions for a template
-        """
+        return interaction_rates
         
-        interactions = []
-        for email in self.phishing_emails:
-            for interaction in email.interactions:
-                interactions.append(interaction)
-        return interactions
+    
         
 class Tag(db.Model):
     """can represent keyword associated with a user based on questionnaire answers and phishing templates
