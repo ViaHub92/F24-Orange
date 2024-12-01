@@ -23,6 +23,7 @@ def performance_report(student_id):
             report.append({
                 "student_email": student.email,
                 "email_body": phishing_email.body,
+                "email_subject": phishing_email.subject,
                 "opened": interaction.opened,
                 "link_clicked": interaction.link_clicked,
                 "replied": interaction.replied,
