@@ -73,7 +73,7 @@ def get_class_performance_data(course_id):
             total_links_clicked = sum(1 for interaction in interactions if interaction.link_clicked)
 
             summary_report = {
-                "student_id": student.id, #Used only for testing purposes
+                "student_id": student.id,
                 "student_name": student.username,
                 "total_opened": total_opened,
                 "total_replied": total_replied,
@@ -134,21 +134,60 @@ def common_tag(course_id):
     Returns:
         A JSON object containing the most common tag and the most successful template.
     """
-    # Fetch the course
     course = Course.query.get(course_id)
     if not course:
         return jsonify({"error": "Course not found"}), 404
 
-    # Get students in the course
     student_ids = [student.id for student in course.students]
     student_profiles = StudentProfile.query.filter(StudentProfile.student_id.in_(student_ids)).all()
 
-    # Calculate the most common tag
     tags = [tag.name for profile in student_profiles for tag in profile.tags]
     most_common_tag = Counter(tags).most_common(1)
     most_common_tag = most_common_tag[0][0] if most_common_tag else None
 
-    # Response
     return jsonify({
         "most_common_tag": most_common_tag,
     }), 200
+
+@instructor_dashboard.route("/most_successful_template/<int:course_id>", methods=["GET"])
+def get_most_successful_template(course_id):
+    """
+    Endpoint to get the most successful phishing email template based on interaction rate for a specific course.
+    
+    Args:
+        course_id (int): The ID of the course.
+        
+    Returns:
+        JSON response containing the most successful template and interaction data.
+    """
+    course = Course.query.get(course_id)
+    
+    if not course:
+        return jsonify({"error": "Course not found"}), 404
+    
+    students = course.students
+    
+    if not students:
+        return jsonify({"error": "No students found for this course"}), 404
+    
+    phishing_emails = PhishingEmail.query.filter(PhishingEmail.inbox_id.in_([student.inbox_id for student in students])).all()
+
+    if not phishing_emails:
+        return jsonify({"error": "No phishing emails found for this course"}), 404
+    
+    interaction_rates = Template.calculate_interaction_rate()
+    
+    if not interaction_rates:
+        return jsonify({"error": "No interaction data available for the templates"}), 404
+    
+    most_successful_template = max(interaction_rates, key=lambda x: x['interaction_rate'])
+    
+    return jsonify({
+        "template_id": most_successful_template['template_id'],
+        "template_name": most_successful_template['template_name'],
+        "total_interactions": most_successful_template['total_interactions'],
+        "total_opened": most_successful_template['total_opened'],
+        "total_links_clicked": most_successful_template['total_links_clicked'],
+        "total_replied": most_successful_template['total_replied'],
+        "interaction_rate": most_successful_template['interaction_rate']
+    })
