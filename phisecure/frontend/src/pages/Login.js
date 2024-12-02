@@ -24,8 +24,10 @@ function Login() {
         localStorage.setItem('role', data.role);
 
         if (data.role === 'Student') {
+          localStorage.setItem('student_id', data.user_id);
           navigate('/Dashboard');
         } else if (data.role === 'Instructor') {
+          localStorage.setItem('instructor_id', data.user_id);
           navigate('/DashboardInstructor');
         }
       } else {
