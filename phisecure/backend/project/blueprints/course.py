@@ -55,16 +55,25 @@ def delete_course(course_id):
 
     return jsonify({"message": "Course deleted successfully!"}), 200
 
-#Get course data
 @course.route('/get_course/<course_name>', methods=['GET'])
 def get_course(course_name):
     course = Course.query.filter_by(course_name=course_name).first()
     if course:
+        students = [
+            {
+                "id": student.id,
+                "username": student.username,
+                "email": student.email,
+                "first_name": student.first_name,
+                "last_name": student.last_name
+            }
+            for student in course.students
+        ]
         return jsonify({
             "id": course.id,
             "course_name": course.course_name,
             "instructor_id": course.instructor_id,
-            "students": course.students
+            "students": students
         }), 200
     else:
         return jsonify({"message": "Course not found"}), 404
