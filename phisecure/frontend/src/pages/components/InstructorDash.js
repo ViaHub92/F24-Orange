@@ -17,7 +17,7 @@ const InstructorDashboard = () => {
   const [courseId, setCourseId] = useState("");
   const [courses, setCourses] = useState([]);
   const [showCourses, setShowCourses] = useState(false);
-  const instructorId = localStorage.getItem('user_id');
+  const instructorId = localStorage.getItem('instructor_id');
 
   useEffect(() => {
     const fetchInstructorData = async () => {

@@ -29,6 +29,7 @@ def performance_report(student_id):
                 "replied": interaction.replied,
                 "red_flag": phishing_email.red_flag,
                 "instructor_feedback": phishing_email.instructor_feedback,
+                "email_id": phishing_email.id
             })
 
     return jsonify(report), 200

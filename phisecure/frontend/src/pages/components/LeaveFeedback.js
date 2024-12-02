@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import FetchPerformanceDetailed from './FetchPerformanceDetailed';
+import FetchPerformanceDetailedInstructor from './FetchPerformanceDetailedInstructor';
 
 const LeaveFeedback = () => {
     const [courses, setCourses] = useState([]);
@@ -15,15 +15,18 @@ const LeaveFeedback = () => {
     // Fetch the list of courses
     useEffect(() => {
         axios.get('course/list_courses')
-            .then(response => setCourses(response.data))
+            .then(response => {
+                console.log("Fetched Courses:", response.data); // Log courses data
+                setCourses(response.data);
+            })
             .catch(error => console.log(error));
     }, []);
 
-    // Fetch the students of the selected course
     const handleCourseChange = (courseName) => {
         setLoading(true);
         axios.get(`/course/get_course/${courseName}`)
             .then(response => {
+                console.log("Fetched Course Details:", response.data); // Log course details
                 setStudents(response.data.students);
                 setSelectedCourse(response.data);
                 setSelectedStudent(null);
@@ -34,31 +37,38 @@ const LeaveFeedback = () => {
             .finally(() => setLoading(false));
     };
 
-    // Fetch the detailed performance report for the selected student
     const handleStudentChange = (studentId) => {
-        setLoading(true);
-        axios.get(`/performance/detailed/${studentId}`)
-            .then(response => {
-                setPerformanceData(response.data);
-                setSelectedStudent(studentId);
-                setSelectedEmailId(null);
-            })
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false));
+        setSelectedStudent(studentId);
     };
-
-    // Submit feedback for the selected phishing email
+    
+    // Watch for selectedStudent change and fetch performance data
+    useEffect(() => {
+        if (selectedStudent) {
+            setLoading(true);
+            axios.get(`/performance/detailed/${selectedStudent}`)
+                .then(response => {
+                    console.log("Fetched Performance Data for Student:", response.data);
+                    setPerformanceData(response.data);
+                    setSelectedEmailId(null);
+                })
+                .catch(error => console.log(error))
+                .finally(() => setLoading(false));
+        }
+    }, [selectedStudent]);
+            
     const handleFeedbackSubmit = () => {
         if (!selectedEmailId) {
             alert('Please select an email to leave feedback for.');
             return;
         }
-
+    
         if (!feedback.trim()) {
             alert('Please provide feedback.');
             return;
         }
-
+    
+        console.log("Submitting Feedback:", { selectedEmailId, feedback }); // Log feedback submission details
+    
         setLoading(true);
         axios.patch(`/instructor_dashboard/phishing_email/${selectedEmailId}/feedback`, {
             instructor_feedback: feedback
@@ -91,7 +101,11 @@ const LeaveFeedback = () => {
 
             {/* Select Student */}
             {selectedCourse && (
-                <select onChange={e => handleStudentChange(e.target.value)} value={selectedStudent || ''}>
+                <select onChange={e => {
+                    const studentId = e.target.value;
+                    console.log("Selected Student ID:", studentId); // Debug log to check the selected student ID
+                    handleStudentChange(studentId);
+                }} value={selectedStudent || ''}>
                     <option value="">Select Student</option>
                     {students.map(student => (
                         <option key={student.id} value={student.id}>
@@ -104,17 +118,20 @@ const LeaveFeedback = () => {
             {/* Show Performance Data */}
             {performanceData.length > 0 && selectedStudent && (
                 <div>
-                    <FetchPerformanceDetailed data={performanceData} />
+                    <FetchPerformanceDetailedInstructor studentId={selectedStudent} />
 
                     {/* Select Email */}
                     <h3>Select Email to Provide Feedback</h3>
                     <select onChange={e => setSelectedEmailId(e.target.value)} value={selectedEmailId || ''}>
                         <option value="">Select Email</option>
-                        {performanceData.map((detail, index) => (
+                        {performanceData.map((detail, index) => {
+                            console.log("Email Detail:", detail); 
+                            return (
                             <option key={index} value={detail.email_id}> {/* This is the problem*/}
                                 {detail.email_subject} - {detail.email_body.substring(0, 30)}...
                             </option>
-                        ))}
+                            );
+                        })}
                     </select>
 
                     {/* Feedback Form */}
