@@ -10,6 +10,8 @@ from database.models.user_interaction import UserInteraction
 from database.models.template import StudentProfile, Template
 from datetime import datetime, timezone
 from collections import Counter
+from collections import OrderedDict
+from decimal import Decimal
 
 instructor_dashboard = Blueprint('instructor_dashboard', __name__)
 
@@ -225,26 +227,33 @@ def get_most_successful_template(course_id):
     if not phishing_emails:
         return jsonify({"error": "No phishing emails found for this course"}), 404
     
-    interaction_rates = Template.calculate_interaction_rate()
+    rates = Template.calculate_interaction_rate()
     
-    if not interaction_rates:
+    if not rates:
         return jsonify({"error": "No interaction data available for the templates"}), 404
     
-    most_successful_template = max(interaction_rates, key=lambda x: x['interaction_rate'])
+    most_successful_template = max(rates, key=lambda x: (x['open_rate'], x['click_rate'], x['reply_rate']))
     
     template = Template.query.get(most_successful_template['template_id'])
     
     if not template:
         return jsonify({"error": "Template not found"}), 404
     
-    return jsonify({
-        "template_id": most_successful_template['template_id'],
-        "template_name": most_successful_template['template_name'],
-        "subject": template.subject_template,
-        "body": template.body_template,
-        "total_interactions": most_successful_template['total_interactions'],
-        "total_opened": most_successful_template['total_opened'],
-        "total_links_clicked": most_successful_template['total_links_clicked'],
-        "total_replied": most_successful_template['total_replied'],
-        "interaction_rate": most_successful_template['interaction_rate']
+    
+    response_data = OrderedDict({
+       ("template_id", most_successful_template['template_id']),
+       ("template_name", most_successful_template['template_name']),
+       ("subject", template.subject_template),
+       ("body", template.body_template),
+       ("total_opened", most_successful_template['total_opened']),
+       ("total_links_clicked", most_successful_template['total_links_clicked']),
+       ("total_replied", most_successful_template['total_replied']),
+       ("open_rate", most_successful_template['open_rate']),
+       ("click_rate", most_successful_template['click_rate']),
+       ("reply_rate", most_successful_template['reply_rate'])
+      
     })
+    
+    print("Response Data:", response_data)
+    
+    return jsonify(response_data), 200

@@ -428,15 +428,15 @@ def test_calculate_interactions_per_email(init_database):
     
 def test_calculate_interaction_rate(init_database):
     """
-    Test calculating interaction rate
+    Test calculating open rate, click rate, reply rate
     """
-    interaction_rates = Template.calculate_interaction_rate()
+    rates = Template.calculate_interaction_rate()
     
     print("interaction rates")
-    for rate in interaction_rates:
-        print(f"Template ID: {rate['template_id']}, Template Name: {rate['template_name']}, Total Interactions: {rate['total_interactions']}, Total Opened: {rate['total_opened']}, Total Links Clicked: {rate['total_links_clicked']}, Total Replied: {rate['total_replied']}, Interaction Rate: {rate['interaction_rate']}")
+    for rate in rates:
+        print(f"Template ID: {rate['template_id']}, Template Name: {rate['template_name']}, Total Opened: {rate['total_opened']}, Total Links Clicked: {rate['total_links_clicked']}, Total Replied: {rate['total_replied']}, Total Phishing Emails: {rate['total_phishing_emails']}, Open Rate: {rate['open_rate']}, Click Rate: {rate['click_rate']}, Reply Rate: {rate['reply_rate']}")
     
-    assert len(interaction_rates) > 0, "Interaction rates calculated"
-    for rate in interaction_rates:
+    assert len(rates) > 0, "rates calculated"
+    for rate in rates:
         if rate['template_id'] == 2:
-            assert rate['interaction_rate'] == 3.0, "Interaction rate for Phishing Template 1 matches"
+            assert rate['open_rate'] == 100.0, "Open rate for template 2 matches"

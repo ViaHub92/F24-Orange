@@ -68,7 +68,9 @@ class Template(db.Model):
             'subject_template': self.subject_template,
             'body_template': self.body_template,
             'link': self.link, 
-            'template_redflag': self.template_redflag
+            'template_redflag': self.template_redflag,
+            
+            
 
         }
     
@@ -77,7 +79,7 @@ class Template(db.Model):
     @classmethod
     def calculate_interaction_rate(cls):
         """
-        calculate the interaction rate across all templates
+        calculate open rate, click rate, and reply rate for each phishing template
         """
         interactions_per_email = PhishingEmail.calculate_interactions_per_email()
         
@@ -86,44 +88,45 @@ class Template(db.Model):
         for email in interactions_per_email:
             if email.template_id not in interactions_by_template:
                 interactions_by_template[email.template_id] = {
-                    'total_interactions': 0,
                     'total_opened': 0,
                     'total_links_clicked': 0,
-                    'total_replied': 0
+                    'total_replied': 0,
+                    'total_phishing_emails': 0,
                 }
-            interactions_by_template[email.template_id]['total_interactions'] += email.total_interactions
+                
             interactions_by_template[email.template_id]['total_opened'] += email.total_opened
             interactions_by_template[email.template_id]['total_links_clicked'] += email.total_links_clicked
             interactions_by_template[email.template_id]['total_replied'] += email.total_replied
+            interactions_by_template[email.template_id]['total_phishing_emails'] += 1
             
         #Calculate interaction rate for each template
-        interaction_rates = []
+        rates = []
         for template_id, data in interactions_by_template.items():
             template = cls.query.get(template_id)
-            total_interactions = data['total_interactions']
             total_opened = data['total_opened']
             total_links_clicked = data['total_links_clicked']
             total_replied = data['total_replied']
+            total_phishing_emails = data['total_phishing_emails']
             
-            interaction_rate = {
+            open_rate = round((total_opened / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
+            click_rate = round((total_links_clicked / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
+            reply_rate = round((total_replied / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
+            
+            rate = {
                 'template_id': template_id,
                 'template_name': template.name,
-                'total_interactions': total_interactions,
                 'total_opened': total_opened,
                 'total_links_clicked': total_links_clicked,
                 'total_replied': total_replied,
-                'interaction_rate': 0
+                'total_phishing_emails': total_phishing_emails,
+                'open_rate': open_rate,
+                'click_rate': click_rate,
+                'reply_rate': reply_rate
             }
             
-            if total_interactions > 0:
-                interaction_rate['interaction_rate'] = round((total_opened + total_links_clicked + total_replied) / total_interactions, 2)
-                
-            interaction_rates.append(interaction_rate)
-    
-        
-        
-        
-        return interaction_rates
+            rates.append(rate)
+            
+        return rates
         
     
         
