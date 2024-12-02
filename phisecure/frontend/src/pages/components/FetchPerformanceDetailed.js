@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Mosaic } from "react-loading-indicators";
-import { FaEnvelope, FaEnvelopeOpen } from 'react-icons/fa';
+import { FaEnvelope, FaEnvelopeOpen, FaCheck, FaTimes } from 'react-icons/fa';
 
 function FetchPerformanceDetailed() {
   const [data, setData] = useState([]);
   const [openRowIndex, setOpenRowIndex] = useState(null); // Track which row is open
   const [openBody, setBodyIndex] = useState(null);
+  const [clickedStatus, setClickedStatus] = useState([]);
 
   useEffect(() => {
     const studentId = localStorage.getItem('student_id');
@@ -14,7 +15,7 @@ function FetchPerformanceDetailed() {
       .then(res => res.json())
       .then(data => {
         setData(data);
-        console.log(data);  // Log data to ensure it has the right format
+        console.log(data);  // Log data to ensure it has the right format        
       })
       .catch(error => console.error("Error fetching data: ", error));
   }, []);
@@ -34,6 +35,13 @@ function FetchPerformanceDetailed() {
 
   const toggleBody = (index) => {
     setBodyIndex(prevIndex => (prevIndex === index ? null : index));
+    setClickedStatus(prevStatus => {
+      const updatedStatus = [...prevStatus];
+      if (!updatedStatus[index]) {
+        updatedStatus[index] = true; // Mark it as clicked
+      }
+      return updatedStatus;
+    });
   };
 
   return (
@@ -48,12 +56,8 @@ function FetchPerformanceDetailed() {
         data.map((item, index) => (
           <React.Fragment key={index}>
             {/* Main row with interaction data */}
-            <tr>
-              <td style={{ backgroundColor: getInteractionColor(item.opened, item.link_clicked, item.replied) }}>
-                <p><strong>Opened:</strong> {item.opened ? "Yes" : "No"}</p>
-                <p><strong>Link Clicked:</strong> {item.link_clicked ? "Yes" : "No"}</p>
-                <p><strong>Replied:</strong> {item.replied ? "Yes" : "No"}</p>
-              </td>
+            <tr style={{ backgroundColor: getInteractionColor(item.opened, item.link_clicked, item.replied) }}>
+
 
               {/* Email Subject Column */}
               <td onClick={() => toggleBody(index)} style={{ cursor: 'pointer', color: 'black' }}>
@@ -65,15 +69,27 @@ function FetchPerformanceDetailed() {
                 </div>
               </td>
 
-              {/* Red Flags Column */}
+              {/*Checked by Student or not*/}
               <td>
-                <div className="email-body-container">
-                  {item.red_flag ? item.red_flag : "No Red Flags"}
-                </div>
-              </td>
+                  <div className="email-body-container">
+                    {/* Conditionally render FaCheck or FaTimes */}
+                    {clickedStatus[index] ? (
+                      <div className="check-container">
+                        <FaCheck style={{ color: 'green', fontSize: '20px' }} />
+                      </div>
+                    ) : (
+                      <FaTimes
+                        style={{ color: 'red', cursor: 'pointer', fontSize: '20px' }}
+                        onClick={() => setClickedStatus(index)} // Toggle when clicked
+                      />
+                    )}
+                  </div>
+                </td>
+      
+                  {/*item.red_flag ? item.red_flag : "No Red Flags"*/}
 
               {/* Instructor Feedback Column */}
-              <td>
+              <td className="feedback-column">
                 <div className="email-body-container">
                   {item.instructor_feedback ? (
                     <>
@@ -108,13 +124,25 @@ function FetchPerformanceDetailed() {
               <tr className="body-row">
                 <td colSpan="5" style={{ backgroundColor: '#f9f9f9' }}>
                   <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.email_body || "Error fetching email body"
-                      }}
-                    />
+                    dangerouslySetInnerHTML={{
+                      __html: item.email_body || "Error fetching email body"
+                    }}
+                  />
+                  <td>                  
+                    <div>
+                      <p><strong>Opened:</strong> {item.opened ? "Yes" : "No"}</p>
+                      <p><strong>Link Clicked:</strong> {item.link_clicked ? "Yes" : "No"}</p>
+                      <p><strong>Replied:</strong> {item.replied ? "Yes" : "No"}</p>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="email-body-container">                   
+                      <strong>Red Flags:</strong> {item.red_flag ? item.red_flag : "No Red Flags"}                      
+                    </div>
+                  </td>
                 </td>
               </tr>
-            ) }
+            )}
           </React.Fragment>
 
         ))

@@ -106,10 +106,9 @@ const SidebarComponent = () => {
           <table className="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
             <thead>
               <tr>
-                <th>Interactions</th>
-                <th>Email Title</th>
-                <th>Red Flags</th>
-                <th>Instructor Feedback</th>
+                <th>Email Title  </th>
+                <th>Reviewed</th>
+                <th>Feedback</th>
               </tr>
             </thead>
             <tbody>
