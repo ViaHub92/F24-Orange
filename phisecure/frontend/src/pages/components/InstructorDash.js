@@ -11,6 +11,7 @@ import axios from 'axios';
 import DeleteCourseForm from './DeleteCourseForm';
 import CourseList from './CourseList';
 import LeaveFeedback from './LeaveFeedback';
+import PhishingAttackInstructor from './PhishingAttackInstructor';
 
 const InstructorDashboard = () => {
   const [studentName, setStudentName] = useState("Instructor");
@@ -143,8 +144,17 @@ const InstructorDashboard = () => {
        
         <hr />
 
+          {/* Phishing Attack Section */}
+          <div className="w3-container">
+            <h5>Phishing Attack</h5>
+            <PhishingAttackInstructor />
+          </div>
+
+
      {/* Feedback Section for a Specific Phishing Email */}
 <div className="w3-container">
+<h5>Leave Feedback</h5>
+
   <LeaveFeedback studentId={selectedStudentId} />
   </div>
 

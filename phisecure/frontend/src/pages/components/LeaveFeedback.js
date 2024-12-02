@@ -87,7 +87,7 @@ const LeaveFeedback = () => {
 
     return (
         <div>
-            <h2>Leave Feedback for Student Performance</h2>
+           
 
             {/* Select Course */}
             <select onChange={e => handleCourseChange(e.target.value)} value={selectedCourse?.course_name || ''}>
