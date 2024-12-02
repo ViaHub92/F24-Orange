@@ -56,7 +56,7 @@ function FetchPerformanceDetailed() {
               </td>
 
               {/* Email Subject Column */}
-              <td onClick={() => toggleBody(index)} style={{ cursor: 'pointer', color: 'blue' }}>
+              <td onClick={() => toggleBody(index)} style={{ cursor: 'pointer', color: 'black' }}>
                 <div className="email-body-container-subject">
                   {item.email_subject || "No Email Subject"}
                   <span className="tooltip">
@@ -107,7 +107,11 @@ function FetchPerformanceDetailed() {
             {openBody === index && (
               <tr className="body-row">
                 <td colSpan="5" style={{ backgroundColor: '#f9f9f9' }}>
-                  {item.email_body || "Error fetching email body"}
+                  <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.email_body || "Error fetching email body"
+                      }}
+                    />
                 </td>
               </tr>
             ) }
