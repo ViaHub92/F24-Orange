@@ -4,7 +4,7 @@ import { FaEnvelope, FaEnvelopeOpen, FaCheck, FaTimes } from 'react-icons/fa';
 
 function FetchPerformanceDetailed() {
   const [data, setData] = useState([]);
-  const [openRowIndex, setOpenRowIndex] = useState(null); // Track which row is open
+  const [openRowIndex, setOpenRowIndex] = useState(null); 
   const [openBody, setBodyIndex] = useState(null);
   const [clickedStatus, setClickedStatus] = useState([]);
 
@@ -16,6 +16,7 @@ function FetchPerformanceDetailed() {
       .then(data => {
         setData(data);
         console.log(data);  // Log data to ensure it has the right format        
+        console.log(data);  
       })
       .catch(error => console.error("Error fetching data: ", error));
   }, []);

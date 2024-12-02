@@ -10,6 +10,8 @@ import CreateCourseForm from './CreateCourseForm';
 import axios from 'axios';
 import DeleteCourseForm from './DeleteCourseForm';
 import CourseList from './CourseList';
+import LeaveFeedback from './LeaveFeedback';
+
 const InstructorDashboard = () => {
   const [studentName, setStudentName] = useState("Instructor");
   const [courseId, setCourseId] = useState("");
@@ -33,7 +35,9 @@ const InstructorDashboard = () => {
 
     fetchInstructorData();
   }, [instructorId]);
-
+  const studentId = localStorage.getItem('student_id');
+  const [selectedStudentId, setSelectedStudentId] = useState("");
+  
   const handleCourseIdChange = (e) => {
     const value = e.target.value;
 
@@ -42,6 +46,8 @@ const InstructorDashboard = () => {
       setCourseId(value);
     }
   };
+
+
 
   const fetchCourses = async () => {
     try {
@@ -130,22 +136,21 @@ const InstructorDashboard = () => {
             ))}
           </div>
         </div>
- {/* My Courses Section */}
- <CourseList /> {/* Use the CourseList component here */}
+            {/* My Courses Section */}
+             <CourseList /> 
        
 
        
         <hr />
 
-        {/* Customized Phishing Attacks Section */}
-        <div className="w3-container">
-          <h5>Customized Phishing Attacks</h5>
-          <p>Design phishing emails to simulate real-world scenarios for students.</p>
-          <textarea className="w3-input" placeholder="Enter custom phishing email content here..."></textarea>
-          <button className="w3-button w3-blue" style={{ marginTop: '10px' }}>Save Attack Template</button>
-        </div>
-        <hr />
+     {/* Feedback Section for a Specific Phishing Email */}
+<div className="w3-container">
+  <LeaveFeedback studentId={selectedStudentId} />
+  </div>
 
+
+
+      
         {/* Student Interaction Monitoring */}
         <div className="w3-container course-section">
           <h5>Student Interaction Monitoring</h5>
