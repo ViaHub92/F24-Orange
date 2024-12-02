@@ -5,28 +5,47 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const InstructorPerformance = ({ courseId }) => {
+const InstructorPerformance = () => {
+  const [courses, setCourses] = useState([]);
+  const [courseId, setCourseId] = useState(null);
   const [performanceData, setPerformanceData] = useState([]);
   const [error, setError] = useState(null);
 
+  // Fetch the list of courses when the component mounts
   useEffect(() => {
-    const fetchPerformanceData = async () => {
+    const fetchCourses = async () => {
       try {
-        const response = await axios.post(
-          `instructor_dashboard/get_class_performance_data/${courseId}`
-        );
-        setPerformanceData(response.data); 
-        setError(null); 
+        const response = await axios.get("/course/list_courses");
+        setCourses(response.data); // Set the course list
       } catch (err) {
-        setError(err.response?.data?.message || "Error fetching data");
-        setPerformanceData([]); 
+        setError("Error fetching courses");
       }
     };
 
-    if (courseId) {
-      fetchPerformanceData();
-    }
-  }, [courseId]);
+    fetchCourses();
+  }, []);
+
+  // Fetch the performance data whenever a course is selected
+  useEffect(() => {
+    const fetchPerformanceData = async () => {
+      if (!courseId) return; // Don't fetch if no course is selected
+
+      try {
+        const response = await axios.get(`instructor_dashboard/get_class_performance_data/${courseId}`);
+        setPerformanceData(response.data);
+        setError(null);
+      } catch (err) {
+        setError("Error fetching performance data");
+        setPerformanceData([]);
+      }
+    };
+
+    fetchPerformanceData();
+  }, [courseId]); // Trigger when courseId changes
+
+  const handleCourseChange = (e) => {
+    setCourseId(e.target.value); // Update courseId when user selects a course
+  };
 
   const chartData = {
     labels: performanceData.map((student) => student.student_name),
@@ -56,29 +75,29 @@ const InstructorPerformance = ({ courseId }) => {
         display: true,
         text: "Class Performance Overview",
         font: {
-          size: 20, 
+          size: 20,
         },
       },
       tooltip: {
         bodyFont: {
-          size: 16, 
+          size: 16,
         },
       },
     },
     scales: {
       y: {
-        min: 0,      
-        max: 20,     
+        min: 0,
+        max: 20,
         ticks: {
           font: {
-            size: 16,  
+            size: 16,
           },
         },
       },
       x: {
         ticks: {
           font: {
-            size: 14,  
+            size: 14,
           },
         },
       },
@@ -87,23 +106,30 @@ const InstructorPerformance = ({ courseId }) => {
 
   return (
     <div>
-      <h2>Class Performance Report</h2>
-      {error ? (
-        <p style={{ color: "red" }}>{error}</p>
-      ) : performanceData.length > 0 ? (
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      
+      <div>
+        <label htmlFor="course-select"></label>
+        <select id="course-select" onChange={handleCourseChange} value={courseId}>
+          <option value="">--Choose a Course--</option>
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.course_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {performanceData.length > 0 ? (
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          {/* Chart container */}
           <div style={{ width: "45%" }}>
             <Bar data={chartData} options={chartOptions} />
           </div>
-          
-
-
-          
-          
         </div>
+      ) : courseId ? (
+        <p>No performance data available for this course.</p>
       ) : (
-        <p>Enter a Course ID.</p>
+        <p>Please select a course to view performance data.</p>
       )}
     </div>
   );

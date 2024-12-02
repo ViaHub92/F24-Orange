@@ -3,26 +3,27 @@ import axios from 'axios';
 
 const CreateCourseForm = () => {
   const [courseName, setCourseName] = useState('');
-  const [instructorId, setInstructorId] = useState('');
   const [message, setMessage] = useState('');
+
+  // Retrieve the instructor's ID from localStorage
+  const instructorId = localStorage.getItem('instructor_id');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!courseName || !instructorId) {
-      setMessage('Please fill out all fields.');
+      setMessage('Please fill out all fields and ensure you are logged in.');
       return;
     }
 
     try {
       const response = await axios.post('course/create_course', {
         course_name: courseName,
-        instructor_id: instructorId,
+        instructor_id: instructorId, // Send instructorId directly from localStorage
       });
 
       if (response.status === 201) {
         setMessage('Course created successfully!');
         setCourseName('');
-        setInstructorId('');
       }
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error creating course.');
@@ -41,16 +42,6 @@ const CreateCourseForm = () => {
             id="courseName"
             value={courseName}
             onChange={(e) => setCourseName(e.target.value)}
-            className="w3-input"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="instructorId">Instructor ID:</label>
-          <input
-            type="text"
-            id="instructorId"
-            value={instructorId}
-            onChange={(e) => setInstructorId(e.target.value)}
             className="w3-input"
           />
         </div>

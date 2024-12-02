@@ -116,33 +116,20 @@ const InstructorDashboard = () => {
 
         {/* Create Course Section */}
         <div className="w3-container">
-          <h5>Create a Course</h5>
           <CreateCourseForm />
         </div>
         <hr />
 
-        {/* My Courses Section */}
-        <div>
-          <h3>My Courses</h3>
-          <div>
-            {courses.map((course) => (
-              <div key={course.id} className="course-item w3-container w3-border-bottom">
-                <p>{course.course_name}</p>
-                <DeleteCourseForm
-                  courseId={course.id}
-                  courseName={course.course_name}
-                  onDeleteSuccess={handleDeleteSuccess}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        
             {/* My Courses Section */}
+            <h3>My Courses</h3>
+
              <CourseList /> 
        
 
        
         <hr />
+        <h3>Student Interaction</h3>
 
           {/* Phishing Attack Section */}
           <div className="w3-container">
@@ -163,23 +150,10 @@ const InstructorDashboard = () => {
       
         {/* Student Interaction Monitoring */}
         <div className="w3-container course-section">
-          <h5>Student Interaction Monitoring</h5>
+          <h5>Class Performance Report</h5>
           <p>Monitor students' performance by selecting the course and viewing the reports below.</p>
 
-          {/* Course ID Selector */}
-          <div className="course-id-section">
-            <label htmlFor="courseId" className="course-label">Select Course:</label>
-            <input
-              type="text"
-              id="courseId"
-              value={courseId}
-              onChange={handleCourseIdChange}
-              className="w3-input course-input"
-              placeholder="Enter Course ID"
-              style={{ marginBottom: '10px' }}
-            />
-          </div>
-
+       
           {/* Display students for the selected course */}
           <InstructorPerformance courseId={courseId} />
         </div>
