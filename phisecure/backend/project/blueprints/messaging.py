@@ -105,17 +105,15 @@ def compose_email():
     return redirect(url_for('messaging.inbox', student_id=recipient_student.id))
 
 
-@messaging.route('/compose_phishing_email', methods=['POST'])
-def compose_phishing_email():
+@messaging.route('/compose_phishing_email/<int:student_id>', methods=['POST'])
+def compose_phishing_email(student_id):
     """
     Compose a phishing email by finding a matching template based on recipient tags
     and populating the template with recipient data. If no matching template is found,
     a "generic" template will be used instead.
     """
-    data = request.get_json()
-    recipient_id = data.get('recipient_id')
 
-    recipient = Student.query.get(recipient_id)
+    recipient = Student.query.get(student_id)
     if not recipient:
         return jsonify({'error': 'Recipient not found'}), 404
 
