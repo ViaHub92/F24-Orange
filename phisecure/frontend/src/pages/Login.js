@@ -20,8 +20,14 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('student_id', data.user_id);
-        navigate('/Dashboard');
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('role', data.role);
+
+        if (data.role === 'Student') {
+          navigate('/Dashboard');
+        } else if (data.role === 'Instructor') {
+          navigate('/DashboardInstructor');
+        }
       } else {
         setError(data.message || 'Invalid login credentials');
       }
@@ -30,7 +36,6 @@ function Login() {
       setError('An error occurred. Please try again.');
     }
   };
-
   return (
     <div>
       <meta charSet="UTF-8" />

@@ -120,12 +120,22 @@ def login():
     username = data.get('username')
     password = data.get('password')
     
+    # Check if user is a student
     student = Student.query.filter_by(username=username).first()
     if student and student.check_password(password):
         session['user_id'] = student.id
         session['role'] = 'Student'
         return jsonify({'message': 'Login successful', 'role': 'Student', 'user_id': student.id}), 200
+    
+    # Check if user is an instructor
+    instructor = Instructor.query.filter_by(username=username).first()
+    if instructor and instructor.check_password(password):
+        session['user_id'] = instructor.id
+        session['role'] = 'Instructor'
+        return jsonify({'message': 'Login successful', 'role': 'Instructor', 'user_id': instructor.id}), 200
+
     return jsonify({'message': 'Invalid credentials'}), 401
+
 
 #Get student data
 @account.route('/get_student/<int:student_id>', methods=['GET'])
@@ -144,9 +154,9 @@ def get_student(student_id):
         return jsonify({"message": "Student not found"}), 404
     
 #Get instructor data
-@account.route('/get_instructor/<username>', methods=['GET'])
-def get_instructor(username):
-    instructor = Instructor.query.filter_by(username=username).first()
+@account.route('/get_instructor/<int:instructor_id>', methods=['GET'])
+def get_instructor(instructor_id):
+    instructor = Instructor.query.filter_by(id=instructor_id).first()
     if instructor:
         serialized_courses = [
             {

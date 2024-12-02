@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { FaEnvelope } from "react-icons/fa";
@@ -15,6 +15,24 @@ const InstructorDashboard = () => {
   const [courseId, setCourseId] = useState("");
   const [courses, setCourses] = useState([]);
   const [showCourses, setShowCourses] = useState(false);
+  const instructorId = localStorage.getItem('user_id');
+
+  useEffect(() => {
+    const fetchInstructorData = async () => {
+      try {
+        const response = await axios.get(`/account/get_instructor/${instructorId}`);
+        const instructorData = response.data;
+        setStudentName(instructorData.first_name);
+        setCourses(instructorData.courses || []);
+        setShowCourses(true);
+      } catch (error) {
+        console.error("Error fetching instructor data:", error);
+        setShowCourses(false);
+      }
+    };
+
+    fetchInstructorData();
+  }, [instructorId]);
 
   const handleCourseIdChange = (e) => {
     const value = e.target.value;
