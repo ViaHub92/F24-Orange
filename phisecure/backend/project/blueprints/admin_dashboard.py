@@ -68,7 +68,7 @@ def email_date_total_report(rdate):
         return jsonify({"message": "No students found"}), 404
 
 #Get statistics from student profiles
-@admin_dashboard.route('/student_comparison_report', methods=['POST'])
+@admin_dashboard.route('/student_comparison_report', methods=['GET'])
 def student_comparison_report():
     students = Student.query.all()
     if students:
@@ -82,34 +82,32 @@ def student_comparison_report():
         
         #For each tag, get the percentage of how much they appear in student profiles and append them to percentages
         for tag in tags:
-            for student_profile in student_profiles:
-                temp = StudentProfile.query.filter(StudentProfile.tags.any(str(tag))).all()
-                percentages.append(len(temp)/len(student_profiles))
-                temp = []
+            
+                temp = StudentProfile.query.filter(StudentProfile.tags.any(name=tag)).all()
+                percentages.append(round((len(temp)/len(student_profiles))* 100, 2))
         res = {tags[i]: percentages[i] for i in range(len(tags))}
         return jsonify(res), 200
     else:
-        return jsonify({"message", "No students found"}), 404
+        return jsonify({"message": "No students found"}), 404
 
 #Get statistics from student profiles based on major
-@admin_dashboard.route('/student_comparison_major_report', methods=['POST'])
+@admin_dashboard.route('/student_comparison_major_report/<string:major>', methods=['GET'])
 def student_comparison_major_report(major):
     students = Student.query.all()
     if students:
         #Grab the data needed for analysis
         percentages = []
-        student_ids = [student.id for student in students.students]
-        student_profiles = StudentProfile.query.filter(StudentProfile.student_id.in_(student_ids)).all()
+        student_ids = [student.id for student in students]
+        student_profiles = StudentProfile.query.filter(StudentProfile.student_id.in_(student_ids), StudentProfile.major == major).all()
         tags = [tag.name for profile in student_profiles for tag in profile.tags]
         amntOfStudents = len(student_profiles)
         tags = list(set(tags))
         
         #For each tag, get the percentage of how much they appear in student profiles and append them to percentages
         for tag in tags:
-            for student_profile in student_profiles:
-                temp = StudentProfile.query.filter(StudentProfile.tags.contains(tag)).all()
-                percentages.append(len(temp)/len(student_profiles))
-                temp = []
+                temp = StudentProfile.query.filter(StudentProfile.tags.any(name=tag), StudentProfile.major == major).all()
+                percentages.append(round((len(temp)/len(student_profiles))* 100, 2))
+                
         res = {tags[i]: percentages[i] for i in range(len(tags))}
         return jsonify(res), 200
     else:
