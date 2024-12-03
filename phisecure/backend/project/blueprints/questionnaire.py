@@ -234,7 +234,11 @@ def submit_response(student_id):
         
         db.session.commit()
         
-        return jsonify(new_response.serialize()), 200
+        return jsonify({
+            "status": "success",
+            "message": "Your responses have been submitted successfully!",
+            "response": new_response.serialize()
+        }), 200
     
 @questionnaire.route("/questions/<question_id>", methods=["PUT"])
 def update_question(question_id):

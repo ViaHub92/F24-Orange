@@ -58,6 +58,7 @@ const ViewQuestionnaire = () => {
             } else {
                 const result = await response.json();
                 console.log('Success:', result);
+                alert(result.message);
             }
         } catch (error) {
             console.error('Fetch error:', error);
