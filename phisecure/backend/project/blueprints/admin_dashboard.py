@@ -24,7 +24,18 @@ def get_tags():
         tags = list(set(tags))
         return jsonify(tags), 200
     else:
-        return jsonify({"message": "No students found"}), 404
+        return jsonify({"message": "No tags found"}), 404
+    
+#Grab all the majors currently in the database
+@admin_dashboard.route('/get_majors', methods=['GET'])
+def get_majors():
+    student_profiles = StudentProfile.query.all()
+    if student_profiles:
+        majors = [student_profile.major for student_profile in student_profiles]
+        majors = list(set(majors))
+        return jsonify(majors), 200
+    else:
+        return jsonify({"message": "No student profiles found"}), 404
 
 #Get the amount of emails sent in total, and which ones performed the best and worst
 @admin_dashboard.route('/email_total_report', methods=['POST'])
