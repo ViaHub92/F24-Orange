@@ -8,6 +8,7 @@ import 'w3-css/w3.css';
 import FetchPerformanceSummary from './FetchPerformanceSummary';
 import FetchPerformanceDetailed from './FetchPerformanceDetailed';
 import axios from "axios";
+import Logout from './Logout';
 
 const SidebarComponent = () => {
   const [studentName, setStudentName] = useState("Loading...");
@@ -70,6 +71,7 @@ const SidebarComponent = () => {
           <Link to="/settings" className="w3-bar-item w3-button w3-padding">
             <i className="fa fa-cog"></i> Settings
           </Link>
+          <Logout />  
         </div>
       </nav>
 

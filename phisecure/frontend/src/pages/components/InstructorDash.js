@@ -12,6 +12,7 @@ import DeleteCourseForm from './DeleteCourseForm';
 import CourseList from './CourseList';
 import LeaveFeedback from './LeaveFeedback';
 import PhishingAttackInstructor from './PhishingAttackInstructor';
+import Logout from './Logout';
 
 const InstructorDashboard = () => {
   const [studentName, setStudentName] = useState("Instructor");
@@ -105,6 +106,7 @@ const InstructorDashboard = () => {
           <Link to="/settings" className="w3-bar-item w3-button w3-padding">
             <i className="fa fa-cog"></i> Settings
           </Link>
+          <Logout />  
         </div>
       </nav>
 

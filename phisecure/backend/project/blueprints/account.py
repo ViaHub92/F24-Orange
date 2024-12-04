@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, session
-from backend.project import db
+from backend.project import db, login_manager
+from flask_login import login_user
+from flask_login import logout_user
 from database.models.student import Student
 from database.models.instructor import Instructor
 from database.models.course import Course
@@ -9,6 +11,10 @@ from database.models.admin import Admin
 
 account = Blueprint('account', __name__)
 
+@login_manager.user_loader
+def load_user(user_id):
+    user = Student.query.get(int(user_id)) or Instructor.query.get(int(user_id))
+    return user
 #Create a new student
 @account.route('/create_student', methods=['POST'])
 def create_student():
@@ -123,8 +129,7 @@ def login():
     # Check if user is a student
     student = Student.query.filter_by(username=username).first()
     if student and student.check_password(password):
-        session['user_id'] = student.id
-        session['role'] = 'Student'
+        login_user(student)
         return jsonify({'message': 'Login successful', 'role': 'Student', 'user_id': student.id}), 200
     
     # Check if user is an instructor
@@ -136,6 +141,10 @@ def login():
 
     return jsonify({'message': 'Invalid credentials'}), 401
 
+@account.route('/logout', methods=['POST'])
+def logout():
+    logout_user()
+    return jsonify({'message': 'Logged out successfully'}), 200
 
 #Get student data
 @account.route('/get_student/<int:student_id>', methods=['GET'])

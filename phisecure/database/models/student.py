@@ -2,10 +2,11 @@
 """
 from backend.project import db
 from flask_bcrypt import Bcrypt
+from flask_login import UserMixin
 
 bcrypt = Bcrypt()
 
-class Student(db.Model):
+class Student(UserMixin,db.Model):
     """
     Represents a student user in the database.
     
