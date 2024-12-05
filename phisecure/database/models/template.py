@@ -141,6 +141,8 @@ class Tag(db.Model):
     name = db.Column(db.String(120), nullable=False, unique=True)
     templates = relationship("Template", secondary="template_tags", back_populates="tags")
     student_profiles = relationship("StudentProfile", secondary="student_profile_tags", back_populates="tags")
+    peer_phishing_templates = relationship("PeerPhishingTemplate", secondary="peer_phishing_template_tags", back_populates="tags")
+    
 
     
 class StudentProfile(db.Model):
@@ -414,5 +416,63 @@ class StudentProfileTag(db.Model):
         """
         return {
             'student_profile_id': self.student_profile_id,
+            'tag_id': self.tag_id
+        }
+
+class PeerPhishingTemplate(db.Model):
+    """
+    Represents a phishing template that is sent by a student to another student
+    
+    Args:
+        db (_type_): _description_
+    """
+    __tablename__ = "peer_phishing_templates"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False, unique=True, index=True)
+    description = db.Column(db.String(400), nullable=False)
+    category = db.Column(db.String(250))
+    difficulty_level = db.Column(Enum(DifficultyLevel), nullable=False)
+    sender_template = db.Column(db.String(120), nullable=False)
+    subject_template = db.Column(db.String(120), nullable=False)
+    body_template = db.Column(db.Text, nullable=False)
+    link = db.Column(db.String(100))
+    template_redflag=db.Column(db.Text, nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+    
+    phishing_emails = db.relationship("PhishingEmail", back_populates="template", lazy=True)
+    tags = db.relationship("Tag", secondary="peer_phishing_template_tags", back_populates="peer_phishing_templates")
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'category': self.category,
+            'difficulty_level': self.difficulty_level.value,
+            'sender_template': self.sender_template,
+            'subject_template': self.subject_template,
+            'body_template': self.body_template,
+            'link': self.link, 
+            'template_redflag': self.template_redflag,
+            'created_by': self.created_by
+        }
+
+
+class PeerPhishingTemplateTags(db.Model):
+    """Association table for many-to-many relationship between PeerPhishingTemplate and Tag
+
+    Args:
+        db (_type_): _description_
+    """
+    __tablename__ = "peer_phishing_template_tags"
+    template_id = db.Column(db.Integer, db.ForeignKey('peer_phishing_templates.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+    
+    def serialize(self):
+        """
+        Convert model of a peer phishing template tag into a serializable dictionary
+        """
+        return {
+            'template_id': self.template_id,
             'tag_id': self.tag_id
         }
