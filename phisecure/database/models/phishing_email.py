@@ -31,10 +31,12 @@ class PhishingEmail(db.Model):
     instructor_feedback = db.Column(db.Text, nullable=True)
     inbox_id = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)
     template_id = db.Column(db.Integer, db.ForeignKey("phishing_templates.id"), nullable=False)
+    peer_phishing_template_id = db.Column(db.Integer, db.ForeignKey("peer_phishing_templates.id"), nullable=True)
+    
     #Attribute of the PhishingEmail model. it is deinfed using the relationship function that creates a realationship with user interaction model
     interactions = db.relationship("UserInteraction", back_populates="phishing_email")
     template = db.relationship("Template", back_populates="phishing_emails")
-    peer_phishing_templates = db.relationship("PeerPhishingTemplate", back_populates="phishing_emails")
+    peer_phishing_template = db.relationship("PeerPhishingTemplate", back_populates="phishing_emails")
     
     @classmethod
     def calculate_interactions_per_email(cls):

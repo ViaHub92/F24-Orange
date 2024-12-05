@@ -8,6 +8,7 @@ from backend.config import TestConfig
 from datetime import datetime, timezone
 
 
+
 @pytest.fixture(scope='session')
 def app():
     app = create_app(TestConfig)

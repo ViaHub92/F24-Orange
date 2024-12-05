@@ -162,6 +162,7 @@ class StudentProfile(db.Model):
     attention_to_detail = db.Column(db.String(120), nullable=False)
     tags = relationship("Tag", secondary="student_profile_tags", back_populates="student_profiles")
     responses = relationship("Response", back_populates="student_profile")
+    target_list = db.relationship("TargetList", back_populates="student_profile")
     
     def serialize(self):
         """
@@ -439,7 +440,7 @@ class PeerPhishingTemplate(db.Model):
     template_redflag=db.Column(db.Text, nullable=True)
     created_by = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
     
-    phishing_emails = db.relationship("PhishingEmail", back_populates="template", lazy=True)
+    phishing_emails = db.relationship("PhishingEmail", back_populates="peer_phishing_template", lazy=True)
     tags = db.relationship("Tag", secondary="peer_phishing_template_tags", back_populates="peer_phishing_templates")
     
     def serialize(self):
