@@ -458,6 +458,7 @@ class PeerPhishingTemplate(db.Model):
         }
 
 
+
 class PeerPhishingTemplateTags(db.Model):
     """Association table for many-to-many relationship between PeerPhishingTemplate and Tag
 
@@ -475,4 +476,26 @@ class PeerPhishingTemplateTags(db.Model):
         return {
             'template_id': self.template_id,
             'tag_id': self.tag_id
+        }
+
+class TargetList(db.Model):
+    """ Represents a list of targets for a phishing campaign
+
+    Args:
+        db (_type_): _description_
+    """
+    __tablename__ = "target_lists"
+    id = db.Column(db.Integer, primary_key=True)
+    student_profile_id = db.Column(db.Integer, db.ForeignKey('student_profiles.id'), nullable=False)
+    
+    student_profile = db.relationship("StudentProfile", back_populates="target_list")
+    
+    def serialize(self):
+        """
+        serialize the target list model
+        
+        """
+        return {
+            'id': self.id,
+            'student_profile_id': self.student_profile_id
         }
