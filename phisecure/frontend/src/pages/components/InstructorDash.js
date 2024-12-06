@@ -110,56 +110,47 @@ const InstructorDashboard = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="w3-main" style={{ marginLeft: '300px', marginTop: '43px' }}>
-        <header className="w3-container" style={{ paddingTop: '18px' }}>
-          <h5><b><i className="fa fa-dashboard"></i> Instructor Dashboard</b></h5>
-        </header>
+  <header className="w3-container" style={{ paddingTop: '18px' }}>
+    <h5><b><i className="fa fa-dashboard"></i> Instructor Dashboard</b></h5>
+  </header>
 
-        {/* Create Course Section */}
-        <div className="w3-container">
-          <CreateCourseForm />
-        </div>
-        <hr />
+  {/* Main Layout */}
+  <div className="dashboard-container">
+    {/* Row 1: Create Course and List Courses */}
+    <div className="dashboard-row">
+      <div className="dashboard-item">
+        <h5>Create Course</h5>
+        <CreateCourseForm />
+      </div>
+      <div className="dashboard-item">
+        <h5>My Courses</h5>
+        <CourseList courses={courses} />
+      </div>
+    </div>
 
-        
-            {/* My Courses Section */}
-            <h3>My Courses</h3>
+    {/* Row 2: Phishing Attack and Leave Feedback */}
+    <div className="dashboard-row">
+      <div className="dashboard-item">
+        <h5>Phishing Attack</h5>
+        <PhishingAttackInstructor />
+      </div>
+      <div className="dashboard-item">
+        <h5>Leave Feedback</h5>
+        <LeaveFeedback studentId={selectedStudentId} />
+      </div>
+    </div>
 
-             <CourseList /> 
-       
-
-       
-        <hr />
-        <h3>Student Interaction</h3>
-
-          {/* Phishing Attack Section */}
-          <div className="w3-container">
-            <h5>Phishing Attack</h5>
-            <PhishingAttackInstructor />
-          </div>
-
-
-     {/* Feedback Section for a Specific Phishing Email */}
-<div className="w3-container">
-<h5>Leave Feedback</h5>
-
-  <LeaveFeedback studentId={selectedStudentId} />
+    {/* Row 3: Class Performance */}
+    <div className="dashboard-row single-item">
+      <div className="dashboard-item">
+        <h5>Class Performance Report</h5>
+        <InstructorPerformance courseId={courseId} />
+      </div>
+    </div>
   </div>
+</main>
 
-
-
-      
-        {/* Student Interaction Monitoring */}
-        <div className="w3-container course-section">
-          <h5>Class Performance Report</h5>
-          <p>Monitor students' performance by selecting the course and viewing the reports below.</p>
-
-       
-          {/* Display students for the selected course */}
-          <InstructorPerformance courseId={courseId} />
-        </div>
-      </main>
 
       {/* Footer */}
       <footer className="w3-container w3-padding-16 w3-center">

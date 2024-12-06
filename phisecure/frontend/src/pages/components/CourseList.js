@@ -8,11 +8,9 @@ const CourseList = () => {
 
   const fetchCourses = async () => {
     if (showCourses) {
-      // Hide courses if currently visible
       setShowCourses(false);
     } else {
       try {
-        // Fetch courses if not already shown
         const response = await axios.get('course/list_courses');
         setCourses(response.data);
         setShowCourses(true);
@@ -35,17 +33,13 @@ const CourseList = () => {
         {showCourses ? 'Hide Courses' : 'Show Courses'}
       </button>
       {showCourses && (
-        <div className="w3-row-padding" style={{ marginTop: '20px' }}>
+        <div className="courses-grid">
           {courses.length > 0 ? (
             <>
               <h6>Available Courses:</h6>
-              <div className="w3-row">
+              <div className="grid-container">
                 {courses.map((course) => (
-                  <div
-                    key={course.id}
-                    className="w3-col s12 m6 l4"
-                    style={{ marginBottom: '15px' }}
-                  >
+                  <div key={course.id} className="grid-item">
                     <div className="w3-card-4">
                       <header className="w3-container w3-blue">
                         <h5>{course.course_name}</h5>
@@ -74,5 +68,6 @@ const CourseList = () => {
     </div>
   );
 };
+
 
 export default CourseList;
