@@ -500,3 +500,28 @@ class TargetList(db.Model):
             'id': self.id,
             'student_profile_id': self.student_profile_id
         }
+        
+    @classmethod
+    def filter_available_peer_phishing_targets(cls):
+        """
+        Filter the target list to only include students who have not been 
+        recipients of a phishing email created by a peer phishing template.
+        
+        Returns:
+            list: A list of TargetList objects representing student profiles that are available as targets.
+        """
+        targeted_recipients_subquery = (
+            db.session.query(PhishingEmail.recipient)
+            .filter(PhishingEmail.peer_phishing_template_id.isnot(None))
+            .subquery()
+        )
+        
+        # Filter available targets
+        available_targets = (
+            db.session.query(cls)
+            .join(StudentProfile)
+            .filter(~StudentProfile.email_used_for_platforms.in_(targeted_recipients_subquery))
+            .all()
+        )
+        
+        return available_targets

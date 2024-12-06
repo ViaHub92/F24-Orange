@@ -134,3 +134,13 @@ def test_query_target_list(db_session, init_database):
     assert student_profile.employer == "Tech Corp"
     assert student_profile.risk_level == "Medium"
     assert student_profile.attention_to_detail == "High"
+
+def test_filter_available_peer_phishing_targets(db_session, init_database):
+   
+   available_targets = TargetList.filter_available_peer_phishing_targets()
+   
+   assert available_targets is not None
+   assert len(available_targets) == 1
+   target_student_profile_id = init_database["student_profile_id"]
+   target_found = any(target.student_profile_id == target_student_profile_id for target in available_targets)
+   assert target_found
