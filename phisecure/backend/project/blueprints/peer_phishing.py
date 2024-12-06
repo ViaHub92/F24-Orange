@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import IntegrityError
 from backend.project import db
-from database.models.template import PeerPhishingTemplate,TargetList, PeerPhishingTemplateTags, PhishingEmail
+from database.models.template import PeerPhishingTemplate,TargetList, PeerPhishingTemplateTags, PhishingEmail, StudentProfile
 from database.models.course import Course
+from database.models.inbox import Inbox
+from database.models.student import Student
 
 peer_phishing = Blueprint('peer_phishing', __name__)
 
@@ -92,13 +94,31 @@ def create_and_send_phishing_email():
             db.session.rollback()
             return jsonify({'error': 'Target not found or unavailable'}), 404
         
+        # Retrieve the student's profile using the target's student_profile
+        student_profile = StudentProfile.query.filter_by(id=target.student_profile.id).first()
+        if not student_profile:
+            db.session.rollback()
+            return jsonify({'error': 'Student profile not found'}), 404
+        
+        # Retrieve the student's inbox using the student_profile's student_id
+        student = Student.query.filter_by(id=student_profile.student_id).first()
+        if not student:
+            db.session.rollback()
+            return jsonify({'error': 'Student not found'}), 404
+        
+        recipient_inbox = Inbox.query.filter_by(id=student.inbox_id).first()
+        if not recipient_inbox:
+            db.session.rollback()
+            return jsonify({'error': 'Inbox not found for student'}), 404
+        
         # Create and send the phishing email
         phishing_email = PhishingEmail(
             sender=new_template.sender_template,
             recipient=target.student_profile.email_used_for_platforms,
             subject=new_template.subject_template,
             body=new_template.body_template,
-            peer_phishing_template_id=new_template.id
+            peer_phishing_template_id=new_template.id,
+            inbox_id=recipient_inbox.id
         )
         db.session.add(phishing_email)
         db.session.commit()
@@ -113,9 +133,10 @@ def create_and_send_phishing_email():
             },
             'message': 'Phishing template created and email sent successfully'
         }), 201
-    except IntegrityError:
+    except IntegrityError as e:
+        print("IntegrityError:", str(e))
         db.session.rollback()
-        return jsonify({'error': 'Template name must be unique'}), 400
+        return jsonify({'error': 'Template Integrity Error'}), 400
     except KeyError as e:
         return jsonify({'error': f'Missing field: {str(e)}'}), 400
     except Exception as e:
