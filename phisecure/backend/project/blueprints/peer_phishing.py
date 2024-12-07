@@ -85,7 +85,7 @@ def create_and_send_phishing_email():
             created_by=data['created_by']
         )
         db.session.add(new_template)
-        db.session.flush()  # Ensure the template gets an ID before sending email
+        db.session.flush()
         
         # Validate the target
         target_id = data['target_id']
@@ -121,6 +121,9 @@ def create_and_send_phishing_email():
             inbox_id=recipient_inbox.id
         )
         db.session.add(phishing_email)
+        db.session.commit()
+        
+        db.session.delete(target)
         db.session.commit()
         
         return jsonify({
