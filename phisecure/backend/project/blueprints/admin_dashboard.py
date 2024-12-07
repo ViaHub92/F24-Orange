@@ -8,7 +8,7 @@ from database.models.role import Role
 from database.models.inbox import Inbox
 from database.models.phishing_email import PhishingEmail
 from database.models.user_interaction import UserInteraction
-from database.models.template import StudentProfile
+from database.models.template import StudentProfile, Template
 from datetime import datetime, timezone
 
 admin_dashboard = Blueprint('admin_dashboard', __name__)
@@ -42,6 +42,7 @@ def get_majors():
 def email_total_report():
     students = Student.query.all()
     if students:
+        #First, get the total amount of emails
         for student in students:
             email_total = 0
             inbox_emails = Email.query.filter_by(recipient=student.email).all()
@@ -50,8 +51,32 @@ def email_total_report():
                 email_total += 1
             for email in inbox_phishing_emails:
                 email_total += 1
+        
+        '''
+        #Now, let's get the best and worst phishing template
+        phishing_emails = PhishingEmail.query.all()
+
+        if not phishing_emails:
+            return jsonify({"error": "No phishing emails found for this course"}), 404
+    
+        rates = Template.calculate_interaction_rate()
+    
+        if not rates:
+            return jsonify({"error": "No interaction data available for the templates"}), 404
+    
+        most_successful_template = max(rates, key=lambda x: (x['open_rate'], x['click_rate'], x['reply_rate']))
+        least_successful_template = min(rates, key=lambda x: (x['open_rate'], x['click_rate'], x['reply_rate']))
+    
+        template1 = Template.query.get(most_successful_template['template_id'])
+        template2 = Template.query.get(least_successful_template['template_id'])
+    
+        if not template1 or not template2:
+            return jsonify({"error": "Template not found"}), 404
+        '''
         report = {
-            "Total Emails": email_total
+            "Total Emails": email_total,
+            #"Most Successful Template": template1,
+            #"Least Successful Template": template2
         }
         return jsonify(report), 200
     else:
@@ -116,8 +141,8 @@ def student_comparison_major_report(major):
         
         #For each tag, get the percentage of how much they appear in student profiles and append them to percentages
         for tag in tags:
-                temp = StudentProfile.query.filter(StudentProfile.tags.any(name=tag), StudentProfile.major == major).all()
-                percentages.append(round((len(temp)/len(student_profiles))* 100, 2))
+            temp = StudentProfile.query.filter(StudentProfile.tags.any(name=tag), StudentProfile.major == major).all()
+            percentages.append(round((len(temp)/len(student_profiles))* 100, 2))
                 
         res = {tags[i]: percentages[i] for i in range(len(tags))}
         return jsonify(res), 200
