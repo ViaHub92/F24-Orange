@@ -30,7 +30,7 @@ class PhishingEmail(db.Model):
     red_flag = db.Column(db.Text, nullable=True)
     instructor_feedback = db.Column(db.Text, nullable=True)
     inbox_id = db.Column(db.Integer, db.ForeignKey("inbox.id"), nullable=False)
-    template_id = db.Column(db.Integer, db.ForeignKey("phishing_templates.id"), nullable=False)
+    template_id = db.Column(db.Integer, db.ForeignKey("phishing_templates.id"), nullable=True)
     peer_phishing_template_id = db.Column(db.Integer, db.ForeignKey("peer_phishing_templates.id"), nullable=True)
     
     #Attribute of the PhishingEmail model. it is deinfed using the relationship function that creates a realationship with user interaction model
