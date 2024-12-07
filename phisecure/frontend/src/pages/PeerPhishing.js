@@ -1,4 +1,5 @@
 import { Chart } from "react-google-charts";
+import React, { useState } from 'react';
 
 export const data = [
   ["Name", "Class ID", "Approved"],
@@ -14,6 +15,30 @@ export const options = {
   legend: { position: "bottom" },
   pageSize: 5,
 };
+
+function DropdownMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div>
+      <button onClick={toggleDropdown} className="dropdown-button">
+        Select Option
+      </button>
+
+      {isOpen && (
+        <ul className="dropdown-menu">
+          <li className="dropdown-item">Option 1</li>
+          <li className="dropdown-item">Option 2</li>
+          <li className="dropdown-item">Option 3</li>
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export function PeerPhishing() {
   return (

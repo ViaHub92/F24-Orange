@@ -27,7 +27,7 @@
 
 2. Adjust the FLASK_APP environment variable with this command
    ```bash
-    export FLASK_APP=backend.project:create_app
+export FLASK_APP=backend.project:create_app
    ```
 
 3. Use flask run command
