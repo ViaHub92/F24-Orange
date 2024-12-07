@@ -8,6 +8,7 @@ from database.models.course import Course
 from database.models.role import Role
 from database.models.inbox import Inbox
 from database.models.admin import Admin
+from database.models.template import StudentProfile
 
 account = Blueprint('account', __name__)
 
@@ -149,15 +150,19 @@ def logout():
 #Get student data
 @account.route('/get_student/<int:student_id>', methods=['GET'])
 def get_student(student_id):
-    student = Student.query.filter_by(id=student_id).first()
+    student = db.session.query(Student, StudentProfile).join(
+        StudentProfile, Student.id == StudentProfile.student_id
+    ).filter(Student.id == student_id).first()
     if student:
+        student_data, profile_data = student
         return jsonify({
-            "id": student.id,
-            "username": student.username,
-            "email": student.email,
-            "first_name": student.first_name,
-            "last_name": student.last_name,
-            "course_id": student.course_id
+            "id": student_data.id,
+            "username": student_data.username,
+            "email": student_data.email,
+            "first_name": student_data.first_name,
+            "last_name": student_data.last_name,
+            "course_id": student_data.course_id,
+            "student_profile_id": profile_data.id
         }), 200
     else:
         return jsonify({"message": "Student not found"}), 404

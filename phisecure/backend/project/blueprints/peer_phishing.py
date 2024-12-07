@@ -49,22 +49,65 @@ def fill_target_list(course_id):
 @peer_phishing.route('/target-list', methods=['GET'])
 def get_target_list():
     """
-    Fetches and returns all entries in the TargetList.
-
+    Fetches and returns all entries in the TargetList with student_id.
+    
     Returns:
         JSON response containing the serialized target list.
     """
     try:
-        # Query all target list entries
-        target_list_entries = TargetList.query.all()
+        # Query all target list entries with associated student data
+        target_list_entries = db.session.query(TargetList, Student).join(
+            StudentProfile, TargetList.student_profile_id == StudentProfile.id
+        ).join(
+            Student, StudentProfile.student_id == Student.id
+        ).all()
 
         # Serialize the results
-        serialized_list = [entry.serialize() for entry in target_list_entries]
+        serialized_list = [{
+            "target_list_id": entry[0].id,
+            "student_id": entry[1].id,  # Student ID
+            "student_profile_id": entry[0].student_profile_id
+        } for entry in target_list_entries]
 
         return jsonify(serialized_list), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@peer_phishing.route('/target-list/course/<int:course_id>', methods=['GET'])
+def get_targets_by_course(course_id):
+    """
+    Fetches and returns all targets for a given course.
+    
+    Args:
+        course_id (int): ID of the course to fetch targets for.
+        
+    Returns:
+        JSON response containing the list of targets for the course, 
+        including student names and their actual IDs.
+    """
+    try:
+        targets = (
+            db.session.query(TargetList, StudentProfile, Student)
+            .join(StudentProfile, TargetList.student_profile_id == StudentProfile.id)
+            .join(Student, StudentProfile.student_id == Student.id)
+            .filter(Student.course_id == course_id)
+            .all()
+        )
+        
+        serialized_targets = [
+        {
+            'target_list_id': target[0].id,
+            'student_id': target[2].id,
+            'student_name': f"{target[2].first_name} {target[2].last_name}",
+        }
+        for target in targets
+    ]
+        return jsonify(serialized_targets), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 
 @peer_phishing.route('/create-and-send', methods=['POST'])
 def create_and_send_phishing_email():
