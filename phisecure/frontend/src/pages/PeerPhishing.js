@@ -104,9 +104,9 @@ const PeerPhishing = () => {
                 </div>
             )}
 
-            {/* Draft.js Editor for the email body */}
+            {/* react-draft-wysiwyg Editor for the email body */}
             <div>
-                <h3>Email Body:</h3>
+                <h3>Phishing Email:</h3>
                 <Editor
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}  // Handle editor state changes
