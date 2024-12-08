@@ -13,6 +13,7 @@ import CourseList from './CourseList';
 import LeaveFeedback from './LeaveFeedback';
 import PhishingAttackInstructor from './PhishingAttackInstructor';
 import Logout from './Logout';
+import FillTargetList from './FillTargetList';
 
 const InstructorDashboard = () => {
   const [studentName, setStudentName] = useState("Instructor");
@@ -141,7 +142,22 @@ const InstructorDashboard = () => {
       </div>
     </div>
 
-    {/* Row 3: Class Performance */}
+{/* Row 3: Target List */}
+<div className="dashboard-row">
+  <div className="dashboard-item">
+    <h5></h5>
+    <FillTargetList courseId={courseId} />
+
+  </div>
+</div>
+
+
+
+
+
+
+
+    {/* Row 4: Class Performance */}
     <div className="dashboard-row single-item">
       <div className="dashboard-item">
         <h5>Class Performance Report</h5>
@@ -149,6 +165,10 @@ const InstructorDashboard = () => {
       </div>
     </div>
   </div>
+
+
+
+
 </main>
 
 

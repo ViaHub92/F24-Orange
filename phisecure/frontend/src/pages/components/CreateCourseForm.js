@@ -45,7 +45,7 @@ const CreateCourseForm = ({ onCourseCreated }) => {
             placeholder="Enter course name"
           />
         </div>
-        <button type="submit" className="w3-button w3-blue w3-round">
+        <button type="submit" className="w3-button w3-green w3-round">
           Create Course
         </button>
       </form>
