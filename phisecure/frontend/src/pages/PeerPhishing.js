@@ -1,70 +1,134 @@
-import { Chart } from "react-google-charts";
 import React, { useState } from 'react';
+import axios from 'axios';
+import { EditorState } from 'draft-js';
+import 'draft-js/dist/Draft.css'; // Make sure to include the CSS
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-export const data = [
-  ["Name", "Class ID", "Approved"],
-  ["Barnes, Ethan", { v: 54631, f: "54631" }, true],
-  ["Engaro, Meat", { v: 8000, f: "8000" }, false],
-  ["Milhouse, Tricky", { v: 54631, f: "54631" }, true],
-  ["Wrong, Hany", { v: 54631, f: "54631" }, true],
-];
+const PeerPhishing = () => {
+    const [courseId, setCourseId] = useState('');
+    const [targets, setTargets] = useState([]);
+    const [selectedTargetId, setSelectedTargetId] = useState(null);
+    const [editorState, setEditorState] = useState(EditorState.createEmpty()); 
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
 
-export const options = {
-  title: "Peer Phishing",
-  curveType: "function",
-  legend: { position: "bottom" },
-  pageSize: 5,
+    // Fetch the target list for a given course ID
+    const fetchTargets = async () => {
+        if (!courseId) return;
+
+        try {
+            const response = await axios.get(`/target-list/course/${courseId}`);
+            if (response.data.error) {
+                setError(response.data.error);
+                setTargets([]);
+            } else {
+                setTargets(response.data);
+                setError('');
+            }
+        } catch (error) {
+            setError(error.response ? error.response.data.error : 'An error occurred while fetching targets');
+            setTargets([]);
+        }
+    };
+
+    // Handle course ID input change
+    const handleInputChange = (event) => {
+        setCourseId(event.target.value);
+    };
+
+    // Handle selecting a target from the list
+    const handleSelectTarget = (targetId) => {
+        setSelectedTargetId(targetId);
+        setMessage('');
+        setError('');
+    };
+
+    const handleEditorChange = (state) => {
+      setEditorState(state);
+    };
+
+    // Handle creating and sending phishing email for selected target
+    const handleCreateAndSend = async () => {
+        if (!selectedTargetId) {
+            setError('Please select a target.');
+            return;
+        }
+
+        // Get the email body from the editor
+        const emailBody = editorState.getCurrentContent().getPlainText(); // Convert the editor content to plain text
+
+        try {
+            const response = await axios.post('/create-and-send', {
+                target_id: selectedTargetId,
+                body_template: emailBody, // Include the email body in the POST request
+            });
+            setMessage(response.data.message);  // Assuming success message is returned
+            setError('');
+        } catch (error) {
+            setError(error.response ? error.response.data.error : 'An error occurred while sending the phishing email.');
+            setMessage('');
+        }
+    };
+
+    return (
+        <div>
+            <h2>Fill Target List</h2>
+
+            {/* Input for courseId */}
+            <div>
+                <label htmlFor="courseId">Course ID:</label>
+                <input
+                    type="number"
+                    id="courseId"
+                    value={courseId}
+                    onChange={handleInputChange}
+                    placeholder="Enter Course ID"
+                />
+                <button onClick={fetchTargets}>Fetch Targets</button>
+            </div>
+
+            {/* Display targets for the selected course */}
+            {targets.length > 0 && (
+                <div>
+                    <h3>Select a Target</h3>
+                    <ul>
+                        {targets.map((target) => (
+                            <li key={target.target_list_id}>
+                                <button onClick={() => handleSelectTarget(target.target_list_id)}>
+                                    {target.student_name} (ID: {target.student_id})
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {/* Draft.js Editor for the email body */}
+            <div>
+                <h3>Email Body:</h3>
+                <Editor
+                editorState={editorState}
+                onEditorStateChange={handleEditorChange}  // Handle editor state changes
+                toolbarClassName="demo-toolbar"
+                wrapperClassName="demo-wrapper"
+                editorClassName="demo-editor"
+                placeholder="Write your phishing email content here..."
+            />
+            </div>
+
+            {/* Button to create and send phishing email */}
+            {selectedTargetId && (
+                <div>
+                    <button onClick={handleCreateAndSend}>Create and Send Phishing Email</button>
+                </div>
+            )}
+
+            {/* Display success or error message */}
+            {message && <div style={{ color: 'green', marginTop: '10px' }}>{message}</div>}
+            {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
+        </div>
+    );
 };
 
-function DropdownMenu() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <div>
-      <button onClick={toggleDropdown} className="dropdown-button">
-        Select Option
-      </button>
-
-      {isOpen && (
-        <ul className="dropdown-menu">
-          <li className="dropdown-item">Option 1</li>
-          <li className="dropdown-item">Option 2</li>
-          <li className="dropdown-item">Option 3</li>
-        </ul>
-      )}
-    </div>
-  );
-}
-
-export function PeerPhishing() {
-  return (
-    <div>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Phisecure - Contact</title>
-        <link rel="stylesheet" href="styles.css" />
-        {/* Main Content */}
-        <main>
-        <section className="section">
-            <h2>Peer-to-Peer Phishing</h2>
-            <Chart
-            chartType="Table"
-            width="100%"
-            height="400px"
-            data={data}
-            options={options}
-            />
-            <input type="submit" value="Select"></input>
-        </section>
-        </main>
-        {/* Footer */}
-        <footer>
-        <p>© 2024 Phisecure. All rights reserved.</p>
-        </footer>
-    </div>
-  )
-}
+export default PeerPhishing;

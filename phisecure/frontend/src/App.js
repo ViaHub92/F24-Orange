@@ -13,7 +13,7 @@ import DashboardInstructor from "./pages/DashboardInstructor.js";
 import Dataanalytics from "./pages/Dataanalytics";
 import Login from "./pages/Login";
 import PhishingAssesment from "./pages/PhishingAssessment";
-import { PeerPhishing } from "./pages/PeerPhishing.js";
+import PeerPhishing from "./pages/PeerPhishing.js";
 import { ReportsInstructor } from "./pages/ReportsInstructor.js";
 import { ReportsStudents } from "./pages/ReportsStudents.js";
 import Services from "./pages/Services";
