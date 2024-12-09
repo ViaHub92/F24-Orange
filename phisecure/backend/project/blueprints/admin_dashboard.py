@@ -37,6 +37,27 @@ def get_majors():
     else:
         return jsonify({"message": "No student profiles found"}), 404
 
+#Grab all Phishing Templates currently in the database
+@admin_dashboard.route('/get_phishing_templates', methods=['GET'])
+def get_phishing_templates():
+    phishing_templates = Template.query.all()
+    if phishing_templates:
+        phishing_template_list = [{
+            "id": phishing_template.id,
+            "name": phishing_template.name,
+            "description": phishing_template.description,
+            "category": phishing_template.category,
+            "difficulty level": phishing_template.difficulty_level.value,
+            "sender template": phishing_template.sender_template,
+            "subject template": phishing_template.subject_template,
+            "body template": phishing_template.body_template,
+            "link": phishing_template.link,
+            "red flag(s)": phishing_template.template_redflag
+        } for phishing_template in phishing_templates]
+        return jsonify(phishing_template_list), 200
+    else:
+        return jsonify({"message": "No phishing templates found"}), 404
+
 #Get the amount of emails sent in total, and which ones performed the best and worst
 @admin_dashboard.route('/email_total_report', methods=['POST'])
 def email_total_report():
@@ -83,6 +104,7 @@ def email_total_report():
         return jsonify({"message": "No students found"}), 404
 
 #Get the amount of emails sent on a certain date
+#THIS DOES NOT CURRENTLY WORK.
 @admin_dashboard.route('/email_date_total_report', methods=['POST'])
 def email_date_total_report(rdate):
     email_total = 0
