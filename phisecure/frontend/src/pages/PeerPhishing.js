@@ -18,7 +18,7 @@ const PeerPhishing = () => {
         if (!courseId) return;
 
         try {
-            const response = await axios.get(`/target-list/course/${courseId}`);
+            const response = await axios.get(`peer_phishing/target-list/course/${courseId}`);
             if (response.data.error) {
                 setError(response.data.error);
                 setTargets([]);
