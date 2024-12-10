@@ -216,7 +216,8 @@ def list_students():
             "email": student.email,
             "first_name": student.first_name,
             "last_name": student.last_name,
-            "student_id": student.id
+            "student_id": student.id,
+            "course_id": student.course_id
         } for student in students]
         return jsonify(student_list), 200
     else:

@@ -5,6 +5,7 @@ from database.models.template import PeerPhishingTemplate,TargetList, PeerPhishi
 from database.models.course import Course
 from database.models.inbox import Inbox
 from database.models.student import Student
+from flask import current_app
 
 peer_phishing = Blueprint('peer_phishing', __name__)
 
@@ -29,14 +30,20 @@ def fill_target_list(course_id):
 
         # Iterate through students in the course
         for student in course.students:
-            # Check if the student already exists in TargetList
-            existing_target = TargetList.query.filter_by(student_profile_id=student.id).first()
+            # Fetch the student profile for the student
+            student_profile = StudentProfile.query.filter_by(student_id=student.id).first()
+            
+            if not student_profile:
+                continue
+            
+            # Check if the student profile already exists in TargetList
+            existing_target = TargetList.query.filter_by(student_profile_id=student_profile.id).first()
+            
             if not existing_target:
-                # Add the student to the target list
-                new_target = TargetList(student_profile_id=student.id)
+                # Add the student profile to the target list
+                new_target = TargetList(student_profile_id=student_profile.id)
                 db.session.add(new_target)
 
-        # Commit the changes
         db.session.commit()
 
         return jsonify({"message": f"Target list successfully populated for course {course.course_name}."}), 201
@@ -87,6 +94,9 @@ def get_targets_by_course(course_id):
         including student names and their actual IDs.
     """
     try:
+        
+        print(f"Fetching targets for course_id: {course_id}")
+        
         targets = (
             db.session.query(TargetList, StudentProfile, Student)
             .join(StudentProfile, TargetList.student_profile_id == StudentProfile.id)
@@ -94,6 +104,8 @@ def get_targets_by_course(course_id):
             .filter(Student.course_id == course_id)
             .all()
         )
+        
+        print(f"Targets fetched: {targets}")
         
         serialized_targets = [
         {
@@ -103,6 +115,9 @@ def get_targets_by_course(course_id):
         }
         for target in targets
     ]
+        
+        print(f"Serialized targets: {serialized_targets}")
+        
         return jsonify(serialized_targets), 200
 
     except Exception as e:
