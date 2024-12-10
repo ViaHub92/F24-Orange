@@ -1,26 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import DeleteCourseForm from './DeleteCourseForm';
 
 const GetTags = () => {
   const [tags, setTags] = useState([]);
   const [showTags, setShowTags] = useState(false);
 
-  const fetchTags = async () => {
-    if (showTags) {
-      setShowTags(false);
-    } else {
+  useEffect(() => {
+    const fetchTags = async () => {
       try {
         const response = await axios.get('admin_dashboard/get_tags');
+        console.log(response.data);
         setTags(response.data);
-        setShowTags(true);
       } catch (error) {
         console.error('Error fetching tags:', error);
         setTags([]);
-        setShowTags(false);
       }
-    }
-  };
+    };
+
+    fetchTags();
+
+  }, []);
+
+  return (
+    <div>
+      <button onClick={() => setShowTags(!showTags)}>
+        {showTags ? 'Hide Tags' : 'Show Tags'}
+      </button>
+
+      {showTags && (
+        <div>
+          <h5>Tags:</h5>
+          <ul>
+            {tags.map((tag, index) => (
+              <li key={index}>{tag}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default GetTags;

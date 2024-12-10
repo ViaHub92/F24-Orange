@@ -20,22 +20,6 @@ const AdminDash = () => {
   const [studentName, setStudentName] = useState("Admin");
   const [courses, setCourses] = useState([]);
   const [showCourses, setShowCourses] = useState(false);
-  const adminId = localStorage.getItem('admin_id');
-
-  useEffect(() => {
-    const fetchAdminData = async () => {
-      try {
-        const response = await axios.get(`/account/get_admin/${adminId}`);
-        const adminData = response.data;
-        setStudentName(adminData.first_name);
-        setShowCourses(true);
-      } catch (error) {
-        console.error("Error fetching admin data:", error);
-        setShowCourses(false);
-      }
-    };
-    fetchAdminData();
-  }, [adminId]);
 
   const fetchCourses = async () => {
     try {
@@ -81,17 +65,13 @@ const AdminDash = () => {
 
       <main className="w3-main" style={{ marginLeft: '300px', marginTop: '43px' }}>
         <header className="w3-container" style={{ paddingTop: '18px' }}>
-          <h5><b><i className="fa fa-dashboard"></i> Instructor Dashboard</b></h5>
+          <h5><b><i className="fa fa-dashboard"></i> Admin Dashboard</b></h5>
         </header>
 
         {/* Main Layout */}
         <div className="dashboard-container">
           {/* Row 1: Create Course and List Courses */}
           <div className="dashboard-row">
-            <div className="dashboard-item">
-              <h5>Create Course</h5>
-              <CreateCourseForm />
-            </div>
             <div className="dashboard-item">
               <h5>Courses</h5>
               <CourseList courses={courses} />
