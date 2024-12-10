@@ -26,6 +26,7 @@ import Inbox from './pages/components/Inbox';
 import FetchID from "./pages/components/FetchID.js";
 import PeerPhishingTemplate from "./pages/PeerPhishingTemplate.js"
 import GmailClone from "./pages/components/GmailClone.js";
+import AdminDash from './pages/components/AdminDash';
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
             <Routes>
                 <Route path="Home" element={<Home />} />
                 <Route path="About" element={<About />} />
-                <Route path="Admin" element={<Admin />} />
+                <Route path="Admin" element={<AdminDash />} /> 
                 <Route path="Contact" element={<Contact />} />
                 <Route path="CreateAccount" element={<CreateAccount />} />
                 <Route path="Dashboard" element={<Dashboard />} />
@@ -55,6 +56,7 @@ function App() {
                 <Route path="Inbox" element={<Inbox />} />
                 <Route path="PeerPhishingTemplate" element={<PeerPhishingTemplate />} />
                 <Route path="GmailClone" element={<GmailClone />} />
+                <Route path="AdminDash" element={<AdminDash />} />
             </Routes>
         </>
   );
