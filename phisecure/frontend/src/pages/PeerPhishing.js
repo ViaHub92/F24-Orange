@@ -59,7 +59,7 @@ const PeerPhishing = () => {
         const emailBody = editorState.getCurrentContent().getPlainText(); // Convert the editor content to plain text
 
         try {
-            const response = await axios.post('/create-and-send', {
+            const response = await axios.post('peer_phishing/create-and-send', {
                 target_id: selectedTargetId,
                 body_template: emailBody, // Include the email body in the POST request
             });
