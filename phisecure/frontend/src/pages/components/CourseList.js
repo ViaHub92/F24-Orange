@@ -5,13 +5,14 @@ import DeleteCourseForm from './DeleteCourseForm';
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [showCourses, setShowCourses] = useState(false);
+  const instructorId = localStorage.getItem('instructor_id');
 
   const fetchCourses = async () => {
     if (showCourses) {
       setShowCourses(false);
     } else {
       try {
-        const response = await axios.get('course/list_courses');
+        const response = await axios.get(`/course/list_courses/${instructorId}`);
         setCourses(response.data);
         setShowCourses(true);
       } catch (error) {

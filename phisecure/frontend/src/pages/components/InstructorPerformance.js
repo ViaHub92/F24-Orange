@@ -10,12 +10,13 @@ const InstructorPerformance = () => {
   const [courseId, setCourseId] = useState(null);
   const [performanceData, setPerformanceData] = useState([]);
   const [error, setError] = useState(null);
+  const instructorId = localStorage.getItem('instructor_id');
 
   // Fetch the list of courses when the component mounts
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("/course/list_courses");
+        const response = await axios.get(`/course/list_courses/${instructorId}`);
         setCourses(response.data); // Set the course list
       } catch (err) {
         setError("Error fetching courses");

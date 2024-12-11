@@ -10,11 +10,12 @@ const LeaveFeedback = () => {
     const [performanceData, setPerformanceData] = useState([]);
     const [selectedEmailId, setSelectedEmailId] = useState(null);
     const [feedback, setFeedback] = useState('');
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
+    const instructorId = localStorage.getItem('instructor_id');
 
     // Fetch the list of courses
     useEffect(() => {
-        axios.get('course/list_courses')
+        axios.get(`/course/list_courses/${instructorId}`)
             .then(response => {
                 console.log("Fetched Courses:", response.data); // Log courses data
                 setCourses(response.data);
