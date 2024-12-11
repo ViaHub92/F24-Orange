@@ -46,9 +46,9 @@ class PhishingEmail(db.Model):
         interactions_per_email = db.session.query(
             cls.id,
             cls.template_id,
-            func.sum(UserInteraction.opened(db.Integer)).label("total_opened"),
-            func.sum(UserInteraction.link_clicked(db.Integer)).label("total_links_clicked"),
-            func.sum(UserInteraction.replied(db.Integer)).label("total_replied")
+            func.sum(cast(UserInteraction.opened, Integer)).label("total_opened"),
+            func.sum(cast(UserInteraction.link_clicked, Integer)).label("total_links_clicked"),
+            func.sum(cast(UserInteraction.replied, Integer)).label("total_replied"),
         ).outerjoin(UserInteraction, cls.id == UserInteraction.phishing_email_id).group_by(cls.id).all()
         
         return interactions_per_email

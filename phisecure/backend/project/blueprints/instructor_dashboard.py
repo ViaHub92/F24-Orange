@@ -314,3 +314,29 @@ def most_successful_phishing(course_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+    
+@instructor_dashboard.route('/analytics/<int:course_id>', methods=['GET'])
+def get_analytics(course_id):
+    """_summary_
+
+    Args:
+        course_id (_type_): _description_
+    """
+    
+    course = Course.query.get(course_id)
+    
+    if not course:
+        return jsonify({"error": "Course not found"}), 404
+    
+   
+    rates = Template.calculate_interaction_rate(course_id)
+    
+    if not rates:
+        return jsonify({"error": "No interaction data available for the templates"}), 404
+    
+    sorted_rates = sorted(rates, key=lambda x: x['click_rate'], reverse=True)
+    top_n = 3
+    top_templates = sorted_rates[:top_n]
+    
+    return jsonify(top_templates), 200

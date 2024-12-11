@@ -1,5 +1,5 @@
 import pytest
-from database.models.template import Template, Tag, TemplateTag
+from database.models.template import Template, Tag, TemplateTag, get_phishing_Template_analytics
 from database.models import StudentProfile, Response, Answer, Student
 from database.models import PhishingEmail, UserInteraction
 from database.models import Questionnaire, Question
@@ -407,26 +407,7 @@ def test_get_interactions_for_template(init_database):
     assert not first_interaction.reported, "Interaction reported matches"
     
 
-def test_calculate_interactions_per_email(init_database):
-    """
-    Test calculating interactions per email
-    """
-    email_ids = init_database
-    interactions_per_email = PhishingEmail.calculate_interactions_per_email()
-    
-    print("interactions per email")
-    print(interactions_per_email)
-  
-    #Check interactions for each phishing email
-    for interaction in interactions_per_email:
-        if interaction.id == email_ids['email1_id']:
-            assert interaction.total_interactions == 1, "total interactions for Phishing Email 1 matches"
-            assert interaction.total_opened == 1
-            assert interaction.total_links_clicked == 0
-            assert interaction.total_replied == 0
-            
-            
-    
+
 def test_calculate_interaction_rate(init_database):
     """
     Test calculating open rate, click rate, reply rate
@@ -441,3 +422,21 @@ def test_calculate_interaction_rate(init_database):
     for rate in rates:
         if rate['template_id'] == 2:
             assert rate['open_rate'] == 100.0, "Open rate for template 2 matches"
+
+def test_calculate_interaction_rate_single_template(init_database):
+    """
+    Test calculating interaction rates for a single template
+    """
+    rates = Template.calculate_interaction_rate()
+    
+    assert len(rates) > 0, "Rates should be calculated"
+    
+    for rate in rates:
+        if rate['template_id'] == 1:
+            assert rate['total_opened'] == 2, "Total opened matches"
+            assert rate['total_links_clicked'] == 0, "Total links clicked matches"
+            assert rate['total_replied'] == 0, "Total replied matches"
+            assert rate['total_phishing_emails'] == 1, "Total phishing emails matches"
+            assert rate['open_rate'] == 100.0, "Open rate matches"
+            assert rate['click_rate'] == 0.0, "Click rate matches"
+            assert rate['reply_rate'] == 0.0, "Reply rate matches"

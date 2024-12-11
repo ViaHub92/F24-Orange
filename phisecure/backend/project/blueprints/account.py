@@ -239,7 +239,7 @@ def delete_student(student_id):
 
 #delete an instructor
 @account.route('/delete_instructor/<int:instructor_id>', methods=['DELETE'])
-def delete_student(instructor_id):
+def delete_instructor(instructor_id):
     # Find the instructor by ID
     instructor = db.session.get(Instructor, instructor_id)
     if not instructor:

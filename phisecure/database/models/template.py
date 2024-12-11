@@ -7,6 +7,8 @@ from backend.project import db
 from sqlalchemy.sql import func
 from database.models.phishing_email import PhishingEmail
 from database.models.user_interaction import UserInteraction
+from database.models.student import Student
+from database.models.course import Course
 from sqlalchemy import Enum
 from sqlalchemy.orm import relationship
 
@@ -77,15 +79,28 @@ class Template(db.Model):
     
         
     @classmethod
-    def calculate_interaction_rate(cls):
+    def calculate_interaction_rate(cls, course_id):
         """
-        calculate open rate, click rate, and reply rate for each phishing template
-        """
-        interactions_per_email = PhishingEmail.calculate_interactions_per_email()
+        Calculate open rate, click rate, and reply rate for each phishing template in a specific course.
         
-        #Aggregate interactions by template
+        Args:
+            course_id (int): The ID of the course.
+        
+        Returns:
+            list: A list of dictionaries containing interaction rates for each template.
+        """
+        # Get all students in the course
+        students = Student.query.filter_by(course_id=course_id).all()
+        student_emails = [student.email for student in students]
+      
+
+        # Get all phishing emails sent to these students
+        phishing_emails = PhishingEmail.query.filter(PhishingEmail.recipient.in_(student_emails)).all()
+
+        
+        # Aggregate interactions by template
         interactions_by_template = {}
-        for email in interactions_per_email:
+        for email in phishing_emails:
             if email.template_id not in interactions_by_template:
                 interactions_by_template[email.template_id] = {
                     'total_opened': 0,
@@ -93,25 +108,31 @@ class Template(db.Model):
                     'total_replied': 0,
                     'total_phishing_emails': 0,
                 }
-                
-            interactions_by_template[email.template_id]['total_opened'] += email.total_opened
-            interactions_by_template[email.template_id]['total_links_clicked'] += email.total_links_clicked
-            interactions_by_template[email.template_id]['total_replied'] += email.total_replied
-            interactions_by_template[email.template_id]['total_phishing_emails'] += 1
-            
-        #Calculate interaction rate for each template
+
+            interactions = UserInteraction.query.filter_by(phishing_email_id=email.id).all()
+           
+            for interaction in interactions:
+                interactions_by_template[email.template_id]['total_opened'] += interaction.opened
+                interactions_by_template[email.template_id]['total_links_clicked'] += interaction.link_clicked
+                interactions_by_template[email.template_id]['total_replied'] += interaction.replied
+                interactions_by_template[email.template_id]['total_phishing_emails'] += 1
+
+        # Calculate interaction rates for each template
         rates = []
         for template_id, data in interactions_by_template.items():
             template = cls.query.get(template_id)
+            if template is None:
+                continue
+            
             total_opened = data['total_opened']
             total_links_clicked = data['total_links_clicked']
             total_replied = data['total_replied']
             total_phishing_emails = data['total_phishing_emails']
-            
+
             open_rate = round((total_opened / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
             click_rate = round((total_links_clicked / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
             reply_rate = round((total_replied / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
-            
+
             rate = {
                 'template_id': template_id,
                 'template_name': template.name,
@@ -123,13 +144,13 @@ class Template(db.Model):
                 'click_rate': click_rate,
                 'reply_rate': reply_rate
             }
-            
+
             rates.append(rate)
             
+       
         return rates
         
-    
-        
+
 class Tag(db.Model):
     """can represent keyword associated with a user based on questionnaire answers and phishing templates
     Args:
