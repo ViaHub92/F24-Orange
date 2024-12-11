@@ -59,7 +59,7 @@ def get_phishing_templates():
         return jsonify({"message": "No phishing templates found"}), 404
 
 #Get the amount of emails sent in total, and which ones performed the best and worst
-@admin_dashboard.route('/email_total_report', methods=['POST'])
+@admin_dashboard.route('/email_total_report', methods=['GET'])
 def email_total_report():
     students = Student.query.all()
     if students:

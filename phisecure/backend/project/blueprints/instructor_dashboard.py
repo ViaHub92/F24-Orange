@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, session, redirect
+from sqlalchemy import func, case
 from backend.project import db
 from database.models.student import Student
 from database.models.instructor import Instructor
@@ -257,3 +258,59 @@ def get_most_successful_template(course_id):
     print("Response Data:", response_data)
     
     return jsonify(response_data), 200
+
+@instructor_dashboard.route('/most-successful-phishing/<int:course_id>', methods=['GET'])
+def most_successful_phishing(course_id):
+    try:
+        # Fetch the course
+        course = Course.query.get(course_id)
+        if not course:
+            return jsonify({"error": "Course not found"}), 404
+
+        # Get the students enrolled in the course
+        students_in_course = course.students
+        if not students_in_course:
+            return jsonify({"error": "No students found in this course"}), 404
+
+        # Create a case statement to give a weight to each interaction
+        interaction_weight = case(
+            (UserInteraction.replied == True, 1),
+            (UserInteraction.link_clicked == True, 1),
+            else_=0
+        )
+
+        # Count the weighted successes (1 for each successful action, 2 for both)
+        interactions = db.session.query(
+            UserInteraction.phishing_email_id,
+            func.sum(
+                case(
+                    (UserInteraction.replied == True, 1),
+                    (UserInteraction.link_clicked == True, 1),
+                    else_=0
+                )
+            ).label('success_count')
+        ).filter(
+            UserInteraction.student_id.in_([student.id for student in students_in_course]),
+            (UserInteraction.replied == True) | (UserInteraction.link_clicked == True)
+        ).group_by(UserInteraction.phishing_email_id).all()
+
+        # Find the phishing email with the highest success count
+        if not interactions:
+            return jsonify({"message": "No interactions found for this course."}), 404
+
+        # Find the phishing email with the most "successful" interactions
+        most_successful_email_id = max(interactions, key=lambda x: x.success_count).phishing_email_id
+
+        # Fetch the phishing email details
+        most_successful_email = PhishingEmail.query.get(most_successful_email_id)
+
+        return jsonify({
+            "email_id": most_successful_email.id,
+            "subject": most_successful_email.subject,
+            "success_count": max(interactions, key=lambda x: x.success_count).success_count,
+            "sender": most_successful_email.sender
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500

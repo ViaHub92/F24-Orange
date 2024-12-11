@@ -77,3 +77,27 @@ def get_course(course_name):
         }), 200
     else:
         return jsonify({"message": "Course not found"}), 404
+    
+@course.route('/list_courses/<int:instructor_id>', methods=['GET'])
+def list_courses_by_instructor(instructor_id):
+    """
+    List all courses affiliated with a specific instructor ID.
+
+    Args:
+        instructor_id (int): ID of the instructor.
+
+    Returns:
+        JSON response containing courses for the instructor or an error message.
+    """
+    # Query the courses based on instructor_id
+    courses = Course.query.filter_by(instructor_id=instructor_id).all()
+    
+    if courses:
+        course_list = [{
+            "id": course.id,
+            "course_name": course.course_name,
+            "instructor_id": course.instructor_id
+        } for course in courses]
+        return jsonify(course_list), 200
+    else:
+        return jsonify({"message": f"No courses found for instructor with ID {instructor_id}"}), 404
