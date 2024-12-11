@@ -26,6 +26,7 @@ import FetchID from "./pages/components/FetchID.js";
 import PeerPhishingTemplate from "./pages/PeerPhishingTemplate.js"
 import GmailClone from "./pages/components/GmailClone.js";
 import AdminDash from './pages/components/AdminDash';
+import PeerCourse from './pages/components/PeerCourse';
 
 function App() {
   return (
@@ -41,7 +42,8 @@ function App() {
                 <Route path="DashboardInstructor" element={<DashboardInstructor />} />
                 <Route path="Dataanalytics" element={<Dataanalytics />} />
                 <Route path="Login" element={<Login />} />
-                <Route path="PeerPhishing" element={<PeerPhishing />} />
+                <Route path="PeerPhishing" element={<PeerCourse />} />
+                <Route path="/:targetId" element={<PeerPhishing />} />
                 <Route path="PhishingAssesment" element={<PhishingAssesment />} />
                 <Route path="ReportsInstructor" element={<ReportsInstructor />} />
                 <Route path="ReportsStudents" element={<ReportsStudents />} />
