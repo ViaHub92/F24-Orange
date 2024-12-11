@@ -1,6 +1,5 @@
 // Filename - App.js
 
-import React, { useState, useEffect } from "react";
 import { Routes, Route} from "react-router-dom";
 import Header from "./pages/components/Header.js";
 import Home from "./pages/Home";
