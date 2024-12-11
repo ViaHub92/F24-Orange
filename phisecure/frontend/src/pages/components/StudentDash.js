@@ -4,6 +4,11 @@ import { Helmet } from 'react-helmet';
 import { FaEnvelope } from "react-icons/fa";
 import { GoPersonFill } from "react-icons/go";
 import { FaCog } from "react-icons/fa";
+import { GiFishing } from "react-icons/gi";
+import { FaServer } from "react-icons/fa";
+import { FaChartLine } from "react-icons/fa";
+import { HiOutlineMail } from "react-icons/hi";
+import { FaUsersCog } from "react-icons/fa";
 import 'w3-css/w3.css';
 import FetchPerformanceSummary from './FetchPerformanceSummary';
 import FetchPerformanceDetailed from './FetchPerformanceDetailed';
@@ -57,19 +62,22 @@ const SidebarComponent = () => {
         </div>
         <div className="w3-bar-block">
           <Link to="/overview" className="w3-bar-item w3-button w3-padding">
-            <i className="fa fa-users-cog"></i> Overview
+            <FaUsersCog /> Overview
           </Link>
           <Link to="/GmailClone" className="w3-bar-item w3-button w3-padding">
-            <i className="fa fa-user-shield"></i> Prototype Inbox
+            <HiOutlineMail /> Prototype Inbox
           </Link>
           <Link to="/ReportsStudents" className="w3-bar-item w3-button w3-padding">
-            <i className="fa fa-chart-line"></i> Reports
+            <FaChartLine /> Reports
           </Link>
           <Link to="/notifications" className="w3-bar-item w3-button w3-padding">
-            <i className="fa fa-server"></i> Notifications
+            <FaServer /> Notifications
           </Link>
           <Link to="/settings" className="w3-bar-item w3-button w3-padding">
-            <i className="fa fa-cog"></i> Settings
+            <FaCog /> Settings
+          </Link>
+          <Link to="/PeerPhishing" className="w3-bar-item w3-button w3-padding">
+            <GiFishing /> Peer Phishing
           </Link>
           <Logout />  
         </div>

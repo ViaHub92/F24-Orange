@@ -41,6 +41,7 @@ export default function Home() {
             <Link to="/GmailClone" className="site-map-card">Email</Link>
             <Link to="/Services" className="site-map-card">Services</Link>
             <Link to="/ViewQuestionnaire" className="site-map-card">Questionnaire</Link>
+            <Link to="/PeerPhishing" className="site-map-card">Peer Phishing</Link>
           </div>
         </div>
       </section>
