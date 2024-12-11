@@ -132,6 +132,7 @@ class Template(db.Model):
             open_rate = round((total_opened / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
             click_rate = round((total_links_clicked / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
             reply_rate = round((total_replied / total_phishing_emails) * 100, 2) if total_phishing_emails > 0 else 0
+           
 
             rate = {
                 'template_id': template_id,
@@ -142,7 +143,8 @@ class Template(db.Model):
                 'total_phishing_emails': total_phishing_emails,
                 'open_rate': open_rate,
                 'click_rate': click_rate,
-                'reply_rate': reply_rate
+                'reply_rate': reply_rate,
+       
             }
 
             rates.append(rate)

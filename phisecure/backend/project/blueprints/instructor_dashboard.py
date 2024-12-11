@@ -335,8 +335,8 @@ def get_analytics(course_id):
     if not rates:
         return jsonify({"error": "No interaction data available for the templates"}), 404
     
-    sorted_rates = sorted(rates, key=lambda x: x['click_rate'], reverse=True)
-    top_n = 3
-    top_templates = sorted_rates[:top_n]
+    #sorted_rates = sorted(rates, key=lambda x: x['click_rate'], reverse=True)
+    #top_n = 5
+   # top_templates = sorted_rates[:top_n]
     
-    return jsonify(top_templates), 200
+    return jsonify(rates), 200
