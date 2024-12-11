@@ -105,7 +105,7 @@ def email_total_report():
 
 #Get the amount of emails sent on a certain date
 #THIS DOES NOT CURRENTLY WORK.
-@admin_dashboard.route('/email_date_total_report', methods=['POST'])
+@admin_dashboard.route('/email_date_total_report', methods=['GET'])
 def email_date_total_report(rdate):
     email_total = 0
     # rdate = rdate.date()

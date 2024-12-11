@@ -236,3 +236,17 @@ def delete_student(student_id):
     db.session.commit()
 
     return jsonify({"message": "Student deleted successfully!"}), 200
+
+#delete an instructor
+@account.route('/delete_instructor/<int:instructor_id>', methods=['DELETE'])
+def delete_student(instructor_id):
+    # Find the instructor by ID
+    instructor = db.session.get(Instructor, instructor_id)
+    if not instructor:
+        return jsonify({"message": "Instructor not found"}), 404
+
+    # Delete the instructor
+    db.session.delete(instructor)
+    db.session.commit()
+
+    return jsonify({"message": "Instructor deleted successfully!"}), 200
