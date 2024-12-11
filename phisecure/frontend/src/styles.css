@@ -1184,3 +1184,18 @@ label {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
 }
 
+select {
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+option {
+  font-size: 16px;
+}
+
+h6 {
+  margin-top: 20px;
+  font-weight: bold;
+}

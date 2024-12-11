@@ -15,11 +15,18 @@ import PhishingAttackInstructor from './PhishingAttackInstructor';
 import Logout from './Logout';
 import GetTags from './GetTags'
 import GetMajors from './GetMajors'
+import CourseListAdmin from './CourseListAdmin';
+import AdminPhishingTemplates from './AdminPhishingTemplates';
+
 
 const AdminDash = () => {
+
   const [studentName, setStudentName] = useState("Admin");
   const [courses, setCourses] = useState([]);
   const [showCourses, setShowCourses] = useState(false);
+  const [students, setStudents] = useState([]);
+
+ 
 
   const fetchCourses = async () => {
     try {
@@ -74,7 +81,7 @@ const AdminDash = () => {
           <div className="dashboard-row">
             <div className="dashboard-item">
               <h5>Courses</h5>
-              <CourseList courses={courses} />
+              <CourseListAdmin courses={courses} />
             </div>
           </div>
 
@@ -95,11 +102,31 @@ const AdminDash = () => {
             <div className="dashboard-item">
               <h5>Email Report</h5>
             </div>
-            <div className="dashboard-item">
-              <h5>Student Report</h5>
-            </div>
+
           </div>
+
+
+        {/* Row 4: User Management */}
+        <div className="dashboard-row">
+            <div className="dashboard-item">
+              <h5>User Management</h5>
+              </div>
+
+          </div>
+
+
+          {/* Row 5: Phishing Templates */}
+         <div className="dashboard-row">
+            <div className="dashboard-item">
+              <h5>View Phishing Templates</h5>
+              <AdminPhishingTemplates />
+            </div>
+           </div>
+          
         </div>
+
+        
+
       </main>
 
       {/* Footer */}
