@@ -7,11 +7,12 @@ const PhishingAttackInstructor = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
+    const instructorId = localStorage.getItem('instructor_id');
 
     // Fetch the list of courses
     useEffect(() => {
-        axios.get('course/list_courses')
+        axios.get(`/course/list_courses/${instructorId}`)
             .then(response => {
                 console.log("Fetched Courses:", response.data); // Log courses data
                 setCourses(response.data);

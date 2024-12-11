@@ -5,12 +5,13 @@ const FillTargetList = ({ courseId }) => {
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [message, setMessage] = useState("");
+  const instructorId = localStorage.getItem('instructor_id');
 
   // Fetch the list of courses available for the instructor
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("/course/list_courses");
+        const response = await axios.get(`/course/list_courses/${instructorId}`);
         setCourses(response.data);
       } catch (error) {
         console.error("Error fetching courses:", error);
