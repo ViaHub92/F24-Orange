@@ -59,12 +59,12 @@ const InstructorPerformance = () => {
       {
         label: "Total Replied",
         data: performanceData.map((student) => student.total_replied),
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        backgroundColor: "rgba(245, 221, 39, 1)",
       },
       {
         label: "Total Links Clicked",
         data: performanceData.map((student) => student.total_links_clicked),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        backgroundColor: "rgba(245, 39, 39, 1)",
       },
     ],
   };

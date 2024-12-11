@@ -16,8 +16,10 @@ import Logout from './Logout';
 import GetTags from './GetTags'
 import GetMajors from './GetMajors'
 import CourseListAdmin from './CourseListAdmin';
+import EmailAdminReport from './EmailAdminReport';
 import AdminPhishingTemplates from './AdminPhishingTemplates';
-
+import AdminStudentComparison from './AdminStudentComparison';
+import DeleteStudent from './DeleteStudent';
 
 const AdminDash = () => {
 
@@ -27,6 +29,9 @@ const AdminDash = () => {
   const [students, setStudents] = useState([]);
 
  
+
+
+  
 
   const fetchCourses = async () => {
     try {
@@ -101,6 +106,7 @@ const AdminDash = () => {
           <div className="dashboard-row">
             <div className="dashboard-item">
               <h5>Email Report</h5>
+              <EmailAdminReport />
             </div>
 
           </div>
@@ -110,6 +116,7 @@ const AdminDash = () => {
         <div className="dashboard-row">
             <div className="dashboard-item">
               <h5>User Management</h5>
+            <DeleteStudent/>
               </div>
 
           </div>
