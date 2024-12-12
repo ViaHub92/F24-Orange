@@ -79,10 +79,25 @@ const PeerPhishingTemplate = () => {
         }
     };
 
+    // Word Bank Component
+    const words = ["{first_name}", "{last_name}", "{date}"];
+
+    const wordMessages = {
+      "{first_name}": "Phisecure will insert the target's first name",
+      "{last_name}": "Phisecure will insert the target's last name",
+      "{date}": "Will insert the current date when sent",
+    };
+
+    const handleWordClick = (word) => {
+        const wordMessage = wordMessages[word] || "No message available for this word.";
+        setMessage(wordMessage); // Update the message state in the parent component
+    };
+
     return (
         <div>
-            <h2>Peer Phishing Template</h2>
-            <div>
+            <h1>Peer Phishing Template</h1>
+            <ul className = "phishing-entries">
+            <div className = "phishing-inputs">
                 <label htmlFor="name">Template Name:</label>
                 <input
                     type="text"
@@ -93,7 +108,7 @@ const PeerPhishingTemplate = () => {
                 />
             </div>
 
-            <div>
+            <div className = "phishing-inputs">
                 <label htmlFor="description">Template Description:</label>
                 <input
                     type="text"
@@ -104,7 +119,7 @@ const PeerPhishingTemplate = () => {
                 />
             </div>
 
-            <div>
+            <div className = "phishing-inputs">
                 <label htmlFor="category">Template Category:</label>
                 <input
                     type="text"
@@ -115,9 +130,43 @@ const PeerPhishingTemplate = () => {
                 />
             </div>
 
-            <div>
+            <div className = "phishing-inputs">
+                <label htmlFor="senderTemplate">Sender:</label>
+                <input
+                    type="text"
+                    id="senderTemplate"
+                    value={senderTemplate}
+                    onChange={(e) => setSenderTemplate(e.target.value)}
+                    placeholder="Enter sender's email"
+                />
+            </div>
+
+            <div className = "phishing-inputs">
+                <label htmlFor="subjectTemplate">Subject:</label>
+                <input
+                    type="text"
+                    id="subjectTemplate"
+                    value={subjectTemplate}
+                    onChange={(e) => setSubjectTemplate(e.target.value)}
+                    placeholder="Enter subject template"
+                />
+            </div>
+
+            <div className = "phishing-inputs">
+                <label htmlFor="redFlag">Red Flag:</label>
+                <input
+                    type="text"
+                    id="redFlag"
+                    value={redFlag}
+                    onChange={(e) => setRedFlag(e.target.value)}
+                    placeholder="Enter a red flag"
+                />
+                
+            </div>
+            
+            <div className = 'difficulty-level'>
                 <label>Difficulty Level:</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flexbox', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <input
                             type="radio"
@@ -153,59 +202,29 @@ const PeerPhishingTemplate = () => {
                     </div>
                 </div>
             </div>
-
-
-
-            <div>
-                <label htmlFor="senderTemplate">Sender:</label>
-                <input
-                    type="text"
-                    id="senderTemplate"
-                    value={senderTemplate}
-                    onChange={(e) => setSenderTemplate(e.target.value)}
-                    placeholder="Enter sender's email"
-                />
+            </ul>
+            <div className="wordbank-container">
+                <h3 className="wordbank-title">Available Tags</h3>
+                <ul className="wordbank-list">
+                    {words.map((word, index) => (
+                        <li
+                            key={index}
+                            className="wordbank-item"
+                            onClick={() => handleWordClick(word)}
+                        >
+                            {word}
+                        </li>
+                    ))}
+                </ul>
+                {message && <div className="message">{message}</div>}
             </div>
 
-            <div>
-                <label htmlFor="subjectTemplate">Subject:</label>
-                <input
-                    type="text"
-                    id="subjectTemplate"
-                    value={subjectTemplate}
-                    onChange={(e) => setSubjectTemplate(e.target.value)}
-                    placeholder="Enter subject template"
-                />
-            </div>
-
-            <div>
-                <label htmlFor="badLink">Bad Link:</label>
-                <input
-                    type="text"
-                    id="badLink"
-                    value={badLink}
-                    onChange={(e) => setBadLink(e.target.value)}
-                    placeholder="Enter a bad link"
-                />
-            </div>
-
-            <div>
-                <label htmlFor="redFlag">Red Flag:</label>
-                <input
-                    type="text"
-                    id="redFlag"
-                    value={redFlag}
-                    onChange={(e) => setRedFlag(e.target.value)}
-                    placeholder="Enter a red flag"
-                />
-            </div>
-
-            <div>
+            <div className="text-editor">
                 <h3>Email Body</h3>
                 <Editor editorState={editorState} onEditorStateChange={handleEditorChange} />
             </div>
 
-            <div>
+            <div className = 'difficulty-level'>
                 <button onClick={handleCreateAndSend}>Create and Send</button>
             </div>
 

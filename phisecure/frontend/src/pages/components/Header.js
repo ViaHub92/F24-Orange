@@ -19,6 +19,9 @@ function Header() {
             <li><NavLink to="/Dashboard">Dashboard</NavLink></li>
             <li><NavLink to="/ReportsStudents">Reports</NavLink></li>
             <li><NavLink to="/GmailClone">GmailClone</NavLink></li>
+            <li><a href="https://github.com/ViaHub92/F24-Orange/wiki" target="_blank">
+            Phisecure Wiki
+            </a></li>
             
           </ul>
         </nav>
