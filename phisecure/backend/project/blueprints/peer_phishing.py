@@ -5,6 +5,7 @@ from database.models.template import PeerPhishingTemplate,TargetList, PeerPhishi
 from database.models.course import Course
 from database.models.inbox import Inbox
 from database.models.student import Student
+from datetime import datetime
 from flask import current_app
 
 peer_phishing = Blueprint('peer_phishing', __name__)
@@ -168,6 +169,21 @@ def create_and_send_phishing_email():
         if not recipient_inbox:
             db.session.rollback()
             return jsonify({'error': 'Inbox not found for student'}), 404
+        
+        first_name = student.first_name
+        link = data.get('link', '') if '{link}' in new_template.body_template else ""
+        date = datetime.now().strftime("%B %d, %Y")
+        try:
+            body = new_template.body_template.format(
+                first_name=first_name,
+                link=link,
+                date=date
+            )
+       
+            subject = new_template.subject_template.format(first_name=first_name)
+            
+        except KeyError as e:
+            return jsonify({'error': f'Missing placeholder in recipient data: {e}'}), 400
         
         # Create and send the phishing email
         phishing_email = PhishingEmail(

@@ -151,7 +151,7 @@ def submit_response(student_id):
     """
     if request.method == "POST":
         data = request.get_json()
-        
+        print("Received data:", data)
         #Validate the data
         schema = ResponseSchema()
         try:
@@ -202,38 +202,47 @@ def submit_response(student_id):
         answers = validated_data['answers']
         
         #Create a new response
-        new_response = Response(questionnaire_id=questionnaire_id, 
-                                student_id=student_id, 
-                                student_profile_id=student_profile.id) 
-        for answer in answers: # loop to iterate through the answers
-            question_id = answer.get('question_id') # get the question id
-            answer_text = answer.get('answer_text') # get the answer text
-            new_answer = Answer(
-                response=new_response, 
-                question_id=question_id, 
-                answer_text=answer_text
-            )
-            db.session.add(new_answer)
-        db.session.add(new_response)
-       
-        
-        #Update the student profile employment status and employer information based on answers given.
-        student_profile.update_attributes_from_answers(questionnaire_id)
-        
-        #Assign tags to the student profile based on the answers given
+        new_response = Response(
+            questionnaire_id=questionnaire_id,
+            student_id=student_id,
+            student_profile_id=student_profile.id
+        )
+        db.session.add(new_response)  # Add the response before processing answers
+
+        for answer in answers:  # Loop through all answers
+            question_id = answer.get('question_id')  # Get the question ID
+            answer_text = answer.get('answer_text')  # Get the answer text
+            
+            # Handle multiple answers by splitting on commas if needed
+            individual_answers = answer_text.split(', ') if isinstance(answer_text, str) else [answer_text]
+            
+            for single_answer in individual_answers:
+                print(f"Saving answer: Question ID: {question_id}, Answer Text: {single_answer}")
+                new_answer = Answer(
+                    response=new_response,
+                    question_id=question_id,
+                    answer_text=single_answer.strip()  # Strip whitespace
+                )
+                db.session.add(new_answer)  # Add the answer to the session
+
         try:
+            # Update the student profile employment status and employer information based on answers given
+            student_profile.update_attributes_from_answers(questionnaire_id)
+
+            # Assign tags to the student profile based on the answers given
             student_profile.assign_tags_to_profiles(questionnaire_id)
             assigned_tags = student_profile.get_assigned_tags_from_student_profile()
             
             if not assigned_tags:
                 raise Exception("No tags assigned")
+
+            db.session.commit()  # Commit after all operations
+            print("All data committed successfully!")
         except Exception as e:
-            print(f"Error assigning tags: {str(e)}")
-            db.session.rollback()
-            return jsonify({"error": "Failed to assign tags"}), 500
-        
-        db.session.commit()
-        
+            print(f"Error: {str(e)}")
+            db.session.rollback()  # Rollback in case of any error
+            return jsonify({"error": "An error occurred while saving the data"}), 500
+
         return jsonify({
             "status": "success",
             "message": "Your responses have been submitted successfully!",

@@ -22,27 +22,37 @@ const ViewQuestionnaire = () => {
     }, []);
 
     const handleAnswerChange = (questionId, answerText, isMultipleChoice) => {
-        if (isMultipleChoice) {
-            setAnswers(prevAnswers => {
+        console.log(`Before update:`, answers); // Log the current state of answers
+        console.log(`Question ID: ${questionId}, Answer Text: ${answerText}, Is Multiple Choice: ${isMultipleChoice}`);
+
+        setAnswers(prevAnswers => {
+            if (isMultipleChoice) {
+                // Handle multiple-choice answers
                 const currentAnswers = prevAnswers[questionId] || [];
                 if (currentAnswers.includes(answerText)) {
+                    // Remove the answer if it's already selected
                     return {
                         ...prevAnswers,
                         [questionId]: currentAnswers.filter(answer => answer !== answerText)
+                        
                     };
+
                 } else {
+                    // Add the answer if it's not already selected
                     return {
                         ...prevAnswers,
                         [questionId]: [...currentAnswers, answerText]
                     };
                 }
-            });
-        } else {
-            setAnswers(prevAnswers => ({
-                ...prevAnswers,
-                [questionId]: answerText // Store the answer as-is
-            }));
-        }
+            } else {
+                // Handle single-choice answers
+                return {
+                    ...prevAnswers,
+                    [questionId]: answerText
+                };
+            }
+        });
+    
         setUnansweredQuestion(null); // Reset the unanswered question state
     };
 
@@ -67,6 +77,8 @@ const ViewQuestionnaire = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log('Answers before validation:', answers);
+
         // Validate that all questions have been answered
         const unansweredQuestions = data.questions.filter(q => {
             // For short answer, check if the trimmed answer exists
@@ -90,12 +102,19 @@ const ViewQuestionnaire = () => {
         console.log('Answers:', formattedAnswers);
         console.log('Student ID:', studentId);
 
+        console.log('Payload being sent:', {
+            student_id: studentId,
+            questionnaire_id: data.id,
+            answers: formattedAnswers,
+        });
+        
         try {
             const response = await fetch(`/questionnaire/Submit/${studentId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                
                 body: JSON.stringify({
                     student_id: studentId,
                     questionnaire_id: data.id,
